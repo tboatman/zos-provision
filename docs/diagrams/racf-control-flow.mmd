@@ -1,0 +1,11 @@
+flowchart TD
+    A["RACF desired state"] --> B["Render commands and backout"]
+    B --> C["Validate naming, collisions, and authority"]
+    C --> D{"Approved?"}
+    D -- "No" --> E["Report findings"]
+    D -- "Yes" --> F["Apply RACF command stream"]
+    F --> G["Query users, groups, profiles, permits, OMVS, and keyrings"]
+    G --> H["Compare expected state"]
+    H --> I{"Matched?"}
+    I -- "No" --> J["Recover or flag drift"]
+    I -- "Yes" --> K["Publish security evidence"]

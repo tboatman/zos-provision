@@ -1,0 +1,14 @@
+flowchart TD
+    A["Internal SMP repository"] --> B["Clone manifest"]
+    C["z/OS service levels"] --> B
+    D["Middleware and vendor levels"] --> B
+    E["Local RACF template"] --> B
+    F["VM guest network, disk, and storage policy"] --> B
+
+    B --> G["Plan VM guest clone"]
+    G --> H["Materialize datasets and USS content"]
+    H --> I["Generate local RACF and certificates"]
+    I --> J["Render PARMLIB, PROCLIB, JES, TCP/IP, and product config"]
+    J --> K["Boot VM guest clone"]
+    K --> L["Verify local-only authority and subsystem readiness"]
+    L --> M["Publish clone evidence bundle"]

@@ -15,8 +15,10 @@ All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid sour
 1. Ansible is the orchestrator, not the only execution engine.
 2. z/OS-native mechanisms remain authoritative for z/OS-native work:
    - SMP/E for SMP/E-packaged software.
+   - Internal SMP/E repository metadata for curated service levels and clone manifests.
    - JCL for batch install, generation, and verification jobs.
    - Operator commands for started task and subsystem control.
+   - RACF command streams and verification reports for security control.
    - CMCI for CICS resource definition and runtime management.
    - IMS commands, DBRC, DBD/PSB/ACB generation, and catalog operations for IMS.
    - Db2 utilities, DSN command processor jobs, SQL execution jobs, BIND/REBIND jobs, catalog queries, and subsystem commands for Db2.
@@ -60,6 +62,7 @@ Required:
 - Ansible service ID with OMVS segment.
 - IBM Open Enterprise SDK for Python installed on z/OS.
 - IBM Z Open Automation Utilities installed and configured.
+- z/OSMF APIs available for approved z/OSMF-driven software management, workflow, and configuration paths.
 - Correct environment variables for ZOAU, Python, PATH, LIBPATH, codepage handling, and tagging.
 - RACF, ACF2, or Top Secret permissions for:
   - Data set allocation and update.
@@ -71,6 +74,9 @@ Required:
   - APF, PROGxx, PARMLIB, LINKLIST, LPA, and security definitions where in scope.
 - Storage classes, SMS rules, volume policies, HLQ standards, and dataset naming standards.
 - JES classes, job accounting fields, and installation exits understood before automation design is finalized.
+- Internal SMP/E repository and service-level metadata available for environments and disconnected VM guest clones.
+- RACF command execution, review, and verification path agreed.
+- VM guest clone provisioning path agreed for disconnected development environments.
 
 For CICS:
 
@@ -134,6 +140,13 @@ roles/
   zos_security_model/
   zos_jcl/
   zos_smpe/
+  zos_smp_repository/
+  zos_maintenance/
+  zos_racf/
+  zos_clone_factory/
+  zos_parmlib/
+  zos_proclib/
+  zos_apf_linklist_lpa/
   cics_region/
   cics_cmci_resources/
   ims_region/
@@ -146,6 +159,9 @@ roles/
   evidence/
 playbooks/
   preflight.yml
+  maintain_zos.yml
+  create_disconnected_vm_clone.yml
+  apply_racf_model.yml
   deploy_cics_region.yml
   deploy_ims_region.yml
   deploy_db2_artifacts.yml
@@ -158,6 +174,11 @@ product_definitions/
   ims/
   db2/
   vendors/
+platform_definitions/
+  smp_repository/
+  maintenance/
+  racf/
+  clones/
 templates/
   jcl/
   proclib/
@@ -256,6 +277,8 @@ See [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecy
 
 See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vendor-dependent process overlays that specialize the generic lifecycle for BMC, Broadcom CA, and Rocket.
 
+See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md) for z/OS maintenance, RACF control, internal SMP/E repository governance, and disconnected VM guest clone generation.
+
 ## Role Boundaries
 
 The roles should be intentionally narrow. Region provisioning, resource definition, and product runtime hooks should not be collapsed into one role because they have different owners, prerequisites, approvals, and recovery behavior.
@@ -283,6 +306,26 @@ Owns SMP/E orchestration through generated JCL and state probes:
 - HOLDDATA handling.
 - BYPASS policy only through explicit approval.
 - FMID and SYSMOD verification.
+
+### `zos_smp_repository`
+
+Owns internal SMP/E repository metadata, service-level manifests, HOLDDATA registration, CSI templates, receive input metadata, clone manifests, and repository evidence.
+
+### `zos_maintenance`
+
+Owns z/OS and IBM middleware maintenance planning, z/OSMF workflow execution where approved, SMP/E CHECK/APPLY/ACCEPT orchestration, service-level verification, and maintenance evidence.
+
+### `zos_racf`
+
+Owns RACF desired-state modeling, command rendering, backout rendering, authority validation, command execution, query-based verification, and security evidence.
+
+### `zos_clone_factory`
+
+Owns disconnected VM guest clone planning, clone manifest interpretation, local RACF/security generation, clone-local configuration rendering, VM guest activation handoff, and clone evidence.
+
+### `zos_parmlib`, `zos_proclib`, and `zos_apf_linklist_lpa`
+
+Own shared platform control surfaces for PARMLIB, PROCLIB, APF, LINKLIST, LPA, PROGxx, activation notes, refresh requirements, and backout.
 
 ### `cics_region`
 
@@ -342,8 +385,10 @@ Required outputs:
 - Effective Python and ZOAU paths.
 - Effective codepage/tagging environment.
 - Security permission gaps.
+- RACF command and query capability if security control is in scope.
 - Dataset allocation test result.
 - JES submission test result.
+- z/OSMF API and workflow capability if z/OSMF paths are in scope.
 - CMCI availability for CICS if in scope.
 - IMS command capability if in scope.
 - Db2 command, batch SQL, bind, and catalog-query capability if in scope.
@@ -397,6 +442,14 @@ Diagram source: [docs/diagrams/full-environment-deployment-flow.mmd](diagrams/fu
 
 The exact ordering depends on which vendor products are deployed. Products that instrument, monitor, or integrate with CICS, IMS, or Db2 may need base libraries installed before subsystem customization, but final hooks should happen after the target regions, subsystems, databases, and bind targets exist.
 
+### Flow 7: Platform Maintenance and Clone Factory
+
+Diagram sources:
+
+- [docs/diagrams/platform-maintenance-flow.mmd](diagrams/platform-maintenance-flow.mmd)
+- [docs/diagrams/smp-repo-clone-factory.mmd](diagrams/smp-repo-clone-factory.mmd)
+- [docs/diagrams/racf-control-flow.mmd](diagrams/racf-control-flow.mmd)
+
 ## Dependency Governance
 
 Product dependencies should be represented as data and resolved before execution. The resolver does not need to be complex initially, but it must prevent accidental ordering mistakes.
@@ -404,6 +457,9 @@ Product dependencies should be represented as data and resolved before execution
 Each deployable unit should declare:
 
 - Required z/OS level.
+- Required internal SMP/E repository service level.
+- Required RACF/security template.
+- Required VM guest clone manifest where applicable.
 - Required middleware level.
 - Required FMIDs or products.
 - Required product maintenance level.
@@ -417,13 +473,15 @@ Each deployable unit should declare:
 The deployment planner should produce an ordered manifest before applying changes:
 
 1. Base z/OS prerequisites.
-2. Vendor shared infrastructure and common libraries.
-3. Vendor product base installation.
-4. CICS, IMS, and Db2 provisioning or artifact deployment.
-5. Product hooks into CICS, IMS, and Db2.
-6. Runtime starts, refreshes, or recycles.
-7. Verification.
-8. Evidence publication.
+2. Platform maintenance and security baseline.
+3. Disconnected VM guest clone generation if applicable.
+4. Vendor shared infrastructure and common libraries.
+5. Vendor product base installation.
+6. CICS, IMS, and Db2 provisioning or artifact deployment.
+7. Product hooks into CICS, IMS, and Db2.
+8. Runtime starts, refreshes, or recycles.
+9. Verification.
+10. Evidence publication.
 
 The manifest should be reviewed for production changes before execution.
 
@@ -444,6 +502,9 @@ Use native Ansible modules where they expose state safely:
 Use custom state probes where native idempotency is not available:
 
 - SMP/E CSI query job.
+- Internal SMP/E repository manifest state.
+- RACF user, group, connect, profile, permit, OMVS, STARTED, and keyring state.
+- Disconnected VM guest clone manifest and local authority state.
 - Product FMID installed state.
 - Product maintenance level.
 - APF list membership.
@@ -469,12 +530,16 @@ Approval gates should be enforced in the automation platform or through explicit
 Required approval gates:
 
 - Security profile creation or alteration.
+- RACF template changes for disconnected VM guest clones.
 - APF authorization changes.
 - LINKLIST, LPA, or PROGxx changes.
 - PARMLIB changes.
 - Started task creation in production.
 - SMP/E APPLY for production.
 - SMP/E ACCEPT in all controlled environments.
+- z/OS maintenance APPLY or ACCEPT.
+- Internal SMP/E repository promotion.
+- Disconnected VM guest clone templates that grant privileged local IDs.
 - CICS catalog recreation.
 - IMS RECON or DBRC changes.
 - Db2 destructive DDL, REVOKE, FREE, mass REBIND, RUNSTATS/REORG/COPY policy changes, and subsystem parameter changes.
@@ -491,6 +556,8 @@ Secrets must not be stored in plaintext inventory:
 - SSH private keys.
 - Vendor license keys.
 - Product download credentials.
+- Clone-local break-glass credentials.
+- Clone-local certificate private keys.
 - Certificates.
 - API tokens.
 
@@ -513,8 +580,11 @@ Each run should produce an evidence bundle containing:
 - Rendered JCL.
 - Submitted job IDs.
 - JES output.
+- z/OSMF workflow output where applicable.
 - Return-code summary.
 - Operator command outputs.
+- RACF command streams, query output, and before/after snapshots where applicable.
+- Clone manifests and disconnected VM guest evidence where applicable.
 - CICS CMCI before/after snapshots where applicable.
 - IMS command outputs where applicable.
 - Db2 catalog snapshots, SQL output, bind reports, and utility output where applicable.
@@ -543,6 +613,8 @@ Each run should produce an evidence bundle containing:
 - IMS test artifact generation and command execution.
 - Db2 test DDL, DCL, BIND, REBIND, and catalog verification in an isolated schema or sandbox subsystem.
 - SMP/E dry-run CHECK jobs against non-production CSI.
+- RACF render/validate/apply/verify tests in a sandbox or disconnected VM guest clone.
+- Disconnected VM guest clone creation, boot/activation handoff, and local-only authority verification.
 
 ### Production Readiness Tests
 
@@ -552,6 +624,7 @@ Each run should produce an evidence bundle containing:
 - Evidence bundle review.
 - Operator handoff checklist.
 - Rollback drill for at least one CICS region, one IMS customization, one Db2 artifact deployment, and one vendor product flow.
+- RACF backout drill and disconnected VM guest clone rebuild/destroy drill.
 
 ## Delivery Phases
 
@@ -566,6 +639,8 @@ Deliverables:
 - CICS and IMS region catalog.
 - Db2 subsystem, schema, package, plan, and application dependency catalog.
 - Vendor product dependency graph.
+- Internal SMP/E repository and service-level catalog.
+- RACF model and disconnected VM guest clone template catalog.
 - Install media and license handling plan.
 
 ### Phase 1: Automation Foundation
@@ -577,8 +652,20 @@ Deliverables:
 - Inventories and variable schemas.
 - Preflight playbook design.
 - Shared JCL and evidence framework design.
+- Internal SMP/E repository metadata design.
+- RACF and disconnected VM guest clone schema design.
 
-### Phase 2: CICS Region Automation
+### Phase 2: Platform Maintenance and Clone Foundation
+
+Deliverables:
+
+- z/OS maintenance manifest schema.
+- Internal SMP/E repository skeleton.
+- RACF render/apply/verify skeleton.
+- Disconnected VM guest clone manifest schema.
+- Clone factory plan/check/apply/verify/evidence skeleton.
+
+### Phase 3: CICS Region Automation
 
 Deliverables:
 
@@ -588,7 +675,7 @@ Deliverables:
 - Start/stop/verify workflows.
 - Test region deployment.
 
-### Phase 3: IMS Region Automation
+### Phase 4: IMS Region Automation
 
 Deliverables:
 
@@ -597,7 +684,7 @@ Deliverables:
 - IMS command and verification workflows.
 - Test IMS deployment.
 
-### Phase 4: Db2 Artifact Automation
+### Phase 5: Db2 Artifact Automation
 
 Deliverables:
 
@@ -608,7 +695,7 @@ Deliverables:
 - DDL/DCL deployment and backout classification.
 - Test Db2 deployment in an isolated schema or sandbox subsystem.
 
-### Phase 5: Vendor Product Framework
+### Phase 6: Vendor Product Framework
 
 Deliverables:
 
@@ -621,7 +708,7 @@ Deliverables:
 - Product customization JCL framework.
 - First product onboarded end to end.
 
-### Phase 6: Product Factory
+### Phase 7: Product Factory
 
 Deliverables:
 
@@ -630,7 +717,7 @@ Deliverables:
 - Environment deployment workflow.
 - Evidence and audit publication.
 
-### Phase 7: Production Operating Model
+### Phase 8: Production Operating Model
 
 Deliverables:
 
@@ -646,12 +733,14 @@ Deliverables:
 Start with a narrow but representative pilot:
 
 1. One z/OS sandbox LPAR.
-2. One new CICS test region.
-3. One IMS test region or IMS artifact generation flow.
-4. One Db2 isolated schema or sandbox subsystem deployment flow.
-5. One vendor product with SMP/E packaging.
-6. One vendor product with post-install runtime customization, preferably including at least one Db2 bind or catalog dependency if representative.
-7. Full preflight, deploy, verify, and evidence bundle.
+2. One disconnected VM guest clone generated from the internal SMP/E repository.
+3. One local RACF model applied to that VM guest clone.
+4. One new CICS test region.
+5. One IMS test region or IMS artifact generation flow.
+6. One Db2 isolated schema or sandbox subsystem deployment flow.
+7. One vendor product with SMP/E packaging or z/OSMF workflow packaging.
+8. One vendor product with post-install runtime customization, preferably including at least one Db2 bind or catalog dependency if representative.
+9. Full preflight, deploy, verify, and evidence bundle.
 
 Do not start by automating every product. Build the factory pattern with two vendor product shapes, then scale.
 
@@ -666,9 +755,12 @@ Do not start by automating every product. Build the factory pattern with two ven
 7. Which Db2 execution method is approved for automation: DSNTEP2, DSNTEP4, DSNTIAD, site-standard JCL, or another batch SQL runner?
 8. What are the approval boundaries for Db2 DDL, DCL, BIND, REBIND, FREE, utilities, and subsystem commands?
 9. Which z/OSMF workflow definitions, variable conventions, API credentials, and workflow ownership rules are approved for vendor installation and configuration?
-10. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
-11. What is the required backout posture for each product?
-12. Are IPLs allowed, avoided, or scheduled only by separate change process?
+10. What is the internal SMP/E repository promotion policy?
+11. What is the disconnected VM guest clone lifecycle: create, expire, rebuild, destroy, and evidence export?
+12. Which RACF classes and local credentials are mandatory for disconnected VM guest clones?
+13. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
+14. What is the required backout posture for each product?
+15. Are IPLs allowed, avoided, or scheduled only by separate change process?
 
 ## Implementation Readiness Checklist
 
@@ -679,6 +771,9 @@ Code should not begin until these are complete:
 - Control-node and managed-node prerequisites are validated.
 - Security model is approved.
 - Dataset naming and storage standards are approved.
+- Internal SMP/E repository model is approved.
+- RACF model and command execution path are approved.
+- Disconnected VM guest clone model is approved.
 - CICS region model is approved.
 - IMS region model is approved.
 - Db2 model and artifact schema are approved.

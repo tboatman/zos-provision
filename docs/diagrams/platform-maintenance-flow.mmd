@@ -1,0 +1,13 @@
+flowchart TD
+    A["Discover installed service levels"] --> B["Intake service and HOLDDATA"]
+    B --> C["Create maintenance manifest"]
+    C --> D["Run RECEIVE/APPLY CHECK and hold review"]
+    D --> E{"Approved path"}
+    E -- "z/OSMF workflow" --> F["Drive z/OSMF workflow"]
+    E -- "Generated SMP/E JCL" --> G["Submit SMP/E jobs"]
+    F --> H["Verify CSI, libraries, reports, and runtime state"]
+    G --> H
+    H --> I{"Soak passed?"}
+    I -- "No" --> J["Recover or hold"]
+    I -- "Yes" --> K["ACCEPT with approval"]
+    K --> L["Publish service level to SMP repository"]

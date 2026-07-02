@@ -24,6 +24,8 @@ Vendor-specific naming, packaging, maintenance cadence, license handling, and ge
 
 See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vendor-dependent process overlays for BMC, Broadcom CA, and Rocket.
 
+See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md) for the internal SMP/E repository and disconnected VM guest clone model that vendor product service levels will feed.
+
 ## Core Problem
 
 Vendor product deployment is not one problem. It is several overlapping problems:
