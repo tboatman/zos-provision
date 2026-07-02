@@ -1,0 +1,486 @@
+flowchart TD
+    START["Management scale view<br/>z/OS provisioning and third-party software lifecycle"] --> CN["Linux or macOS control node"]
+
+    subgraph WORKFORCE["Delivery model: one owner plus AI-assisted execution"]
+        OWNER["Human architect and accountable owner"] --> BACKLOG["Architecture backlog and decision log"]
+        OWNER --> PRIORITY["Scope triage and pilot selection"]
+        OWNER --> REVIEW["Design review, risk acceptance, and production approval"]
+        AG1["AI agent: repo/documentation maintainer"] --> BACKLOG
+        AG2["AI agent: product documentation researcher"] --> DOCQUEUE["Vendor documentation research queue"]
+        AG3["AI agent: Ansible role implementer"] --> ROLEQUEUE["Role and collection implementation queue"]
+        AG4["AI agent: test and verification builder"] --> TESTQUEUE["Scenario, molecule, lint, and evidence queue"]
+        AG5["AI agent: migration and unwinding analyst"] --> UNWINDQUEUE["Installed-state unwinding queue"]
+        COPILOT["IDE completion assistant"] --> ROLEQUEUE
+        BACKLOG --> DECISIONS["Recorded assumptions, constraints, and open questions"]
+        DOCQUEUE --> DECISIONS
+        ROLEQUEUE --> DECISIONS
+        TESTQUEUE --> DECISIONS
+        UNWINDQUEUE --> DECISIONS
+    end
+
+    subgraph CONTROL["Control node and project foundation"]
+        CN --> AP["Ansible project"]
+        AP --> INV["Inventory and environment model"]
+        AP --> ROLES["Shared role catalog"]
+        AP --> DATA["Product, region, subsystem, security, and clone definitions"]
+        AP --> REPORT["Validation, reporting, and evidence roles"]
+        AP --> DOCS["Synchronized design documentation"]
+        AP --> DIAGS["Standalone Mermaid diagram sources"]
+        AP --> GIT["Git history with atomic commits"]
+        AP --> CI["Lint, syntax, and scenario checks"]
+        AP --> SECRETS["Vault, credential, token, and key handling"]
+        AP --> COLLECTIONS["Ansible collections and execution environments"]
+        AP --> TEMPLATES["Jinja templates for JCL, SQL, PARMLIB, PROCLIB, RACF"]
+    end
+
+    subgraph ARCH["Target architecture surfaces"]
+        ROLES --> ZOS["z/OS managed node over SSH"]
+        ZOS --> ZOSMF["z/OSMF APIs and workflows"]
+        ZOS --> ZOAU["ZOAU and Python runtime"]
+        ZOS --> JES["JES job submission and spool capture"]
+        ZOS --> MVS["MVS datasets, catalogs, PROCLIB, PARMLIB"]
+        ZOS --> USS["USS paths, permissions, tagging, scripts"]
+        ZOS --> SMPE["SMP/E CSI, target libraries, distribution libraries"]
+        ZOS --> RACF["RACF users, groups, profiles, permits, OMVS, keyrings"]
+        ZOS --> CICSAPI["CICS TS, CICSPlex SM, CMCI, CSD"]
+        ZOS --> IMSAPI["IMS control regions, commands, DBRC, catalog"]
+        ZOS --> DB2API["Db2 subsystems, catalog, SQL, BIND, utilities"]
+        ZOS --> TCPIP["TCP/IP, ports, resolver, certificates, keyrings"]
+        ZOS --> AUTO["Automation, scheduling, console command, and message hooks"]
+        ZOS --> STORAGE["SMS classes, volumes, ACS rules, dataset naming"]
+    end
+
+    subgraph PREFLIGHT["Preflight checks"]
+        INV --> PF1["Validate control node versions and collections"]
+        PF1 --> PF2["Validate SSH and Python on z/OS"]
+        PF2 --> PF3["Validate ZOAU and environment variables"]
+        PF3 --> PF4["Gather z/OS facts and dataset standards"]
+        PF4 --> PF5["Validate security permissions"]
+        PF5 --> PF6["Validate storage and HLQ access"]
+        PF6 --> PF7["Validate product, CICS, IMS, Db2, SMP/E, and z/OSMF prerequisites"]
+        PF7 --> PF8["Produce preflight report"]
+        PF8 --> PFGATE{"Ready?"}
+        PFGATE -- "No" --> PFGAP["Report gaps<br/>security, storage, SSH, ZOAU, Python, product media, APIs"]
+        PFGAP --> PFFOLLOW["Create remediation backlog"]
+    end
+
+    subgraph INTAKE["Enterprise intake and design controls"]
+        PFGATE -- "Yes" --> IN1["Stage inputs"]
+        IN1 --> IN2["Normalize definitions"]
+        IN2 --> IN3["Resolve dependencies"]
+        IN3 --> IN4["Build execution plan"]
+        IN4 --> IN5{"Approval to execute?"}
+        IN5 -- "No" --> IN6["Hold plan and publish findings"]
+        IN2 --> IN7["Tag unknowns and assumptions"]
+        IN7 --> IN8["Split into pilot, backlog, and out-of-scope"]
+    end
+
+    subgraph ZOSMFCTRL["z/OSMF-first control model"]
+        ZM1["Discover z/OSMF services"] --> ZM2["Validate authentication and certificates"]
+        ZM2 --> ZM3["Validate workflow service"]
+        ZM3 --> ZM4["Validate jobs, files, datasets, and console APIs"]
+        ZM4 --> ZM5["Register workflow templates"]
+        ZM5 --> ZM6["Create workflow instance"]
+        ZM6 --> ZM7["Bind workflow variables"]
+        ZM7 --> ZM8["Drive workflow steps"]
+        ZM8 --> ZM9["Collect workflow status and logs"]
+        ZM9 --> ZM10{"Workflow reusable?"}
+        ZM10 -- "Yes" --> ZM11["Promote as preferred install path"]
+        ZM10 -- "No" --> ZM12["Wrap as product-specific exception"]
+    end
+
+    subgraph PRODUCTMODEL["Product definition schema pressure"]
+        PD1["Vendor family"] --> PD2["Product identity and aliases"]
+        PD2 --> PD3["Version, release, FMIDs, SYSMODs"]
+        PD3 --> PD4["Media, service, HOLDDATA, checksums"]
+        PD4 --> PD5["Install method classification"]
+        PD5 --> PD6["z/OSMF workflow variables"]
+        PD5 --> PD7["SMP/E zones and CSI model"]
+        PD5 --> PD8["Vendor JCL parameters"]
+        PD5 --> PD9["Runtime-only overlay"]
+        PD6 --> PD10["Runtime integration hooks"]
+        PD7 --> PD10
+        PD8 --> PD10
+        PD9 --> PD10
+        PD10 --> PD11["CICS, IMS, Db2, RACF, USS, TCP/IP, automation"]
+        PD11 --> PD12["Verification probes and expected evidence"]
+        PD12 --> PD13["Backout, hold, soak, accept policy"]
+    end
+
+    subgraph BMC["BMC documentation and product intake"]
+        BMC1["BMC entitlement and installed-state inventory"] --> BMC2["BMC documentation catalog"]
+        BMC1 --> BMC3["BMC Product Download Tool"]
+        BMC2 --> BMC4["BMC product/version documentation set"]
+        BMC3 --> BMC5["BMC media, service, HOLDDATA, tools, workflows"]
+        BMC4 --> BMC6["Classify BMC install method"]
+        BMC5 --> BMC6
+        BMC6 --> BMC7["Extract BMC automation requirements"]
+        BMC7 --> BMC8["Create BMC product definition"]
+        BMC8 --> BMC9{"BMC ready for pilot?"}
+        BMC9 -- "No" --> BMC10["Mark BMC unknowns and continue discovery"]
+        BMC9 -- "Yes" --> BMC11["Select BMC adapter pilot"]
+    end
+
+    subgraph BROADCOM["Broadcom CA documentation and product intake"]
+        CA1["Broadcom entitlement and installed-state inventory"] --> CA2["Broadcom TechDocs and Support Portal"]
+        CA1 --> CA3["Broadcom My Downloads"]
+        CA2 --> CA4["Broadcom CA product/version documentation set"]
+        CA3 --> CA5["Broadcom CA media, service, HOLDDATA, tools, workflows"]
+        CA4 --> CA6["Classify Broadcom CA install method and legacy CA aliases"]
+        CA5 --> CA6
+        CA6 --> CA7["Extract Broadcom CA automation requirements"]
+        CA7 --> CA8["Create Broadcom CA product definition"]
+        CA8 --> CA9{"Broadcom CA ready for pilot?"}
+        CA9 -- "No" --> CA10["Mark Broadcom CA unknowns and continue discovery"]
+        CA9 -- "Yes" --> CA11["Select Broadcom CA adapter pilot"]
+    end
+
+    subgraph ROCKET["Rocket documentation and product intake"]
+        RK1["Rocket entitlement and installed-state inventory"] --> RK2["Rocket documentation portal"]
+        RK1 --> RK3["Rocket support and download channels"]
+        RK2 --> RK4["Rocket product/version documentation set"]
+        RK3 --> RK5["Rocket media, service, HOLDDATA, USS payloads, workflows"]
+        RK4 --> RK6["Classify Rocket install method and aliases"]
+        RK5 --> RK6
+        RK6 --> RK7["Extract Rocket MVS, USS, and runtime requirements"]
+        RK7 --> RK8["Create Rocket product definition"]
+        RK8 --> RK9{"Rocket ready for pilot?"}
+        RK9 -- "No" --> RK10["Mark Rocket unknowns and continue discovery"]
+        RK9 -- "Yes" --> RK11["Select Rocket adapter pilot"]
+    end
+
+    subgraph VENDORLIFE["Generic third-party vendor lifecycle"]
+        VD1["Vendor media and service"] --> VD2["Internal vendor software depot"]
+        VD2 --> VD3["Product bill of materials"]
+        VD3 --> VD4["Compatibility and dependency graph"]
+        VD5["Current z/OS estate discovery"] --> VD6["Configuration unwinder"]
+        VD6 --> VD7["Observed state catalog"]
+        VD4 --> VD8["Deployment planner"]
+        VD7 --> VD8
+        VD8 --> VA1["Vendor adapter: discover"]
+        VA1 --> VA2["Vendor adapter: intake"]
+        VA2 --> VA3["Vendor adapter: classify"]
+        VA3 --> VA4["Vendor adapter: plan"]
+        VA4 --> VA5["Vendor adapter: stage"]
+        VA5 --> VA6["Vendor adapter: check"]
+        VA6 --> VA7{"Install method"}
+        VA7 -- "z/OSMF workflow" --> VA8["Drive z/OSMF workflow"]
+        VA7 -- "SMP/E" --> VA9["Run SMP/E RECEIVE/APPLY"]
+        VA7 -- "Vendor JCL" --> VA10["Submit vendor JCL"]
+        VA7 -- "Runtime only" --> VA11["Apply runtime overlay"]
+        VA7 -- "Legacy capture" --> VA12["Capture and normalize only"]
+        VA8 --> VA13["Vendor verify"]
+        VA9 --> VA13
+        VA10 --> VA13
+        VA11 --> VA13
+        VA12 --> VA13
+        VA13 --> VA14{"Vendor passed?"}
+        VA14 -- "No" --> VA15["Recover vendor change"]
+        VA14 -- "Yes" --> VA16["Vendor evidence"]
+        VA16 --> VA17["Promote, hold, rollback, or accept"]
+    end
+
+    subgraph DEPOT["Internal depot and repository operations"]
+        DP1["Raw entitlement download"] --> DP2["Checksum and provenance capture"]
+        DP2 --> DP3["License and access classification"]
+        DP3 --> DP4["Normalize package names"]
+        DP4 --> DP5["Store media by vendor/product/version"]
+        DP5 --> DP6["Store service by APAR/PTF/build"]
+        DP6 --> DP7["Store HOLDDATA and advisories"]
+        DP7 --> DP8["Store z/OSMF workflows and vendor JCL"]
+        DP8 --> DP9["Generate depot manifest"]
+        DP9 --> DP10["Feed product BOM and dependency graph"]
+    end
+
+    subgraph UNWIND["Configuration unwinding and current-state capture"]
+        UW1["Scan SMP/E CSIs"] --> UW2["Map FMIDs to products"]
+        UW3["Scan APF, LINKLIST, LPA"] --> UW4["Map runtime libraries"]
+        UW5["Scan PROCLIB and PARMLIB"] --> UW6["Map started tasks and parameters"]
+        UW7["Scan CICS definitions"] --> UW8["Map CICS hooks"]
+        UW9["Scan IMS PROCLIB, DBD, PSB, ACB, RECON"] --> UW10["Map IMS hooks"]
+        UW11["Scan Db2 catalog, plans, packages, grants"] --> UW12["Map Db2 hooks"]
+        UW13["Scan RACF profiles and permits"] --> UW14["Map security hooks"]
+        UW15["Scan USS trees and file tags"] --> UW16["Map USS payloads"]
+        UW2 --> UW17["Observed product state graph"]
+        UW4 --> UW17
+        UW6 --> UW17
+        UW8 --> UW17
+        UW10 --> UW17
+        UW12 --> UW17
+        UW14 --> UW17
+        UW16 --> UW17
+    end
+
+    subgraph VENDORDEPLOY["Vendor product deployment execution"]
+        VP1["Load vendor product definition"] --> VP2["Validate media, license, prerequisites, workflows, and FMIDs"]
+        VP2 --> VP3["Stage media to USS, MVS datasets, or z/OSMF workflow inputs"]
+        VP3 --> VP4{"z/OSMF workflow available?"}
+        VP4 -- "Yes" --> VP5["Create or drive z/OSMF workflow"]
+        VP4 -- "No" --> VP6["Prepare SMP/E CSI, zones, or vendor JCL"]
+        VP5 --> VP7["Track workflow steps and capture output"]
+        VP6 --> VP8["Run RECEIVE/APPLY CHECK or vendor validation"]
+        VP8 --> VP9["Approval gate for APPLY or install"]
+        VP9 --> VP10["Run APPLY or vendor install JCL"]
+        VP7 --> VP11["Run product customization steps"]
+        VP10 --> VP11
+        VP11 --> VP12["Configure runtime integration"]
+        VP12 --> VP13["Start or refresh product components"]
+        VP13 --> VP14["Verify product status"]
+        VP14 --> VP15["Capture vendor evidence and deployment manifest"]
+    end
+
+    subgraph SHAREDZOS["Shared z/OS services deployment"]
+        SZ1["Allocate datasets"] --> SZ2["Set catalog aliases and SMS policy"]
+        SZ2 --> SZ3["Render PARMLIB members"]
+        SZ3 --> SZ4["Render PROCLIB members"]
+        SZ4 --> SZ5["Update APF, LINKLIST, LPA candidates"]
+        SZ5 --> SZ6["Submit validation jobs"]
+        SZ6 --> SZ7["Issue refresh or operator commands"]
+        SZ7 --> SZ8["Capture system-service evidence"]
+    end
+
+    subgraph CICS["CICS region deployment"]
+        C1["Load CICS region definition"] --> C2["Validate region naming and dataset model"]
+        C2 --> C3["Allocate or verify region datasets"]
+        C3 --> C4["Initialize global and local catalogs"]
+        C4 --> C5["Create auxiliary datasets"]
+        C5 --> C6["Create or update CSD"]
+        C6 --> C7["Render and install startup JCL"]
+        C7 --> C8["Apply CMCI resource definitions if enabled"]
+        C8 --> C9["Start CICS region"]
+        C9 --> C10["Verify CICS region status and expected resources"]
+        C10 --> C11["Capture CICS evidence"]
+    end
+
+    subgraph CICSINTEG["CICS vendor integration"]
+        CI1["Identify target CICS regions"] --> CI2["Map product libraries to DFHRPL or dynamic LIBRARY"]
+        CI2 --> CI3["Generate CSD or BAS resources"]
+        CI3 --> CI4["Apply PLT, SIT, TDQ, TCPIPSERVICE, PROGRAM, TRANSACTION changes"]
+        CI4 --> CI5["Coordinate phase-in, newcopy, recycle, or cold start"]
+        CI5 --> CI6["Verify transactions, programs, exits, and messages"]
+        CI6 --> CI7["Capture CICS integration evidence"]
+    end
+
+    subgraph IMS["IMS region deployment"]
+        I1["Load IMS region definition"] --> I2["Validate IMSID and library model"]
+        I2 --> I3["Allocate or verify IMS runtime datasets"]
+        I3 --> I4["Render PROCLIB and JCL members"]
+        I4 --> I5["Generate DBDs and PSBs if in scope"]
+        I5 --> I6["Generate ACBs"]
+        I6 --> I7["Run DBRC or catalog actions if in scope"]
+        I7 --> I8["Start IMS control and dependent regions"]
+        I8 --> I9["Submit IMS verification commands"]
+        I9 --> I10["Capture IMS evidence"]
+    end
+
+    subgraph IMSINTEG["IMS vendor integration"]
+        II1["Identify target IMS systems"] --> II2["Map product libraries and PROCLIB members"]
+        II2 --> II3["Generate IMS parameters, DBDs, PSBs, ACBs if needed"]
+        II3 --> II4["Coordinate DBRC, catalog, dependent regions, and command security"]
+        II4 --> II5["Recycle or refresh IMS components"]
+        II5 --> II6["Verify commands, messages, databases, and regions"]
+        II6 --> II7["Capture IMS integration evidence"]
+    end
+
+    subgraph DB2["Db2 artifact deployment"]
+        D1["Load Db2 artifact definition"] --> D2["Validate subsystem, schema, collection, and authority model"]
+        D2 --> D3["Capture current catalog, package, plan, and grant state"]
+        D3 --> D4["Render SQL, bind, utility, and verification JCL"]
+        D4 --> D5["Run non-destructive validation where available"]
+        D5 --> D6["Run DDL or DCL jobs"]
+        D6 --> D7["Run BIND, REBIND, FREE, or package jobs if in scope"]
+        D7 --> D8["Run utility jobs if in scope"]
+        D8 --> D9["Query catalog and bind state"]
+        D9 --> D10["Verify expected objects, grants, packages, plans, and return codes"]
+        D10 --> D11["Capture Db2 evidence"]
+    end
+
+    subgraph DB2INTEG["Db2 vendor integration"]
+        DI1["Identify target Db2 subsystems"] --> DI2["Map product libraries, SQL, packages, and plans"]
+        DI2 --> DI3["Generate DDL, DCL, BIND, GRANT, utility jobs"]
+        DI3 --> DI4["Run pre-catalog capture"]
+        DI4 --> DI5["Execute Db2 jobs with return-code policy"]
+        DI5 --> DI6["Verify catalog, packages, plans, collections, grants"]
+        DI6 --> DI7["Capture Db2 integration evidence"]
+    end
+
+    subgraph RACFCTL["RACF maintenance and control"]
+        R1["RACF desired state"] --> R2["Render commands and backout"]
+        R2 --> R3["Validate naming, collisions, and authority"]
+        R3 --> R4{"RACF approved?"}
+        R4 -- "No" --> R5["Report RACF findings"]
+        R4 -- "Yes" --> R6["Apply RACF command stream"]
+        R6 --> R7["Query users, groups, profiles, permits, OMVS, and keyrings"]
+        R7 --> R8["Compare expected RACF state"]
+        R8 --> R9{"RACF matched?"}
+        R9 -- "No" --> R10["Recover or flag RACF drift"]
+        R9 -- "Yes" --> R11["Publish security evidence"]
+    end
+
+    subgraph SECURITYDESIGN["Security design scope"]
+        SD1["Authority model"] --> SD2["Least-privilege role mapping"]
+        SD2 --> SD3["Surrogate, OPERCMDS, FACILITY, dataset, started-task profiles"]
+        SD3 --> SD4["OMVS segments, keyrings, certificates, PassTickets"]
+        SD4 --> SD5["Clone-local identity model"]
+        SD5 --> SD6["Disconnected authentication posture"]
+        SD6 --> SD7["Audit evidence and drift detection"]
+    end
+
+    subgraph MAINT["z/OS and product maintenance"]
+        M1["Discover installed service levels"] --> M2["Intake service and HOLDDATA"]
+        M2 --> M3["Create maintenance manifest"]
+        M3 --> M4["Run RECEIVE/APPLY CHECK and hold review"]
+        M4 --> M5{"Approved maintenance path"}
+        M5 -- "z/OSMF workflow" --> M6["Drive maintenance z/OSMF workflow"]
+        M5 -- "Generated SMP/E JCL" --> M7["Submit SMP/E maintenance jobs"]
+        M6 --> M8["Verify CSI, libraries, reports, and runtime state"]
+        M7 --> M8
+        M8 --> M9{"Soak passed?"}
+        M9 -- "No" --> M10["Recover or hold maintenance"]
+        M9 -- "Yes" --> M11["ACCEPT with approval"]
+        M11 --> M12["Publish service level to SMP repository"]
+    end
+
+    subgraph SMPEFACTORY["SMP/E repository factory"]
+        SF1["Receive vendor and IBM service"] --> SF2["Run APPLY CHECK"]
+        SF2 --> SF3["Review HOLDDATA and exceptions"]
+        SF3 --> SF4["Promote to controlled service level"]
+        SF4 --> SF5["Build canonical CSI and library set"]
+        SF5 --> SF6["Snapshot repository state"]
+        SF6 --> SF7["Emit cloneable maintenance baseline"]
+        SF7 --> SF8["Record compatibility with middleware and vendor products"]
+    end
+
+    subgraph FULLENV["Full environment deployment"]
+        F1["Preflight"] --> F2["Install or update vendor prerequisites"]
+        F2 --> F3["Deploy base vendor runtime products"]
+        F3 --> F4["Deploy CICS regions"]
+        F4 --> F5["Deploy IMS regions"]
+        F5 --> F6["Deploy Db2 artifacts"]
+        F6 --> F7["Deploy vendor integrations into CICS, IMS, and Db2"]
+        F7 --> F8["Run cross-system verification"]
+        F8 --> F9["Publish evidence bundle"]
+    end
+
+    subgraph CLONE["Disconnected VM guest clone factory"]
+        CL1["Internal SMP repository"] --> CL2["Clone manifest"]
+        CL3["z/OS service levels"] --> CL2
+        CL4["Middleware and vendor levels"] --> CL2
+        CL5["Local RACF template"] --> CL2
+        CL6["VM guest network, disk, and storage policy"] --> CL2
+        CL2 --> CL7["Plan VM guest clone"]
+        CL7 --> CL8["Materialize datasets and USS content"]
+        CL8 --> CL9["Generate local RACF and certificates"]
+        CL9 --> CL10["Render PARMLIB, PROCLIB, JES, TCP/IP, and product config"]
+        CL10 --> CL11["Boot VM guest clone"]
+        CL11 --> CL12["Verify local-only authority and subsystem readiness"]
+        CL12 --> CL13["Publish clone evidence bundle"]
+    end
+
+    subgraph TESTING["Test and evidence strategy"]
+        T1["Static lint and syntax checks"] --> T2["Template rendering tests"]
+        T2 --> T3["Offline product-definition validation"]
+        T3 --> T4["Mock z/OSMF and JES response tests"]
+        T4 --> T5["Sandbox z/OS or VM guest dry run"]
+        T5 --> T6["Pilot deployment"]
+        T6 --> T7["Soak validation"]
+        T7 --> T8["Regression bundle for future agents"]
+    end
+
+    subgraph RISK["Scale and risk communication"]
+        K1["No single vendor install model"] --> K2["Adapter-per-product pressure"]
+        K3["No established universal SMP repos"] --> K4["Depot and repository engineering"]
+        K5["Existing configuration must be unwound"] --> K6["Discovery before automation"]
+        K7["Security and disconnected clones"] --> K8["Local authority model per VM guest"]
+        K9["z/OSMF preferred but not sufficient alone"] --> K10["Fallbacks still required"]
+        K11["CICS, IMS, Db2, RACF integration"] --> K12["Cross-subsystem verification burden"]
+        K2 --> K13["Management takeaway: feasible but enormous"]
+        K4 --> K13
+        K6 --> K13
+        K8 --> K13
+        K10 --> K13
+        K12 --> K13
+    end
+
+    subgraph VERIFY["Cross-system verification, recovery, and evidence"]
+        X1["Start, refresh, or recycle components"] --> X2["Verify subsystem, product, security, and service state"]
+        X2 --> X3{"All checks passed?"}
+        X3 -- "No" --> X4["Recover, rollback, hold, or flag drift"]
+        X3 -- "Yes" --> X5["Evidence bundle<br/>JES output, manifests, reports, snapshots"]
+        X5 --> X6["Deployment complete"]
+    end
+
+    DECISIONS --> CN
+    DATA --> BMC1
+    DATA --> CA1
+    DATA --> RK1
+    BMC11 --> VD1
+    CA11 --> VD1
+    RK11 --> VD1
+    BMC8 --> VP1
+    CA8 --> VP1
+    RK8 --> VP1
+    BMC8 --> PD1
+    CA8 --> PD1
+    RK8 --> PD1
+    DP10 --> VD3
+    UW17 --> VD7
+    PD13 --> VP1
+
+    IN5 -- "Yes" --> VP1
+    IN5 -- "Yes" --> SZ1
+    IN5 -- "Yes" --> C1
+    IN5 -- "Yes" --> I1
+    IN5 -- "Yes" --> D1
+    IN5 -- "Yes" --> R1
+    IN5 -- "Yes" --> M1
+    IN5 -- "Yes" --> F1
+
+    ZOSMF --> VA8
+    ZOSMF --> VP5
+    ZOSMF --> M6
+    ZOSMF --> ZM1
+    SMPE --> VA9
+    SMPE --> VP6
+    SMPE --> M7
+    SMPE --> SF1
+    JES --> VA10
+    JES --> VP10
+    JES --> D4
+    RACF --> R1
+    CICSAPI --> C1
+    IMSAPI --> I1
+    DB2API --> D1
+
+    ZM11 --> VP5
+    ZM12 --> VA7
+    VP12 --> C8
+    VP12 --> I4
+    VP12 --> D4
+    VP12 --> R1
+    VP12 --> CI1
+    VP12 --> II1
+    VP12 --> DI1
+    VP12 --> SD1
+    SZ8 --> X1
+    CI7 --> X1
+    II7 --> X1
+    DI7 --> X1
+    SD7 --> R1
+    R11 --> VP13
+    C11 --> X1
+    I10 --> X1
+    D11 --> X1
+    VP15 --> X1
+    M12 --> SF1
+    SF8 --> CL1
+    M12 --> CL1
+    VP15 --> CL4
+    R11 --> CL5
+    F9 --> X5
+    CL13 --> X5
+    T8 --> REPORT
+    K13 --> REVIEW
+
+    X4 --> IN6
+    X5 --> REPORT
