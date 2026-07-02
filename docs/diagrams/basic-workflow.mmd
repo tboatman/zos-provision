@@ -15,9 +15,13 @@ flowchart TD
     F --> K["IMS Region Provisioning<br/>PROCLIB, datasets, DBD/PSB/ACB"]
     K --> L["IMS Commands / DBRC / Catalog"]
 
+    F --> S["Db2 Artifact Deployment<br/>DDL, DCL, BIND, utilities"]
+    S --> T["Db2 Verification<br/>catalog, packages, plans, grants"]
+
     H --> M["Start / Refresh / Recycle"]
     J --> M
     L --> M
+    T --> M
 
     M --> N["Verification"]
     N --> O{"Passed?"}

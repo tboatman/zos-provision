@@ -1,8 +1,8 @@
-# z/OS CICS, IMS, and BMC Product Deployment Through Ansible
+# z/OS CICS, IMS, Db2, and BMC Product Deployment Through Ansible
 
 ## Purpose
 
-Design the architecture, requirements, scope, and execution flows for deploying CICS regions, IMS regions, and multiple BMC Software products on z/OS from a Linux or macOS Ansible control node.
+Design the architecture, requirements, scope, and execution flows for deploying CICS regions, IMS regions, Db2 for z/OS assets, and multiple BMC Software products on z/OS from a Linux or macOS Ansible control node.
 
 This document deliberately avoids implementation code. It defines the operating model and module boundaries that should be agreed before playbooks, roles, inventories, or JCL templates are written.
 
@@ -19,6 +19,7 @@ All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid sour
    - Operator commands for started task and subsystem control.
    - CMCI for CICS resource definition and runtime management.
    - IMS commands, DBRC, DBD/PSB/ACB generation, and catalog operations for IMS.
+   - Db2 utilities, DSN command processor jobs, SQL execution jobs, BIND/REBIND jobs, catalog queries, and subsystem commands for Db2.
 3. Product deployment is metadata-driven. Product-specific values belong in inventory and product definition files, not hardcoded task logic.
 4. Every flow must support plan, apply, verify, and recover phases.
 5. Idempotency is required where z/OS gives reliable state APIs. Where it does not, automation must use probes, markers, CSI queries, product libraries, or job output assertions.
@@ -39,6 +40,7 @@ Required:
 - IBM z/OS CICS collection.
 - IBM z/OS IMS collection.
 - Optional IBM z/OSMF collection if REST-based z/OSMF workflows are needed.
+- No specialized Db2 automation tools are assumed. In particular, the architecture must work without IBM Db2 DevOps Experience, UrbanCode Deploy plugins, or other Db2-specific deployment products.
 - SSH client with key or certificate-based authentication.
 - Vault integration for credentials and product license material.
 - Git repository for all automation, inventories, templates, and product metadata.
@@ -85,6 +87,17 @@ For IMS:
 - DBRC and RECON security agreed.
 - IMS command route and permissions agreed.
 
+For Db2:
+
+- Db2 for z/OS installed and licensed.
+- Db2 subsystem IDs, data sharing group names, catalog aliases, and member topology documented.
+- Db2 SDSNLOAD, SDSNEXIT, SDSNCLST, SDSNSAMP, RUNLIB, and site library conventions documented.
+- DSN command processor execution pattern agreed.
+- SQL execution pattern agreed, such as DSNTEP2, DSNTEP4, DSNTIAD, or site-standard batch SQL runner.
+- BIND, REBIND, FREE, GRANT, REVOKE, DDL, utility, and catalog query authority agreed.
+- Plan, package, collection, qualifier, owner, schema, and authorization naming conventions documented.
+- CICS DB2CONN/DB2ENTRY and IMS Db2 attachment dependencies documented where applicable.
+
 For BMC products:
 
 - Product list, versions, FMIDs, maintenance level, dependencies, and license requirements documented.
@@ -110,6 +123,7 @@ group_vars/
   zos_sysplex/
   cics/
   ims/
+  db2/
   bmc/
 host_vars/
 roles/
@@ -122,6 +136,8 @@ roles/
   cics_cmci_resources/
   ims_region/
   ims_database_artifacts/
+  db2_subsystem/
+  db2_database_artifacts/
   bmc_product/
   bmc_runtime_config/
   verification/
@@ -130,6 +146,7 @@ playbooks/
   preflight.yml
   deploy_cics_region.yml
   deploy_ims_region.yml
+  deploy_db2_artifacts.yml
   deploy_bmc_product.yml
   deploy_environment.yml
   verify_environment.yml
@@ -138,6 +155,7 @@ product_definitions/
   bmc/
   cics/
   ims/
+  db2/
 templates/
   jcl/
   proclib/
@@ -191,6 +209,24 @@ Each IMS region should be described declaratively:
 - DBD, PSB, ACB generation inputs and outputs.
 - Type-1 or type-2 command strategy.
 - Startup, shutdown, checkpoint, drain, and verification policy.
+
+### Db2 Model
+
+Each Db2 deployment target should be described declaratively:
+
+- Subsystem ID, data sharing group, member name, and environment.
+- Db2 release and product library HLQs.
+- SDSNLOAD, SDSNEXIT, RUNLIB, SDSNSAMP, and site execution libraries.
+- SQL execution method and job templates.
+- Plan, package, collection, qualifier, owner, schema, and authorization conventions.
+- DDL artifacts: databases, storage groups, table spaces, tables, indexes, views, aliases, synonyms, routines, triggers, and sequences.
+- Bind artifacts: DBRMs, packages, plans, collections, bind options, explain policy, validate policy, isolation, release, currentdata, and owner.
+- Security artifacts: GRANT, REVOKE, roles, trusted context, and RACF-externalized checks where applicable.
+- Utility artifacts: image copy, runstats, reorg, check data, repair policy, and recoverability checks where in scope.
+- CICS integration: DB2CONN, DB2ENTRY, DB2TRAN, and transaction-to-plan/package dependencies.
+- IMS integration: IMS Db2 attachment, dependent region requirements, and PSB/program dependency mapping.
+- BMC integration: product repository databases, plans/packages, exits, collection IDs, and product-specific catalog objects.
+- Verification queries, expected catalog state, expected binds, and expected return codes.
 
 ### BMC Product Model
 
@@ -259,6 +295,18 @@ Owns IMS procedure generation, dataset preparation, control/dependent region lif
 
 Owns DBD generation, PSB generation, ACB generation, DBRC commands, DDL, and IMS catalog population or purge.
 
+### `db2_subsystem`
+
+Owns Db2 subsystem discovery, command execution, subsystem state checks, library conventions, DSN command processor job setup, and non-invasive subsystem-level verification.
+
+This role must not assume specialized Db2 deployment tooling. It should use z/OS core primitives to submit JCL, run Db2 commands, capture output, and query catalog state through approved batch SQL mechanisms.
+
+### `db2_database_artifacts`
+
+Owns Db2 DDL, DCL, bind, rebind, free, explain, utility, and catalog-verification workflows.
+
+This role should treat SQL and bind control files as versioned deployment artifacts. It should support plan-only validation where possible, strict return-code and message assertions, before/after catalog snapshots, and explicit approval for destructive DDL or privilege removal.
+
 ### `bmc_product`
 
 Owns product media staging, product definition interpretation, SMP/E or vendor JCL install orchestration, and product-specific install evidence.
@@ -267,7 +315,7 @@ Owns product media staging, product definition interpretation, SMP/E or vendor J
 
 Owns APF, LINKLIST, LPA, PARMLIB, PROCLIB, started tasks, security hooks, product parameter libraries, and post-install customization.
 
-This role must model hooks into CICS and IMS separately from base product installation. For example, installing BMC product libraries through SMP/E is not the same change as adding CICS PLT/SIT/resource definitions, changing IMS PROCLIB members, adding exits, or recycling a monitored subsystem.
+This role must model hooks into CICS, IMS, and Db2 separately from base product installation. For example, installing BMC product libraries through SMP/E is not the same change as adding CICS PLT/SIT/resource definitions, changing IMS PROCLIB members, binding Db2 packages, adding exits, or recycling a monitored subsystem.
 
 ### `verification`
 
@@ -293,6 +341,7 @@ Required outputs:
 - JES submission test result.
 - CMCI availability for CICS if in scope.
 - IMS command capability if in scope.
+- Db2 command, batch SQL, bind, and catalog-query capability if in scope.
 - SMP/E CSI accessibility if BMC install is in scope.
 
 ### Flow 2: CICS Region Deployment
@@ -326,11 +375,22 @@ Accept policy:
 - `APPLY` can be part of deployment.
 - `ACCEPT` should require approval because it materially changes backout options.
 
-### Flow 5: Full Environment Deployment
+### Flow 5: Db2 Artifact Deployment
+
+Diagram source: [docs/diagrams/db2-artifact-deployment-flow.mmd](diagrams/db2-artifact-deployment-flow.mmd)
+
+Recovery model:
+
+- DDL changes require explicit reversibility classification before deployment.
+- BIND and REBIND jobs require prior package/plan state capture.
+- GRANT and REVOKE changes require before/after authorization snapshots.
+- Utility execution must record object scope, return codes, and recoverability impact.
+
+### Flow 6: Full Environment Deployment
 
 Diagram source: [docs/diagrams/full-environment-deployment-flow.mmd](diagrams/full-environment-deployment-flow.mmd)
 
-The exact ordering depends on which BMC products are deployed. Products that instrument, monitor, or integrate with CICS or IMS may need base libraries installed before region customization, but final hooks should happen after the target regions exist.
+The exact ordering depends on which BMC products are deployed. Products that instrument, monitor, or integrate with CICS, IMS, or Db2 may need base libraries installed before subsystem customization, but final hooks should happen after the target regions, subsystems, databases, and bind targets exist.
 
 ## Dependency Governance
 
@@ -345,6 +405,7 @@ Each deployable unit should declare:
 - Required APF/LINKLIST/PARMLIB state.
 - Required started tasks.
 - Required CICS or IMS regions.
+- Required Db2 subsystems, data sharing groups, plans, packages, collections, schemas, or catalog objects.
 - Required prior deployment units.
 - Whether the dependency is install-time, customization-time, or runtime-only.
 
@@ -353,8 +414,8 @@ The deployment planner should produce an ordered manifest before applying change
 1. Base z/OS prerequisites.
 2. BMC shared infrastructure and common libraries.
 3. BMC product base installation.
-4. CICS and IMS region provisioning.
-5. Product hooks into CICS and IMS.
+4. CICS, IMS, and Db2 provisioning or artifact deployment.
+5. Product hooks into CICS, IMS, and Db2.
 6. Runtime starts, refreshes, or recycles.
 7. Verification.
 8. Evidence publication.
@@ -373,6 +434,7 @@ Use native Ansible modules where they expose state safely:
 - CICS provisioning module state.
 - CMCI create/update/delete/get/action behavior.
 - IMS command and generation module behavior.
+- Db2 batch SQL, bind job, utility job, command output, and catalog query assertions.
 
 Use custom state probes where native idempotency is not available:
 
@@ -385,6 +447,7 @@ Use custom state probes where native idempotency is not available:
 - PROCLIB member checksum.
 - Product startup message presence.
 - Product-specific command output.
+- Db2 catalog state for objects, grants, packages, plans, collections, and utility-relevant metadata.
 
 Never treat successful JCL submission alone as success. Success requires:
 
@@ -409,6 +472,7 @@ Required approval gates:
 - SMP/E ACCEPT in all controlled environments.
 - CICS catalog recreation.
 - IMS RECON or DBRC changes.
+- Db2 destructive DDL, REVOKE, FREE, mass REBIND, RUNSTATS/REORG/COPY policy changes, and subsystem parameter changes.
 - Any BYPASS of SMP/E HOLDDATA or requisites.
 - Any product step requiring IPL, LLA refresh, VARY, or subsystem restart.
 
@@ -448,6 +512,7 @@ Each run should produce an evidence bundle containing:
 - Operator command outputs.
 - CICS CMCI before/after snapshots where applicable.
 - IMS command outputs where applicable.
+- Db2 catalog snapshots, SQL output, bind reports, and utility output where applicable.
 - SMP/E reports.
 - Changed dataset and member list.
 - Final deployment manifest.
@@ -471,6 +536,7 @@ Each run should produce an evidence bundle containing:
 - JCL submit and JES capture.
 - CICS test region create/start/stop/destroy.
 - IMS test artifact generation and command execution.
+- Db2 test DDL, DCL, BIND, REBIND, and catalog verification in an isolated schema or sandbox subsystem.
 - SMP/E dry-run CHECK jobs against non-production CSI.
 
 ### Production Readiness Tests
@@ -480,7 +546,7 @@ Each run should produce an evidence bundle containing:
 - Backup and restore proof.
 - Evidence bundle review.
 - Operator handoff checklist.
-- Rollback drill for at least one CICS region, one IMS customization, and one BMC product flow.
+- Rollback drill for at least one CICS region, one IMS customization, one Db2 artifact deployment, and one BMC product flow.
 
 ## Delivery Phases
 
@@ -493,6 +559,7 @@ Deliverables:
 - Security matrix.
 - Storage and dataset standards.
 - CICS and IMS region catalog.
+- Db2 subsystem, schema, package, plan, and application dependency catalog.
 - BMC product dependency graph.
 - Install media and license handling plan.
 
@@ -525,7 +592,18 @@ Deliverables:
 - IMS command and verification workflows.
 - Test IMS deployment.
 
-### Phase 4: BMC Product Framework
+### Phase 4: Db2 Artifact Automation
+
+Deliverables:
+
+- Db2 model and artifact schema.
+- Batch SQL execution framework.
+- Bind and rebind framework.
+- Catalog snapshot and verification framework.
+- DDL/DCL deployment and backout classification.
+- Test Db2 deployment in an isolated schema or sandbox subsystem.
+
+### Phase 5: BMC Product Framework
 
 Deliverables:
 
@@ -537,7 +615,7 @@ Deliverables:
 - Product customization JCL framework.
 - First product onboarded end to end.
 
-### Phase 5: Product Factory
+### Phase 6: Product Factory
 
 Deliverables:
 
@@ -546,7 +624,7 @@ Deliverables:
 - Environment deployment workflow.
 - Evidence and audit publication.
 
-### Phase 6: Production Operating Model
+### Phase 7: Production Operating Model
 
 Deliverables:
 
@@ -564,9 +642,10 @@ Start with a narrow but representative pilot:
 1. One z/OS sandbox LPAR.
 2. One new CICS test region.
 3. One IMS test region or IMS artifact generation flow.
-4. One BMC product with SMP/E packaging.
-5. One BMC product with post-install runtime customization.
-6. Full preflight, deploy, verify, and evidence bundle.
+4. One Db2 isolated schema or sandbox subsystem deployment flow.
+5. One BMC product with SMP/E packaging.
+6. One BMC product with post-install runtime customization, preferably including at least one Db2 bind or catalog dependency if representative.
+7. Full preflight, deploy, verify, and evidence bundle.
 
 Do not start by automating every product. Build the factory pattern with two BMC product shapes, then scale.
 
@@ -578,10 +657,12 @@ Do not start by automating every product. Build the factory pattern with two BMC
 4. Which security product is used: RACF, ACF2, or Top Secret?
 5. Are CICS resources managed through CMCI/CICSPlex SM, CSD batch utilities, or both?
 6. Are IMS operations authorized through type-2 commands, type-1 commands, generated JCL, or a mix?
-7. Is z/OSMF available and approved for any deployment functions?
-8. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
-9. What is the required backout posture for each product?
-10. Are IPLs allowed, avoided, or scheduled only by separate change process?
+7. Which Db2 execution method is approved for automation: DSNTEP2, DSNTEP4, DSNTIAD, site-standard JCL, or another batch SQL runner?
+8. What are the approval boundaries for Db2 DDL, DCL, BIND, REBIND, FREE, utilities, and subsystem commands?
+9. Is z/OSMF available and approved for any deployment functions?
+10. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
+11. What is the required backout posture for each product?
+12. Are IPLs allowed, avoided, or scheduled only by separate change process?
 
 ## Implementation Readiness Checklist
 
@@ -594,6 +675,7 @@ Code should not begin until these are complete:
 - Dataset naming and storage standards are approved.
 - CICS region model is approved.
 - IMS region model is approved.
+- Db2 model and artifact schema are approved.
 - BMC product schema is approved.
 - SMP/E CSI strategy is approved.
 - Approval gates are agreed.

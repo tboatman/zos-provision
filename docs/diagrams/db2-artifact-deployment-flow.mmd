@@ -1,0 +1,11 @@
+flowchart TD
+    A["Load Db2 artifact definition"] --> B["Validate subsystem, schema, collection, and authority model"]
+    B --> C["Capture current catalog, package, plan, and grant state"]
+    C --> D["Render SQL, bind, utility, and verification JCL"]
+    D --> E["Run non-destructive validation where available"]
+    E --> F["Run DDL or DCL jobs"]
+    F --> G["Run BIND, REBIND, FREE, or package jobs if in scope"]
+    G --> H["Run utility jobs if in scope"]
+    H --> I["Query catalog and bind state"]
+    I --> J["Verify expected objects, grants, packages, plans, and return codes"]
+    J --> K["Capture evidence"]

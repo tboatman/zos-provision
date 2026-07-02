@@ -6,6 +6,8 @@ Define a strategy for installing, updating, configuring, auditing, and recoverin
 
 This is a planning and brainstorming document. It intentionally includes conservative options and aggressive ideas. Implementation should start only after the product inventory and install evidence are collected.
 
+No specialized Db2 deployment tools are assumed. If a BMC product requires Db2 plans, packages, repository objects, grants, or utility jobs, those steps must be modeled through generic z/OS automation: generated JCL, DSN command processor jobs, site-standard batch SQL runners, bind jobs, catalog queries, and captured evidence.
+
 ## Documentation Diagram Convention
 
 All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid source files under [docs/diagrams](diagrams/). Markdown documents should link to those files instead of embedding Mermaid blocks inline.
@@ -17,7 +19,7 @@ BMC product deployment is not one problem. It is several overlapping problems:
 - Some products are SMP/E-packaged.
 - Some products may use vendor-generated JCL, custom install jobs, runtime customization jobs, or ISPF-driven setup flows.
 - Some products share common libraries, panels, skeletons, exits, started tasks, or infrastructure components.
-- Local customization may be buried in PROCLIB, PARMLIB, CLIST/REXX, ISPF tables, CICS definitions, IMS PROCLIB, DB2 plans/packages, security rules, exits, and product-specific parameter members.
+- Local customization may be buried in PROCLIB, PARMLIB, CLIST/REXX, ISPF tables, CICS definitions, IMS PROCLIB, Db2 plans/packages, Db2 catalog objects, security rules, exits, and product-specific parameter members.
 - The current state may not match vendor docs, previous install jobs, or SMP/E metadata.
 - There may be no disciplined internal repository for BMC base media, service media, HOLDDATA, generated JCL, applied maintenance, or local overrides.
 
@@ -44,7 +46,7 @@ Treat every BMC product as a package with four separate layers:
    - Security definitions.
    - CICS hooks, resources, exits, PLT/SIT references, and transaction definitions.
    - IMS hooks, PROCLIB changes, exits, DBRC or catalog references.
-   - DB2 plans/packages or subsystem references where applicable.
+   - Db2 plans/packages, collections, catalog objects, grants, repository databases, or subsystem references where applicable.
 
 4. **Local configuration layer**
    - Product parameter members.
@@ -116,7 +118,7 @@ Required fields:
 - Media package identifiers.
 - Service package identifiers.
 - Required BMC common components.
-- Required z/OS, CICS, IMS, DB2, MQ, Java, or LE levels.
+- Required z/OS, CICS, IMS, Db2, MQ, Java, or LE levels.
 - SMP/E CSI strategy.
 - Target and distribution zones.
 - Runtime libraries.
@@ -129,7 +131,7 @@ Required fields:
 - Security profiles and started task IDs.
 - CICS integration points.
 - IMS integration points.
-- DB2 integration points.
+- Db2 integration points.
 - Product verification commands.
 - Backout classification.
 - ACCEPT policy.
@@ -197,7 +199,7 @@ Use for products where the install bits already exist but integration is the har
 
 Responsibilities:
 
-- Update APF, LINKLIST, LPA, PROCLIB, PARMLIB, product parameter libraries, CICS, IMS, DB2, and security definitions.
+- Update APF, LINKLIST, LPA, PROCLIB, PARMLIB, product parameter libraries, CICS, IMS, Db2, and security definitions.
 - Create before/after snapshots.
 - Require approval for invasive changes.
 - Trigger LLA refresh, started task recycle, CICS resource install, IMS command, or IPL scheduling when required.
@@ -237,6 +239,7 @@ Collect everything without judging it:
 - Security definitions.
 - CICS CSD/CMCI resources.
 - IMS PROCLIB and command output.
+- Db2 catalog objects, plans, packages, collections, grants, bind jobs, and product repository databases.
 - Product parameter datasets.
 - Scheduler jobs.
 - REXX/CLIST/ISPF assets.
@@ -250,7 +253,7 @@ For each discovered artifact, classify:
 - Belongs to BMC shared infrastructure.
 - Belongs to CICS integration.
 - Belongs to IMS integration.
-- Belongs to DB2 integration.
+- Belongs to Db2 integration.
 - Local site override.
 - Historical dead config.
 - Unknown.
@@ -277,7 +280,7 @@ Use a promotion ring model:
 2. **Static analysis**
    - Compare new package against prior package.
    - Extract FMIDs, SYSMOD IDs, JCL changes, sample changes, and documented hold actions.
-   - Flag APF, LINKLIST, PARMLIB, PROCLIB, CICS, IMS, and DB2 impact.
+   - Flag APF, LINKLIST, PARMLIB, PROCLIB, CICS, IMS, and Db2 impact.
 
 3. **Sandbox apply**
    - Deploy to an isolated sandbox CSI and runtime library set.
@@ -286,7 +289,7 @@ Use a promotion ring model:
    - Capture all output.
 
 4. **Integration test**
-   - Connect to disposable or test CICS/IMS regions.
+   - Connect to disposable or test CICS/IMS regions and isolated Db2 schemas or sandbox subsystems.
    - Verify product starts and hooks work.
    - Run smoke checks.
 
@@ -328,13 +331,14 @@ Define desired runtime state for each LPAR:
 - Required started tasks.
 - Required CICS hooks.
 - Required IMS hooks.
+- Required Db2 plans, packages, collections, grants, repository objects, and subsystem hooks.
 - Required security definitions.
 
 Then continuously compare desired state to observed state. First report drift only. Later, allow controlled remediation.
 
 ### Create a Configuration Archaeology Pipeline
 
-Build read-only jobs that scrape PROCLIB, PARMLIB, APF, LINKLIST, CICS, IMS, scheduler, and product libraries, then infer what product owns each artifact.
+Build read-only jobs that scrape PROCLIB, PARMLIB, APF, LINKLIST, CICS, IMS, Db2 catalog/bind metadata, scheduler, and product libraries, then infer what product owns each artifact.
 
 Output:
 
@@ -356,6 +360,10 @@ Model:
 - PROC points to parameter member.
 - Parameter member references CICS region.
 - CICS region references program or exit.
+- Product bind job creates Db2 package.
+- Package belongs to collection.
+- Collection is referenced by plan or runtime parameter.
+- Product repository table belongs to schema.
 - Security profile permits STC user.
 
 This can start as YAML and `.mmd` diagram sources. If it grows, move to Neo4j, SQLite, or a graph-oriented inventory service.
@@ -367,7 +375,7 @@ For products that tolerate STEPLIB or proc-level indirection, install new librar
 - `BMC.PROD.V1R2M0.*`
 - `BMC.PROD.V1R2M1.*`
 
-Then switch started task PROCs, CICS references, or IMS references through symbolic variables or controlled include members. This improves rollback because old libraries remain intact.
+Then switch started task PROCs, CICS references, IMS references, or Db2 collection/package references through symbolic variables, controlled include members, or bind indirection where safe. This improves rollback because old libraries and package collections remain intact.
 
 ### Create a Product "Flight Recorder"
 
@@ -434,7 +442,7 @@ This is especially useful for products with weak or missing current install meta
 | Vendor JCL is not idempotent | Wrap it with prechecks, backups, markers, and expected-output assertions. |
 | ACCEPT closes rollback path | Separate ACCEPT from APPLY and require explicit approval. |
 | Runtime hooks are riskier than base install | Separate base install from runtime integration and require independent approvals. |
-| CICS/IMS recycle impact is unclear | Model affected regions and commands in the deployment manifest. |
+| CICS/IMS/Db2 runtime impact is unclear | Model affected regions, subsystems, commands, binds, utilities, and catalog objects in the deployment manifest. |
 | Shared BMC components cause hidden coupling | Build a dependency graph and product ownership map. |
 | Local customizations get overwritten | Preserve customizations as overlays and compare before replacement. |
 | Drift after deployment | Add recurring read-only compliance checks before enabling remediation. |
@@ -448,12 +456,13 @@ This is especially useful for products with weak or missing current install meta
 5. Identify BMC started tasks and STC user IDs.
 6. Identify BMC hooks in CICS regions.
 7. Identify BMC hooks in IMS regions.
-8. Identify DB2, MQ, TCP/IP, Java, or USS dependencies.
-9. Collect available vendor media and service packages.
-10. Collect historical install and maintenance jobs.
-11. Collect product-specific runbooks.
-12. Classify each product install method.
-13. Select two pilot products:
+8. Identify Db2, MQ, TCP/IP, Java, or USS dependencies.
+9. Identify BMC-related Db2 plans, packages, collections, repository objects, bind jobs, grants, and utility jobs.
+10. Collect available vendor media and service packages.
+11. Collect historical install and maintenance jobs.
+12. Collect product-specific runbooks.
+13. Classify each product install method.
+14. Select two pilot products:
     - One SMP/E-heavy product.
     - One runtime-customization-heavy product.
 

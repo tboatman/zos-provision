@@ -4,17 +4,20 @@ flowchart LR
     B --> D["Shared z/OS services roles"]
     B --> E["CICS region roles"]
     B --> F["IMS region roles"]
-    B --> G["BMC product roles"]
-    B --> H["Validation and reporting roles"]
+    B --> G["Db2 artifact roles"]
+    B --> H["BMC product roles"]
+    B --> I["Validation and reporting roles"]
 
     D --> Z["z/OS managed node over SSH"]
     E --> Z
     F --> Z
     G --> Z
     H --> Z
+    I --> Z
 
     E --> CICS["CICS TS / CICSPlex SM / CMCI"]
     F --> IMS["IMS control regions and IMS tooling"]
-    G --> SMPE["SMP/E CSI, target libraries, distribution libraries"]
-    G --> JCL["Generated and submitted JCL"]
-    H --> ART["Run artifacts, job logs, evidence"]
+    G --> DB2["Db2 subsystems, catalog, SQL, BIND, utilities"]
+    H --> SMPE["SMP/E CSI, target libraries, distribution libraries"]
+    H --> JCL["Generated and submitted JCL"]
+    I --> ART["Run artifacts, job logs, evidence"]
