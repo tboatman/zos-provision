@@ -123,9 +123,12 @@ flowchart TD
         BMC12 --> BMC13["AMI Ops Monitoring and monitor products"]
         BMC12 --> BMC14["AMI Ops Automation and licensed options"]
         BMC12 --> BMC15["AMI DevX product-family inventory"]
+        BMC12 --> BMC17["Control-M suite and INCONTROL inventory"]
         BMC13 --> BMC16["Capture docs, media, service, HOLDDATA, JCL, workflows"]
         BMC14 --> BMC16
         BMC15 --> BMC16
+        BMC17 --> BMC18["Capture distributed orchestration, agents, Automation API, Control-M for z/OS, and INCONTROL components"]
+        BMC18 --> BMC16
     end
 
     subgraph BROADCOM["Broadcom CA documentation and product intake"]
@@ -429,6 +432,7 @@ flowchart TD
     RK8 --> VP1
     BMC8 --> PD1
     BMC16 --> PD1
+    BMC18 --> PD1
     CA8 --> PD1
     RK8 --> PD1
     DP10 --> VD3

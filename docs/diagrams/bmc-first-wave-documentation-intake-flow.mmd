@@ -1,6 +1,6 @@
 flowchart TD
-    A["BMC target scope<br/>AMI Ops Monitoring, AMI Ops Automation, AMI DevX"] --> B["Confirm BMC Docs and Support Central access"]
-    B --> C["Open official Ops and DevX catalog pages"]
+    A["BMC target scope<br/>AMI Ops Monitoring, AMI Ops Automation, AMI DevX, Control-M"] --> B["Confirm BMC Docs and Support Central access"]
+    B --> C["Open official Ops, DevX, Control-M, and INCONTROL catalog pages"]
     C --> D["Record product families, product names, visible versions, and legacy aliases"]
     D --> E{"Detailed docs visible?"}
     E -- "No" --> F["Log in or request entitlement-backed access"]
@@ -9,8 +9,8 @@ flowchart TD
     G --> H["Capture install, customization, upgrade, admin, integration, messages, and maintenance sections"]
     H --> I["Open Product Download Tool"]
     I --> J["Capture base media, service, HOLDDATA, installation tools, generated JCL, and z/OSMF workflows"]
-    J --> K["Cross-check against installed SMP/E CSIs, HLQs, started tasks, and subsystem hooks"]
-    K --> L["Create BMC AMI product inventory"]
+    J --> K["Cross-check against installed SMP/E CSIs, HLQs, started tasks, agents, endpoints, and subsystem hooks"]
+    K --> L["Create BMC first-wave product inventory"]
     L --> M["Create product definitions for pilots"]
     M --> N{"Ready for automation design?"}
     N -- "No" --> O["Mark gaps and continue documentation/media discovery"]

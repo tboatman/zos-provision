@@ -1,4 +1,4 @@
-# BMC AMI Target Documentation Intake
+# BMC First-Wave Documentation Intake
 
 ## Purpose
 
@@ -7,12 +7,13 @@ Define the immediate work required to obtain and normalize documentation for the
 - BMC AMI Ops Monitoring and related AMI Ops Monitor products.
 - BMC AMI Ops Automation.
 - BMC AMI DevX product family.
+- BMC Control-M suite, including Control-M for Mainframe and INCONTROL components.
 
 This is a documentation and entitlement intake task. Do not start product automation from product names alone.
 
 ## Acquisition Flow
 
-Diagram source: [docs/diagrams/bmc-ami-target-documentation-intake-flow.mmd](diagrams/bmc-ami-target-documentation-intake-flow.mmd)
+Diagram source: [docs/diagrams/bmc-first-wave-documentation-intake-flow.mmd](diagrams/bmc-first-wave-documentation-intake-flow.mmd)
 
 ## Official BMC Entry Points
 
@@ -24,6 +25,8 @@ Use these first:
 - BMC Product Downloads: https://www.bmc.com/support/resources/product-downloads.html
 - BMC Support Central: https://www.bmc.com/support/support-central.html
 - BMC Product Support pages: https://docs.bmc.com/xwiki/bin/view/Standalone/Product-Support/productinfo/
+- Control-M documentation: https://documents.bmc.com/supportu/9.0.21.300/en-US/Documentation/home.htm
+- Control-M for Mainframe and INCONTROL documentation: https://documents.bmc.com/supportu/INC/9.0.21/en-US/home.htm
 
 The public documentation indexes identify product families, products, and visible versions. The detailed product pages can require BMC login or registration. Treat BMC account access as a blocking prerequisite, not an implementation detail.
 
@@ -230,11 +233,106 @@ bmc-ami-devx-workbench-vscode
 bmc-ami-web-products-installation
 ```
 
+## Target 4: BMC Control-M Suite
+
+### Current Official Index Signal
+
+The BMC Documentation home links Control-M as a workload automation solution and separately links Control-M for Mainframe. The current Control-M documentation entry point is hosted on `documents.bmc.com` and exposes version `9.0.21.300`. The Control-M for Mainframe link opens the INCONTROL documentation space, also marked version `9.0.21.300`.
+
+Treat Control-M as a suite, not a single z/OS product. It spans distributed Control-M services, agents, plug-ins, Automation API, and mainframe INCONTROL components.
+
+Visible Control-M documentation areas include:
+
+- Get started.
+- Architecture.
+- Planning workflows.
+- Creating jobs, folders, events, resources, calendars, and variables.
+- Monitoring workflows, jobs, services, alerts, and viewpoints.
+- Reports.
+- Administration.
+- Installation.
+- Security.
+- Agents.
+- Authentication.
+- Authorizations.
+- System settings.
+- Site standards.
+- Migration.
+- Plug-ins.
+- Application Integrator.
+- Control-M integrations.
+- Managed File Transfer.
+- Control-M for SAP.
+- Automation API installation, tutorials, code reference, and services.
+- Conversion tooling.
+
+Visible Control-M for Mainframe and INCONTROL areas include:
+
+- Installing INCONTROL.
+- Control-M for z/OS.
+- Control-M/Restart.
+- Control-M Analyzer.
+- Control-M Assist.
+- Control-O.
+- COSMOS.
+- INCONTROL administration.
+- Utilities.
+- Security.
+- Messages.
+- KeyStroke Language.
+- Control-M JCL Verify.
+- Control-D and Control-V.
+- Control-M/Tape.
+- Conversion from existing workflows.
+
+### What To Capture
+
+For the Control-M suite and each licensed mainframe component, capture:
+
+- Product page URL.
+- Documentation version and publication date.
+- Licensed component list.
+- Whether detailed pages require login.
+- Distributed Control-M architecture and installation requirements.
+- Control-M for z/OS and INCONTROL installation requirements.
+- Mainframe agent, server, gateway, and communication topology.
+- Authentication, authorization, and security model.
+- RACF profiles, started tasks, users, groups, permits, certificates, and keyrings.
+- TCP/IP ports, DNS, TLS, firewall, and endpoint requirements.
+- Db2, CICS, IMS, MQ, SAP, file transfer, and other plug-in dependencies if licensed.
+- Agent deployment and maintenance procedures.
+- Control-M/Restart, Control-M Analyzer, Control-M Assist, Control-O, COSMOS, JCL Verify, Control-D, Control-V, and Control-M/Tape documentation if licensed.
+- Job definition, calendar, variable, resource, event, and site-standard migration requirements.
+- Automation API installation and credential requirements.
+- Conversion tooling and source-data extraction requirements.
+- Product media, service, patches, HOLDDATA, generated JCL, and installation tools.
+- Verification commands, health checks, workflow checks, and expected evidence.
+- Backout and maintenance instructions.
+
+### Initial Product Codes
+
+Use these temporary product-definition codes until entitlement and media names are confirmed:
+
+```text
+bmc-control-m-suite
+bmc-control-m-mainframe
+bmc-incontrol
+bmc-control-m-zos
+bmc-control-m-restart
+bmc-control-m-analyzer
+bmc-control-m-assist
+bmc-control-o
+bmc-control-m-jcl-verify
+bmc-control-d-v
+bmc-control-m-tape
+bmc-control-m-automation-api
+```
+
 ## Document Capture Procedure
 
 For each target product/version:
 
-1. Open the BMC Docs product page from the Ops or DevX catalog.
+1. Open the BMC Docs product page from the Ops, DevX, Control-M, or INCONTROL catalog.
 2. Record the canonical URL, product title, visible versions, and last-modified date.
 3. Log in if the page reports that authentication is required.
 4. Export the product space or relevant page tree as PDF or HTML when permitted.
@@ -254,6 +352,7 @@ product_definitions/vendors/bmc/product-inventory.yml
 product_definitions/vendors/bmc/bmc-ami-ops-monitoring.yml
 product_definitions/vendors/bmc/bmc-ami-ops-automation.yml
 product_definitions/vendors/bmc/bmc-ami-devx-family.yml
+product_definitions/vendors/bmc/bmc-control-m-suite.yml
 ```
 
 Documentation snapshots and metadata should be stored under:
@@ -273,12 +372,14 @@ depot/vendors/bmc/products/<product-code>/<version>/zosmf-workflows/
 2. Is BMC AMI Ops Monitoring licensed as the solution bundle, individual monitor products, or both?
 3. Which BMC AMI Ops Automation options are licensed?
 4. Which BMC AMI DevX products are licensed?
-5. Who can log in to BMC Docs and Support Central?
-6. Who can use the Product Download Tool?
-7. Are PDFs or HTML exports allowed for internal use?
-8. Which currently installed BMC HLQs and SMP/E CSIs correspond to these products?
-9. Are MainView, AutoOPERATOR, Compuware, or other legacy names still used locally?
-10. Which product should be the first implementation pilot after documentation intake?
+5. Which BMC Control-M, Control-M for Mainframe, and INCONTROL components are licensed?
+6. Is Control-M in scope as a full distributed-plus-mainframe suite or only the z/OS/INCONTROL side?
+7. Who can log in to BMC Docs and Support Central?
+8. Who can use the Product Download Tool?
+9. Are PDFs or HTML exports allowed for internal use?
+10. Which currently installed BMC HLQs and SMP/E CSIs correspond to these products?
+11. Are MainView, AutoOPERATOR, Compuware, INCONTROL, Control-D, Control-O, or other legacy names still used locally?
+12. Which product should be the first implementation pilot after documentation intake?
 
 ## Rule
 

@@ -7,7 +7,7 @@ flowchart TD
     E --> F["Automate Deployment Paths<br/>z/OSMF first, SMP/E, vendor JCL, runtime overlays"]
     F --> G["Provision Runtime Platform<br/>z/OS services, RACF, CICS, IMS, Db2"]
     G --> H["Install and Configure Vendor Products<br/>base software plus subsystem integrations"]
-    H --> U["First BMC Focus<br/>AMI Ops Monitoring, AMI Ops Automation, AMI DevX"]
+    H --> U["First BMC Focus<br/>AMI Ops Monitoring, AMI Ops Automation, AMI DevX, Control-M"]
     U --> I["Verify and Produce Evidence<br/>jobs, logs, manifests, drift checks, approvals"]
     I --> J["Emit Disconnected VM Guest Clones<br/>repeatable development environments"]
 
@@ -17,7 +17,7 @@ flowchart TD
     F --> N["Why It Is Large<br/>install methods vary by product and release"]
     G --> O["Why It Is Large<br/>security and subsystem changes are coupled"]
     H --> P["Why It Is Large<br/>BMC, Broadcom CA, and Rocket need vendor-specific adapters"]
-    U --> V["Why It Is Large<br/>BMC AMI alone expands into monitors, automation options, and DevX subproducts"]
+    U --> V["Why It Is Large<br/>BMC expands into monitors, automation options, DevX subproducts, Control-M, and INCONTROL"]
     I --> Q["Why It Is Large<br/>evidence, rollback, and audit cannot be optional"]
     J --> R["Why It Is Large<br/>clones must be independent VM guests with local authority"]
 
