@@ -375,11 +375,17 @@ Owns collection of job logs, rendered JCL, configuration snapshots, reports, and
 
 ## Execution Flows
 
+### Executive 50k Overview
+
+Diagram source: [docs/diagrams/executive-50k-overview.mmd](diagrams/executive-50k-overview.mmd)
+
+This diagram is the deliberately simplified executive view. Keep it synchronized with the master combined flow whenever the major phases, vendor families, clone posture, or delivery model change.
+
 ### Master Combined Flow
 
 Diagram source: [docs/diagrams/master-combined-flow.mmd](diagrams/master-combined-flow.mmd)
 
-This diagram intentionally combines the architecture, intake, preflight, vendor, CICS, IMS, Db2, RACF, maintenance, clone factory, verification, and evidence flows into one large view. Use it to communicate project scale and dependency breadth. Use the individual flow diagrams below as drill-downs for implementation design.
+This diagram intentionally combines the architecture, intake, preflight, vendor, CICS, IMS, Db2, RACF, maintenance, clone factory, verification, and evidence flows into one large view. Keep it synchronized with the executive overview so the simplified message and detailed dependency map tell the same story. Use it to communicate project scale and dependency breadth. Use the individual flow diagrams below as drill-downs for implementation design.
 
 ### Flow 1: Preflight
 
