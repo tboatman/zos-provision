@@ -1,0 +1,10 @@
+flowchart TD
+    A["Load IMS region definition"] --> B["Validate IMSID and library model"]
+    B --> C["Allocate or verify IMS runtime datasets"]
+    C --> D["Render PROCLIB and JCL members"]
+    D --> E["Generate DBDs and PSBs if in scope"]
+    E --> F["Generate ACBs"]
+    F --> G["Run DBRC or catalog actions if in scope"]
+    G --> H["Start IMS control and dependent regions"]
+    H --> I["Submit IMS verification commands"]
+    I --> J["Capture evidence"]

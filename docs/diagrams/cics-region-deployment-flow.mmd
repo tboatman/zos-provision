@@ -1,0 +1,11 @@
+flowchart TD
+    A["Load CICS region definition"] --> B["Validate region naming and dataset model"]
+    B --> C["Allocate or verify region datasets"]
+    C --> D["Initialize global and local catalogs"]
+    D --> E["Create auxiliary datasets"]
+    E --> F["Create or update CSD"]
+    F --> G["Render and install startup JCL"]
+    G --> H["Apply CMCI resource definitions if enabled"]
+    H --> I["Start region"]
+    I --> J["Verify region status and expected resources"]
+    J --> K["Capture evidence"]

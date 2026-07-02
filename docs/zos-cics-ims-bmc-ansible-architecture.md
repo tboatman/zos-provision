@@ -6,6 +6,10 @@ Design the architecture, requirements, scope, and execution flows for deploying 
 
 This document deliberately avoids implementation code. It defines the operating model and module boundaries that should be agreed before playbooks, roles, inventories, or JCL templates are written.
 
+## Documentation Diagram Convention
+
+All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid source files under [docs/diagrams](diagrams/). Markdown documents should link to those files instead of embedding Mermaid blocks inline.
+
 ## Design Principles
 
 1. Ansible is the orchestrator, not the only execution engine.
@@ -22,28 +26,7 @@ This document deliberately avoids implementation code. It defines the operating 
 
 ## Target Architecture
 
-```mermaid
-flowchart LR
-    A["Linux or macOS control node"] --> B["Ansible project"]
-    B --> C["Inventory and environment model"]
-    B --> D["Shared z/OS services roles"]
-    B --> E["CICS region roles"]
-    B --> F["IMS region roles"]
-    B --> G["BMC product roles"]
-    B --> H["Validation and reporting roles"]
-
-    D --> Z["z/OS managed node over SSH"]
-    E --> Z
-    F --> Z
-    G --> Z
-    H --> Z
-
-    E --> CICS["CICS TS / CICSPlex SM / CMCI"]
-    F --> IMS["IMS control regions and IMS tooling"]
-    G --> SMPE["SMP/E CSI, target libraries, distribution libraries"]
-    G --> JCL["Generated and submitted JCL"]
-    H --> ART["Run artifacts, job logs, evidence"]
-```
+Diagram source: [docs/diagrams/target-architecture.mmd](diagrams/target-architecture.mmd)
 
 ## Control Node Requirements
 
@@ -298,17 +281,7 @@ Owns collection of job logs, rendered JCL, configuration snapshots, reports, and
 
 ### Flow 1: Preflight
 
-```mermaid
-flowchart TD
-    A["Start preflight"] --> B["Validate control node versions and collections"]
-    B --> C["Validate SSH and Python on z/OS"]
-    C --> D["Validate ZOAU and environment variables"]
-    D --> E["Gather z/OS facts and dataset standards"]
-    E --> F["Validate security permissions"]
-    F --> G["Validate storage and HLQ access"]
-    G --> H["Validate product-specific prerequisites"]
-    H --> I["Produce preflight report"]
-```
+Diagram source: [docs/diagrams/preflight-flow.mmd](diagrams/preflight-flow.mmd)
 
 Required outputs:
 
@@ -324,19 +297,7 @@ Required outputs:
 
 ### Flow 2: CICS Region Deployment
 
-```mermaid
-flowchart TD
-    A["Load CICS region definition"] --> B["Validate region naming and dataset model"]
-    B --> C["Allocate or verify region datasets"]
-    C --> D["Initialize global and local catalogs"]
-    D --> E["Create auxiliary datasets"]
-    E --> F["Create or update CSD"]
-    F --> G["Render and install startup JCL"]
-    G --> H["Apply CMCI resource definitions if enabled"]
-    H --> I["Start region"]
-    I --> J["Verify region status and expected resources"]
-    J --> K["Capture evidence"]
-```
+Diagram source: [docs/diagrams/cics-region-deployment-flow.mmd](diagrams/cics-region-deployment-flow.mmd)
 
 Recovery model:
 
@@ -347,18 +308,7 @@ Recovery model:
 
 ### Flow 3: IMS Region Deployment
 
-```mermaid
-flowchart TD
-    A["Load IMS region definition"] --> B["Validate IMSID and library model"]
-    B --> C["Allocate or verify IMS runtime datasets"]
-    C --> D["Render PROCLIB and JCL members"]
-    D --> E["Generate DBDs and PSBs if in scope"]
-    E --> F["Generate ACBs"]
-    F --> G["Run DBRC or catalog actions if in scope"]
-    G --> H["Start IMS control and dependent regions"]
-    H --> I["Submit IMS verification commands"]
-    I --> J["Capture evidence"]
-```
+Diagram source: [docs/diagrams/ims-region-deployment-flow.mmd](diagrams/ims-region-deployment-flow.mmd)
 
 Recovery model:
 
@@ -368,22 +318,7 @@ Recovery model:
 
 ### Flow 4: BMC Product Deployment
 
-```mermaid
-flowchart TD
-    A["Load BMC product definition"] --> B["Validate media, license, prerequisites, and FMIDs"]
-    B --> C["Stage media to USS or MVS datasets"]
-    C --> D["Prepare SMP/E CSI and zones if required"]
-    D --> E["Run RECEIVE CHECK"]
-    E --> F["Run RECEIVE"]
-    F --> G["Run APPLY CHECK"]
-    G --> H["Approval gate for APPLY"]
-    H --> I["Run APPLY"]
-    I --> J["Run product customization JCL"]
-    J --> K["Configure runtime integration"]
-    K --> L["Start or refresh product components"]
-    L --> M["Verify product status"]
-    M --> N["Capture evidence and deployment manifest"]
-```
+Diagram source: [docs/diagrams/bmc-product-deployment-flow.mmd](diagrams/bmc-product-deployment-flow.mmd)
 
 Accept policy:
 
@@ -393,16 +328,7 @@ Accept policy:
 
 ### Flow 5: Full Environment Deployment
 
-```mermaid
-flowchart TD
-    A["Preflight"] --> B["Install or update BMC prerequisites"]
-    B --> C["Deploy base BMC runtime products"]
-    C --> D["Deploy CICS regions"]
-    D --> E["Deploy IMS regions"]
-    E --> F["Deploy BMC integrations into CICS and IMS"]
-    F --> G["Run cross-system verification"]
-    G --> H["Publish evidence bundle"]
-```
+Diagram source: [docs/diagrams/full-environment-deployment-flow.mmd](diagrams/full-environment-deployment-flow.mmd)
 
 The exact ordering depends on which BMC products are deployed. Products that instrument, monitor, or integrate with CICS or IMS may need base libraries installed before region customization, but final hooks should happen after the target regions exist.
 

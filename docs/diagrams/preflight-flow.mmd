@@ -1,0 +1,9 @@
+flowchart TD
+    A["Start preflight"] --> B["Validate control node versions and collections"]
+    B --> C["Validate SSH and Python on z/OS"]
+    C --> D["Validate ZOAU and environment variables"]
+    D --> E["Gather z/OS facts and dataset standards"]
+    E --> F["Validate security permissions"]
+    F --> G["Validate storage and HLQ access"]
+    G --> H["Validate product-specific prerequisites"]
+    H --> I["Produce preflight report"]

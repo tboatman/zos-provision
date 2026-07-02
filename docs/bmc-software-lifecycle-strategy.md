@@ -6,6 +6,10 @@ Define a strategy for installing, updating, configuring, auditing, and recoverin
 
 This is a planning and brainstorming document. It intentionally includes conservative options and aggressive ideas. Implementation should start only after the product inventory and install evidence are collected.
 
+## Documentation Diagram Convention
+
+All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid source files under [docs/diagrams](diagrams/). Markdown documents should link to those files instead of embedding Mermaid blocks inline.
+
 ## Core Problem
 
 BMC product deployment is not one problem. It is several overlapping problems:
@@ -55,27 +59,7 @@ Each layer needs its own discovery, deployment, verification, rollback, and owne
 
 ## Proposed Architecture
 
-```mermaid
-flowchart TD
-    A["Vendor media and service"] --> B["Internal BMC software depot"]
-    B --> C["Product bill of materials"]
-    C --> D["Compatibility and dependency graph"]
-    D --> E["Deployment planner"]
-
-    F["Current z/OS estate discovery"] --> G["Configuration unwinder"]
-    G --> H["Observed state catalog"]
-    H --> E
-
-    E --> I["Install adapter"]
-    E --> J["Runtime configuration adapter"]
-    E --> K["Verification adapter"]
-
-    I --> L["SMP/E, vendor JCL, or custom flow"]
-    J --> M["APF, LINKLIST, PARMLIB, PROCLIB, CICS, IMS, security"]
-    K --> N["Evidence and compliance bundle"]
-
-    N --> O["Promote, hold, rollback, or accept"]
-```
+Diagram source: [docs/diagrams/bmc-lifecycle-architecture.mmd](diagrams/bmc-lifecycle-architecture.mmd)
 
 ## Internal BMC Software Depot
 
@@ -374,7 +358,7 @@ Model:
 - CICS region references program or exit.
 - Security profile permits STC user.
 
-This can start as YAML and Mermaid. If it grows, move to Neo4j, SQLite, or a graph-oriented inventory service.
+This can start as YAML and `.mmd` diagram sources. If it grows, move to Neo4j, SQLite, or a graph-oriented inventory service.
 
 ### Build Blue/Green BMC Runtime Libraries
 

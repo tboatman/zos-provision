@@ -1,0 +1,19 @@
+flowchart TD
+    A["Vendor media and service"] --> B["Internal BMC software depot"]
+    B --> C["Product bill of materials"]
+    C --> D["Compatibility and dependency graph"]
+    D --> E["Deployment planner"]
+
+    F["Current z/OS estate discovery"] --> G["Configuration unwinder"]
+    G --> H["Observed state catalog"]
+    H --> E
+
+    E --> I["Install adapter"]
+    E --> J["Runtime configuration adapter"]
+    E --> K["Verification adapter"]
+
+    I --> L["SMP/E, vendor JCL, or custom flow"]
+    J --> M["APF, LINKLIST, PARMLIB, PROCLIB, CICS, IMS, security"]
+    K --> N["Evidence and compliance bundle"]
+
+    N --> O["Promote, hold, rollback, or accept"]
