@@ -106,6 +106,7 @@ For BMC products:
 
 - Product list, versions, FMIDs, maintenance level, dependencies, and license requirements documented.
 - Product media acquisition path agreed.
+- Internal BMC software depot strategy agreed.
 - SMP/E CSI strategy agreed: shared CSI, product-family CSI, or product-specific CSI.
 - Target and distribution zone naming standards agreed.
 - Runtime library, APF, LINKLIST, LPA, STEPLIB, PARMLIB, PROCLIB, started task, and security requirements documented per product.
@@ -228,6 +229,8 @@ Each BMC product should be described with a product definition file:
 - Post-install customization steps.
 - Verification steps and expected messages.
 - Backout plan and recoverability classification.
+
+See [BMC Software Lifecycle Strategy](bmc-software-lifecycle-strategy.md) for the deeper product lifecycle model covering internal depot design, varied install adapters, configuration unwinding, update promotion, evidence, and aggressive future-state ideas.
 
 ## Role Boundaries
 
@@ -600,7 +603,9 @@ Deliverables:
 
 Deliverables:
 
+- Internal BMC software depot structure.
 - BMC product definition schema.
+- Read-only BMC estate discovery and configuration unwinding.
 - Media staging framework.
 - SMP/E orchestration framework.
 - Product customization JCL framework.
