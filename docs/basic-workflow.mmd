@@ -1,6 +1,3 @@
-# Basic Deployment Workflow
-
-```mermaid
 flowchart TD
     A["Control Node<br/>Linux or macOS"] --> B["Ansible Project"]
     B --> C["Preflight Checks"]
@@ -29,10 +26,3 @@ flowchart TD
     O -- "Yes" --> Q["Evidence Bundle<br/>JES output, manifests, reports"]
 
     Q --> R["Deployment Complete"]
-```
-
-Practical flow:
-
-```text
-Preflight -> Stage -> Install base products -> Provision CICS/IMS -> Apply runtime hooks -> Start/refresh -> Verify -> Capture evidence
-```
