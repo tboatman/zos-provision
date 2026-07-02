@@ -100,6 +100,8 @@ See [BMC Documentation Acquisition Plan](bmc-documentation-acquisition-plan.md) 
 
 ## Broadcom CA Adapter Skeleton
 
+See [Broadcom CA Documentation Acquisition Plan](broadcom-ca-documentation-acquisition-plan.md) before implementing any Broadcom CA product adapter.
+
 ### Discovery
 
 - Locate Broadcom CA product HLQs, legacy CA-prefixed product libraries, common services libraries, runtime libraries, sample libraries, and parameter datasets.
@@ -130,6 +132,8 @@ See [BMC Documentation Acquisition Plan](bmc-documentation-acquisition-plan.md) 
 - Verify CSI state, common service state, product command output, started task status, middleware hooks, security access, ISPF asset availability, and expected job messages.
 
 ## Rocket Adapter Skeleton
+
+See [Rocket Documentation Acquisition Plan](rocket-documentation-acquisition-plan.md) before implementing any Rocket product adapter.
 
 ### Discovery
 

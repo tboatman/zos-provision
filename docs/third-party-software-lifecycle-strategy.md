@@ -28,6 +28,10 @@ See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-
 
 See [BMC Documentation Acquisition Plan](bmc-documentation-acquisition-plan.md) for the BMC-specific documentation and media intake path.
 
+See [Broadcom CA Documentation Acquisition Plan](broadcom-ca-documentation-acquisition-plan.md) for the Broadcom CA-specific documentation and media intake path.
+
+See [Rocket Documentation Acquisition Plan](rocket-documentation-acquisition-plan.md) for the Rocket-specific documentation and media intake path.
+
 ## Core Problem
 
 Vendor product deployment is not one problem. It is several overlapping problems:

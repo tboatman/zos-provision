@@ -1,0 +1,12 @@
+flowchart TD
+    A["Broadcom entitlement and installed-state inventory"] --> B["Broadcom TechDocs and Support Portal"]
+    A --> C["Broadcom My Downloads"]
+    B --> D["Product/version documentation set"]
+    C --> E["Media, service, HOLDDATA, tools, workflows"]
+    D --> F["Classify install method and legacy CA aliases"]
+    E --> F
+    F --> G["Extract automation requirements"]
+    G --> H["Create Broadcom CA product definition"]
+    H --> I{"Ready for pilot?"}
+    I -- "No" --> J["Mark unknowns and continue discovery"]
+    I -- "Yes" --> K["Select product for adapter implementation"]

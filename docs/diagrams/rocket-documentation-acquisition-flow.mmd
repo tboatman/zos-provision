@@ -1,0 +1,12 @@
+flowchart TD
+    A["Rocket entitlement and installed-state inventory"] --> B["Rocket documentation portal"]
+    A --> C["Rocket support/download channels"]
+    B --> D["Product/version documentation set"]
+    C --> E["Media, service, HOLDDATA, tools, USS payloads, workflows"]
+    D --> F["Classify install method and aliases"]
+    E --> F
+    F --> G["Extract MVS, USS, and runtime requirements"]
+    G --> H["Create Rocket product definition"]
+    H --> I{"Ready for pilot?"}
+    I -- "No" --> J["Mark unknowns and continue discovery"]
+    I -- "Yes" --> K["Select product for adapter implementation"]
