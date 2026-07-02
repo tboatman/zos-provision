@@ -1,8 +1,8 @@
-# z/OS CICS, IMS, Db2, and BMC Product Deployment Through Ansible
+# z/OS CICS, IMS, Db2, and Vendor Product Deployment Through Ansible
 
 ## Purpose
 
-Design the architecture, requirements, scope, and execution flows for deploying CICS regions, IMS regions, Db2 for z/OS assets, and multiple BMC Software products on z/OS from a Linux or macOS Ansible control node.
+Design the architecture, requirements, scope, and execution flows for deploying CICS regions, IMS regions, Db2 for z/OS assets, and multiple third-party vendor software products on z/OS from a Linux or macOS Ansible control node.
 
 This document deliberately avoids implementation code. It defines the operating model and module boundaries that should be agreed before playbooks, roles, inventories, or JCL templates are written.
 
@@ -39,7 +39,7 @@ Required:
 - IBM z/OS core collection.
 - IBM z/OS CICS collection.
 - IBM z/OS IMS collection.
-- Optional IBM z/OSMF collection if REST-based z/OSMF workflows are needed.
+- IBM z/OSMF collection or equivalent z/OSMF API access. z/OSMF is the preferred forward path where available, and this design assumes required z/OSMF APIs are available for approved z/OSMF-driven install and configuration workflows.
 - No specialized Db2 automation tools are assumed. In particular, the architecture must work without IBM Db2 DevOps Experience, UrbanCode Deploy plugins, or other Db2-specific deployment products.
 - SSH client with key or certificate-based authentication.
 - Vault integration for credentials and product license material.
@@ -98,11 +98,13 @@ For Db2:
 - Plan, package, collection, qualifier, owner, schema, and authorization naming conventions documented.
 - CICS DB2CONN/DB2ENTRY and IMS Db2 attachment dependencies documented where applicable.
 
-For BMC products:
+For vendor products:
 
+- Vendor families in initial scope: BMC Software, Broadcom CA, and Rocket Software.
 - Product list, versions, FMIDs, maintenance level, dependencies, and license requirements documented.
 - Product media acquisition path agreed.
-- Internal BMC software depot strategy agreed.
+- Internal vendor software depot strategy agreed.
+- z/OSMF workflow availability and API access agreed where vendor or site workflows exist.
 - SMP/E CSI strategy agreed: shared CSI, product-family CSI, or product-specific CSI.
 - Target and distribution zone naming standards agreed.
 - Runtime library, APF, LINKLIST, LPA, STEPLIB, PARMLIB, PROCLIB, started task, and security requirements documented per product.
@@ -124,7 +126,7 @@ group_vars/
   cics/
   ims/
   db2/
-  bmc/
+  vendors/
 host_vars/
 roles/
   zos_common/
@@ -138,8 +140,8 @@ roles/
   ims_database_artifacts/
   db2_subsystem/
   db2_database_artifacts/
-  bmc_product/
-  bmc_runtime_config/
+  vendor_product/
+  vendor_runtime_config/
   verification/
   evidence/
 playbooks/
@@ -147,15 +149,15 @@ playbooks/
   deploy_cics_region.yml
   deploy_ims_region.yml
   deploy_db2_artifacts.yml
-  deploy_bmc_product.yml
+  deploy_vendor_product.yml
   deploy_environment.yml
   verify_environment.yml
   rollback_or_recover.yml
 product_definitions/
-  bmc/
   cics/
   ims/
   db2/
+  vendors/
 templates/
   jcl/
   proclib/
@@ -225,18 +227,19 @@ Each Db2 deployment target should be described declaratively:
 - Utility artifacts: image copy, runstats, reorg, check data, repair policy, and recoverability checks where in scope.
 - CICS integration: DB2CONN, DB2ENTRY, DB2TRAN, and transaction-to-plan/package dependencies.
 - IMS integration: IMS Db2 attachment, dependent region requirements, and PSB/program dependency mapping.
-- BMC integration: product repository databases, plans/packages, exits, collection IDs, and product-specific catalog objects.
+- Vendor product integration: product repository databases, plans/packages, exits, collection IDs, and product-specific catalog objects.
 - Verification queries, expected catalog state, expected binds, and expected return codes.
 
-### BMC Product Model
+### Vendor Product Model
 
-Each BMC product should be described with a product definition file:
+Each vendor product should be described with a product definition file:
 
 - Product code and product name.
 - Version, release, maintenance level, FMIDs, and dependent FMIDs.
 - Media source, checksum, unpack method, and staging requirements.
 - Install method:
   - SMP/E receive/apply/accept.
+  - z/OSMF workflow.
   - Vendor-provided generated JCL.
   - Runtime customization only.
   - Hybrid.
@@ -249,7 +252,9 @@ Each BMC product should be described with a product definition file:
 - Verification steps and expected messages.
 - Backout plan and recoverability classification.
 
-See [BMC Software Lifecycle Strategy](bmc-software-lifecycle-strategy.md) for the deeper product lifecycle model covering internal depot design, varied install adapters, configuration unwinding, update promotion, evidence, and aggressive future-state ideas.
+See [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md) for the deeper product lifecycle model covering BMC, Broadcom CA, and Rocket onboarding; internal depot design; z/OSMF workflow adapters; varied install adapters; configuration unwinding; update promotion; evidence; and aggressive future-state ideas.
+
+See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vendor-dependent process overlays that specialize the generic lifecycle for BMC, Broadcom CA, and Rocket.
 
 ## Role Boundaries
 
@@ -307,15 +312,15 @@ Owns Db2 DDL, DCL, bind, rebind, free, explain, utility, and catalog-verificatio
 
 This role should treat SQL and bind control files as versioned deployment artifacts. It should support plan-only validation where possible, strict return-code and message assertions, before/after catalog snapshots, and explicit approval for destructive DDL or privilege removal.
 
-### `bmc_product`
+### `vendor_product`
 
-Owns product media staging, product definition interpretation, SMP/E or vendor JCL install orchestration, and product-specific install evidence.
+Owns product media staging, product definition interpretation, z/OSMF workflow orchestration, SMP/E or vendor JCL install orchestration, and product-specific install evidence.
 
-### `bmc_runtime_config`
+### `vendor_runtime_config`
 
 Owns APF, LINKLIST, LPA, PARMLIB, PROCLIB, started tasks, security hooks, product parameter libraries, and post-install customization.
 
-This role must model hooks into CICS, IMS, and Db2 separately from base product installation. For example, installing BMC product libraries through SMP/E is not the same change as adding CICS PLT/SIT/resource definitions, changing IMS PROCLIB members, binding Db2 packages, adding exits, or recycling a monitored subsystem.
+This role must model hooks into CICS, IMS, and Db2 separately from base product installation. For example, installing vendor product libraries through SMP/E is not the same change as adding CICS PLT/SIT/resource definitions, changing IMS PROCLIB members, binding Db2 packages, adding exits, or recycling a monitored subsystem.
 
 ### `verification`
 
@@ -342,7 +347,7 @@ Required outputs:
 - CMCI availability for CICS if in scope.
 - IMS command capability if in scope.
 - Db2 command, batch SQL, bind, and catalog-query capability if in scope.
-- SMP/E CSI accessibility if BMC install is in scope.
+- SMP/E CSI accessibility if vendor install is in scope.
 
 ### Flow 2: CICS Region Deployment
 
@@ -365,9 +370,9 @@ Recovery model:
 - ACB, DBD, and PSB libraries require backups before replacement.
 - RECON and DBRC changes require stricter approval and should be isolated behind run tags.
 
-### Flow 4: BMC Product Deployment
+### Flow 4: Vendor Product Deployment
 
-Diagram source: [docs/diagrams/bmc-product-deployment-flow.mmd](diagrams/bmc-product-deployment-flow.mmd)
+Diagram source: [docs/diagrams/vendor-product-deployment-flow.mmd](diagrams/vendor-product-deployment-flow.mmd)
 
 Accept policy:
 
@@ -390,7 +395,7 @@ Recovery model:
 
 Diagram source: [docs/diagrams/full-environment-deployment-flow.mmd](diagrams/full-environment-deployment-flow.mmd)
 
-The exact ordering depends on which BMC products are deployed. Products that instrument, monitor, or integrate with CICS, IMS, or Db2 may need base libraries installed before subsystem customization, but final hooks should happen after the target regions, subsystems, databases, and bind targets exist.
+The exact ordering depends on which vendor products are deployed. Products that instrument, monitor, or integrate with CICS, IMS, or Db2 may need base libraries installed before subsystem customization, but final hooks should happen after the target regions, subsystems, databases, and bind targets exist.
 
 ## Dependency Governance
 
@@ -412,8 +417,8 @@ Each deployable unit should declare:
 The deployment planner should produce an ordered manifest before applying changes:
 
 1. Base z/OS prerequisites.
-2. BMC shared infrastructure and common libraries.
-3. BMC product base installation.
+2. Vendor shared infrastructure and common libraries.
+3. Vendor product base installation.
 4. CICS, IMS, and Db2 provisioning or artifact deployment.
 5. Product hooks into CICS, IMS, and Db2.
 6. Runtime starts, refreshes, or recycles.
@@ -484,7 +489,7 @@ Secrets must not be stored in plaintext inventory:
 
 - z/OS passwords.
 - SSH private keys.
-- BMC license keys.
+- Vendor license keys.
 - Product download credentials.
 - Certificates.
 - API tokens.
@@ -546,7 +551,7 @@ Each run should produce an evidence bundle containing:
 - Backup and restore proof.
 - Evidence bundle review.
 - Operator handoff checklist.
-- Rollback drill for at least one CICS region, one IMS customization, one Db2 artifact deployment, and one BMC product flow.
+- Rollback drill for at least one CICS region, one IMS customization, one Db2 artifact deployment, and one vendor product flow.
 
 ## Delivery Phases
 
@@ -560,7 +565,7 @@ Deliverables:
 - Storage and dataset standards.
 - CICS and IMS region catalog.
 - Db2 subsystem, schema, package, plan, and application dependency catalog.
-- BMC product dependency graph.
+- Vendor product dependency graph.
 - Install media and license handling plan.
 
 ### Phase 1: Automation Foundation
@@ -603,13 +608,14 @@ Deliverables:
 - DDL/DCL deployment and backout classification.
 - Test Db2 deployment in an isolated schema or sandbox subsystem.
 
-### Phase 5: BMC Product Framework
+### Phase 5: Vendor Product Framework
 
 Deliverables:
 
-- Internal BMC software depot structure.
-- BMC product definition schema.
-- Read-only BMC estate discovery and configuration unwinding.
+- Internal vendor software depot structure.
+- Vendor product definition schema.
+- Vendor adapter skeletons for BMC, Broadcom CA, and Rocket.
+- Read-only vendor estate discovery and configuration unwinding.
 - Media staging framework.
 - SMP/E orchestration framework.
 - Product customization JCL framework.
@@ -619,7 +625,7 @@ Deliverables:
 
 Deliverables:
 
-- Remaining BMC products onboarded through product definitions and product-specific adapters.
+- Remaining vendor products onboarded through product definitions and product-specific adapters.
 - Cross-product dependency handling.
 - Environment deployment workflow.
 - Evidence and audit publication.
@@ -643,23 +649,23 @@ Start with a narrow but representative pilot:
 2. One new CICS test region.
 3. One IMS test region or IMS artifact generation flow.
 4. One Db2 isolated schema or sandbox subsystem deployment flow.
-5. One BMC product with SMP/E packaging.
-6. One BMC product with post-install runtime customization, preferably including at least one Db2 bind or catalog dependency if representative.
+5. One vendor product with SMP/E packaging.
+6. One vendor product with post-install runtime customization, preferably including at least one Db2 bind or catalog dependency if representative.
 7. Full preflight, deploy, verify, and evidence bundle.
 
-Do not start by automating every product. Build the factory pattern with two BMC product shapes, then scale.
+Do not start by automating every product. Build the factory pattern with two vendor product shapes, then scale.
 
 ## Key Open Questions
 
-1. Which BMC products are in scope, and which versions?
-2. Are the BMC products SMP/E-packaged, vendor-JCL-packaged, runtime-only, or mixed?
+1. Which vendor products are in scope, and which versions?
+2. Are the vendor products SMP/E-packaged, vendor-JCL-packaged, runtime-only, or mixed?
 3. Will Ansible Automation Platform be used, or only command-line ansible-core?
 4. Which security product is used: RACF, ACF2, or Top Secret?
 5. Are CICS resources managed through CMCI/CICSPlex SM, CSD batch utilities, or both?
 6. Are IMS operations authorized through type-2 commands, type-1 commands, generated JCL, or a mix?
 7. Which Db2 execution method is approved for automation: DSNTEP2, DSNTEP4, DSNTIAD, site-standard JCL, or another batch SQL runner?
 8. What are the approval boundaries for Db2 DDL, DCL, BIND, REBIND, FREE, utilities, and subsystem commands?
-9. Is z/OSMF available and approved for any deployment functions?
+9. Which z/OSMF workflow definitions, variable conventions, API credentials, and workflow ownership rules are approved for vendor installation and configuration?
 10. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
 11. What is the required backout posture for each product?
 12. Are IPLs allowed, avoided, or scheduled only by separate change process?
@@ -676,7 +682,7 @@ Code should not begin until these are complete:
 - CICS region model is approved.
 - IMS region model is approved.
 - Db2 model and artifact schema are approved.
-- BMC product schema is approved.
+- Vendor product schema is approved.
 - SMP/E CSI strategy is approved.
 - Approval gates are agreed.
 - Pilot scope is selected.

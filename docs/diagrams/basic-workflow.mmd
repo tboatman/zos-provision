@@ -6,8 +6,8 @@ flowchart TD
     D -- "No" --> E["Report gaps<br/>security, storage, SSH, ZOAU, Python, product media"]
     D -- "Yes" --> F["Stage Inputs"]
 
-    F --> G["BMC Product Install<br/>SMP/E or vendor JCL"]
-    G --> H["BMC Runtime Config<br/>APF, LINKLIST, PARMLIB, PROCLIB, STCs"]
+    F --> G["Vendor Product Install<br/>z/OSMF, SMP/E, or vendor JCL"]
+    G --> H["Vendor Runtime Config<br/>APF, LINKLIST, PARMLIB, PROCLIB, STCs"]
 
     F --> I["CICS Region Provisioning<br/>datasets, catalogs, CSD, JCL"]
     I --> J["CICS Resource Config<br/>CMCI / CSD resources"]

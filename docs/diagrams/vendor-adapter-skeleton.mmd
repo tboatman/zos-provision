@@ -1,0 +1,26 @@
+flowchart TD
+    A["Vendor product"] --> B["Discover"]
+    B --> C["Intake"]
+    C --> D["Classify"]
+    D --> E["Plan"]
+    E --> F["Stage"]
+    F --> G["Check"]
+    G --> H{"Install method"}
+
+    H -- "z/OSMF workflow" --> I["Drive z/OSMF workflow"]
+    H -- "SMP/E" --> J["Run SMP/E receive/apply"]
+    H -- "Vendor JCL" --> K["Submit vendor JCL"]
+    H -- "Runtime only" --> L["Apply runtime overlay"]
+    H -- "Legacy capture" --> M["Capture and normalize only"]
+
+    I --> N["Verify"]
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+
+    N --> O{"Passed?"}
+    O -- "No" --> P["Recover"]
+    O -- "Yes" --> Q["Evidence"]
+    Q --> R["Promote or hold"]
+    R --> S["Accept after soak if applicable"]

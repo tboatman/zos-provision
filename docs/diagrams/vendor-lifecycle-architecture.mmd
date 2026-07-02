@@ -1,5 +1,5 @@
 flowchart TD
-    A["Vendor media and service"] --> B["Internal BMC software depot"]
+    A["Vendor media and service"] --> B["Internal vendor software depot"]
     B --> C["Product bill of materials"]
     C --> D["Compatibility and dependency graph"]
     D --> E["Deployment planner"]
@@ -12,7 +12,7 @@ flowchart TD
     E --> J["Runtime configuration adapter"]
     E --> K["Verification adapter"]
 
-    I --> L["SMP/E, vendor JCL, or custom flow"]
+    I --> L["z/OSMF workflow, SMP/E, vendor JCL, or custom flow"]
     J --> M["APF, LINKLIST, PARMLIB, PROCLIB, CICS, IMS, Db2, security"]
     K --> N["Evidence and compliance bundle"]
 

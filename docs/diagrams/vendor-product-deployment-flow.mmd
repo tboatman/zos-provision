@@ -1,0 +1,16 @@
+flowchart TD
+    A["Load vendor product definition"] --> B["Validate media, license, prerequisites, workflows, and FMIDs"]
+    B --> C["Stage media to USS, MVS datasets, or z/OSMF workflow inputs"]
+    C --> D{"z/OSMF workflow available?"}
+    D -- "Yes" --> E["Create or drive z/OSMF workflow"]
+    D -- "No" --> F["Prepare SMP/E CSI, zones, or vendor JCL"]
+    E --> G["Track workflow steps and capture output"]
+    F --> H["Run RECEIVE/APPLY CHECK or vendor validation"]
+    H --> I["Approval gate for APPLY or install"]
+    I --> J["Run APPLY or vendor install JCL"]
+    G --> K["Run product customization steps"]
+    J --> K
+    K --> L["Configure runtime integration"]
+    L --> M["Start or refresh product components"]
+    M --> N["Verify product status"]
+    N --> O["Capture evidence and deployment manifest"]

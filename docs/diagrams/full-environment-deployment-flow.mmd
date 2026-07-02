@@ -1,9 +1,9 @@
 flowchart TD
-    A["Preflight"] --> B["Install or update BMC prerequisites"]
-    B --> C["Deploy base BMC runtime products"]
+    A["Preflight"] --> B["Install or update vendor prerequisites"]
+    B --> C["Deploy base vendor runtime products"]
     C --> D["Deploy CICS regions"]
     D --> E["Deploy IMS regions"]
     E --> F["Deploy Db2 artifacts"]
-    F --> G["Deploy BMC integrations into CICS, IMS, and Db2"]
+    F --> G["Deploy vendor integrations into CICS, IMS, and Db2"]
     G --> H["Run cross-system verification"]
     H --> I["Publish evidence bundle"]

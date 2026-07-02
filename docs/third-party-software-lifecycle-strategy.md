@@ -1,33 +1,45 @@
-# BMC Software Lifecycle Strategy on z/OS
+# Third-Party Vendor Software Lifecycle Strategy on z/OS
 
 ## Purpose
 
-Define a strategy for installing, updating, configuring, auditing, and recovering BMC Software products on z/OS through Ansible when the product estate has varied install methods, extensive local configuration, and no established SMP/E repository standard.
+Define a strategy for installing, updating, configuring, auditing, and recovering third-party vendor software products on z/OS through Ansible when the product estate has varied install methods, extensive local configuration, and no established SMP/E repository standard.
 
 This is a planning and brainstorming document. It intentionally includes conservative options and aggressive ideas. Implementation should start only after the product inventory and install evidence are collected.
 
-No specialized Db2 deployment tools are assumed. If a BMC product requires Db2 plans, packages, repository objects, grants, or utility jobs, those steps must be modeled through generic z/OS automation: generated JCL, DSN command processor jobs, site-standard batch SQL runners, bind jobs, catalog queries, and captured evidence.
+No specialized Db2 deployment tools are assumed. If a vendor product requires Db2 plans, packages, repository objects, grants, or utility jobs, those steps must be modeled through generic z/OS automation: generated JCL, DSN command processor jobs, site-standard batch SQL runners, bind jobs, catalog queries, and captured evidence.
 
 ## Documentation Diagram Convention
 
 All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid source files under [docs/diagrams](diagrams/). Markdown documents should link to those files instead of embedding Mermaid blocks inline.
 
+## Vendor Families in Scope
+
+The lifecycle model is vendor-neutral. The first vendor families in scope are:
+
+- BMC Software products.
+- Broadcom CA mainframe products, including products still commonly referred to by CA-prefixed names.
+- Rocket Software mainframe products.
+
+Vendor-specific naming, packaging, maintenance cadence, license handling, and generated jobs belong in product definitions and vendor adapters. The control plane should stay generic.
+
+See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vendor-dependent process overlays for BMC, Broadcom CA, and Rocket.
+
 ## Core Problem
 
-BMC product deployment is not one problem. It is several overlapping problems:
+Vendor product deployment is not one problem. It is several overlapping problems:
 
 - Some products are SMP/E-packaged.
-- Some products may use vendor-generated JCL, custom install jobs, runtime customization jobs, or ISPF-driven setup flows.
+- Some products may use vendor-generated JCL, z/OSMF workflows, custom install jobs, runtime customization jobs, or ISPF-driven setup flows.
 - Some products share common libraries, panels, skeletons, exits, started tasks, or infrastructure components.
 - Local customization may be buried in PROCLIB, PARMLIB, CLIST/REXX, ISPF tables, CICS definitions, IMS PROCLIB, Db2 plans/packages, Db2 catalog objects, security rules, exits, and product-specific parameter members.
 - The current state may not match vendor docs, previous install jobs, or SMP/E metadata.
-- There may be no disciplined internal repository for BMC base media, service media, HOLDDATA, generated JCL, applied maintenance, or local overrides.
+- There may be no disciplined internal repository for vendor base media, service media, HOLDDATA, generated JCL, applied maintenance, or local overrides.
 
 The automation design must therefore build a product lifecycle control plane, not just playbooks that submit install JCL.
 
 ## Guiding Model
 
-Treat every BMC product as a package with four separate layers:
+Treat every vendor product as a package with four separate layers:
 
 1. **Vendor media layer**
    - Original product package.
@@ -61,9 +73,9 @@ Each layer needs its own discovery, deployment, verification, rollback, and owne
 
 ## Proposed Architecture
 
-Diagram source: [docs/diagrams/bmc-lifecycle-architecture.mmd](diagrams/bmc-lifecycle-architecture.mmd)
+Diagram source: [docs/diagrams/vendor-lifecycle-architecture.mmd](diagrams/vendor-lifecycle-architecture.mmd)
 
-## Internal BMC Software Depot
+## Internal Vendor Software Depot
 
 Because no established SMP/E repositories exist, create one. Do not wait for a perfect vendor-native repository model.
 
@@ -86,27 +98,39 @@ Recommended structure:
 
 ```text
 depot/
-  bmc/
-    products/
-      <product-code>/
-        <version>/
-          media/
-          expanded/
-          service/
-          holdata/
-          vendor-jcl/
-          product-definition.yml
-          dependency-graph.yml
-          checksums.txt
-          release-notes/
-          evidence/
+  vendors/
+    bmc/
+      products/
+        <product-code>/
+          <version>/
+            media/
+            expanded/
+            service/
+            holdata/
+            vendor-jcl/
+            zosmf-workflows/
+            product-definition.yml
+            dependency-graph.yml
+            checksums.txt
+            release-notes/
+            evidence/
+    broadcom-ca/
+      products/
+        <product-code>/
+          <version>/
+            ...
+    rocket/
+      products/
+        <product-code>/
+          <version>/
+            ...
 ```
 
 The depot can start as Git plus large artifact storage. It can evolve into Nexus, Artifactory, S3-compatible storage, SharePoint-backed storage, or an internal API.
 
 ## Product Definition Schema
 
-Every BMC product should have a product definition that describes the product independent of any one LPAR.
+Every vendor product should have a product definition that describes the product independent of any one LPAR.
 
 Required fields:
 
@@ -117,7 +141,7 @@ Required fields:
 - Install method.
 - Media package identifiers.
 - Service package identifiers.
-- Required BMC common components.
+- Required vendor common components.
 - Required z/OS, CICS, IMS, Db2, MQ, Java, or LE levels.
 - SMP/E CSI strategy.
 - Target and distribution zones.
@@ -139,8 +163,10 @@ Required fields:
 Install method should be one of:
 
 - `smpe_managed`
+- `zosmf_workflow_managed`
 - `vendor_jcl_managed`
 - `runtime_only`
+- `hybrid_zosmf_plus_runtime`
 - `hybrid_smpe_plus_runtime`
 - `legacy_manual_capture`
 - `unknown_pending_discovery`
@@ -163,9 +189,23 @@ All adapters should expose the same phases:
 
 Adapter types:
 
+### z/OSMF Workflow Adapter
+
+Use where the site has z/OSMF enabled and the required z/OSMF APIs or workflows are available. This is the preferred direction for product installation and configuration where the vendor or site provides a usable z/OSMF workflow.
+
+Responsibilities:
+
+- Stage workflow definition files, variable files, and input artifacts.
+- Validate workflow variables against the product definition and environment model.
+- Create or drive z/OSMF workflows through approved APIs.
+- Track workflow step status, return codes, and messages.
+- Capture workflow evidence alongside JES output and generated artifacts.
+- Treat z/OSMF workflow completion as necessary but not sufficient; still verify installed product state, runtime hooks, and catalog/configuration state.
+- Fall back to generated JCL only for steps not represented by z/OSMF workflow APIs or for sites not yet onboarded to z/OSMF.
+
 ### SMP/E Adapter
 
-Use for products with normal SMP/E packaging.
+Use for products with normal SMP/E packaging, whether driven directly by generated JCL or by a z/OSMF workflow wrapper.
 
 Responsibilities:
 
@@ -181,7 +221,7 @@ Responsibilities:
 
 ### Vendor JCL Adapter
 
-Use for products driven by vendor-supplied or generated JCL.
+Use for products driven by vendor-supplied or generated JCL when z/OSMF workflow coverage is not available or is not the approved execution path for that step.
 
 Responsibilities:
 
@@ -249,8 +289,8 @@ Collect everything without judging it:
 
 For each discovered artifact, classify:
 
-- Belongs to BMC product base.
-- Belongs to BMC shared infrastructure.
+- Belongs to vendor product base.
+- Belongs to vendor shared infrastructure.
 - Belongs to CICS integration.
 - Belongs to IMS integration.
 - Belongs to Db2 integration.
@@ -273,7 +313,7 @@ Convert approved findings into declarative product definitions:
 Use a promotion ring model:
 
 1. **Depot intake**
-   - New BMC media or service enters the internal depot.
+   - New vendor media or service enters the internal depot.
    - Package is immutable and checksummed.
    - Product definition is updated or generated.
 
@@ -311,7 +351,7 @@ Use a promotion ring model:
 
 ### Build an Internal "Pseudo SMP/E Repo"
 
-Even if BMC does not give you a repo, build an internal repository abstraction that speaks in product versions, FMIDs, service levels, and dependencies.
+Even if the vendor does not give you a repo, build an internal repository abstraction that speaks in product versions, FMIDs, service levels, and dependencies.
 
 The backend can be crude at first: files, YAML, checksums, and evidence. The important part is the interface:
 
@@ -322,7 +362,7 @@ The backend can be crude at first: files, YAML, checksums, and evidence. The imp
 - `promotion_status`
 - `deployment_manifest`
 
-### Treat BMC Runtime State Like Kubernetes Desired State
+### Treat Vendor Runtime State Like Kubernetes Desired State
 
 Define desired runtime state for each LPAR:
 
@@ -349,7 +389,7 @@ Output:
 
 ### Use a Graph Database or Graph File
 
-BMC product estates are dependency graphs, not lists.
+Vendor product estates are dependency graphs, not lists.
 
 Model:
 
@@ -368,12 +408,12 @@ Model:
 
 This can start as YAML and `.mmd` diagram sources. If it grows, move to Neo4j, SQLite, or a graph-oriented inventory service.
 
-### Build Blue/Green BMC Runtime Libraries
+### Build Blue/Green Vendor Runtime Libraries
 
 For products that tolerate STEPLIB or proc-level indirection, install new libraries side-by-side:
 
-- `BMC.PROD.V1R2M0.*`
-- `BMC.PROD.V1R2M1.*`
+- `VENDOR.PROD.V1R2M0.*`
+- `VENDOR.PROD.V1R2M1.*`
 
 Then switch started task PROCs, CICS references, IMS references, or Db2 collection/package references through symbolic variables, controlled include members, or bind indirection where safe. This improves rollback because old libraries and package collections remain intact.
 
@@ -443,21 +483,21 @@ This is especially useful for products with weak or missing current install meta
 | ACCEPT closes rollback path | Separate ACCEPT from APPLY and require explicit approval. |
 | Runtime hooks are riskier than base install | Separate base install from runtime integration and require independent approvals. |
 | CICS/IMS/Db2 runtime impact is unclear | Model affected regions, subsystems, commands, binds, utilities, and catalog objects in the deployment manifest. |
-| Shared BMC components cause hidden coupling | Build a dependency graph and product ownership map. |
+| Shared vendor components cause hidden coupling | Build a dependency graph and product ownership map. |
 | Local customizations get overwritten | Preserve customizations as overlays and compare before replacement. |
 | Drift after deployment | Add recurring read-only compliance checks before enabling remediation. |
 
 ## Initial Discovery Backlog
 
-1. List all BMC products, versions, product codes, and business owners.
-2. Collect current BMC HLQs and product libraries.
-3. Identify all BMC-related SMP/E CSIs and zones.
-4. Identify BMC-related APF, LINKLIST, LPA, PARMLIB, and PROCLIB entries.
-5. Identify BMC started tasks and STC user IDs.
-6. Identify BMC hooks in CICS regions.
-7. Identify BMC hooks in IMS regions.
+1. List all vendor products, versions, product codes, and business owners.
+2. Collect current vendor HLQs and product libraries.
+3. Identify all vendor-related SMP/E CSIs and zones.
+4. Identify vendor-related APF, LINKLIST, LPA, PARMLIB, and PROCLIB entries.
+5. Identify vendor started tasks and STC user IDs.
+6. Identify vendor hooks in CICS regions.
+7. Identify vendor hooks in IMS regions.
 8. Identify Db2, MQ, TCP/IP, Java, or USS dependencies.
-9. Identify BMC-related Db2 plans, packages, collections, repository objects, bind jobs, grants, and utility jobs.
+9. Identify vendor-related Db2 plans, packages, collections, repository objects, bind jobs, grants, and utility jobs.
 10. Collect available vendor media and service packages.
 11. Collect historical install and maintenance jobs.
 12. Collect product-specific runbooks.
@@ -471,13 +511,13 @@ This is especially useful for products with weak or missing current install meta
 Do not start by automating product installs. Start by building the inventory and depot:
 
 1. Create the product definition schema.
-2. Create the internal BMC software depot structure.
+2. Create the internal vendor software depot structure.
 3. Write read-only discovery playbooks.
 4. Generate a product ownership and dependency report.
 5. Pick two pilot products.
 6. Build install adapters only after the product methods are known.
 
-This creates leverage. Once the depot, product definition, and evidence model exist, each BMC product becomes an onboarding exercise instead of a bespoke automation project.
+This creates leverage. Once the depot, product definition, and evidence model exist, each vendor product becomes an onboarding exercise instead of a bespoke automation project.
 
 ## Source Notes
 
@@ -487,4 +527,6 @@ IBM SMP/E documentation establishes the lifecycle semantics this strategy relies
 - APPLY installs SYSMOD elements into target system libraries and records the service level in the target zone.
 - ACCEPT installs SYSMOD elements into distribution libraries and records that state in the distribution zone.
 
-Public BMC documentation search did not produce a stable open reference for a single consistent BMC install method. The strategy therefore assumes BMC products must be classified from actual product media, local install artifacts, and site-specific evidence.
+Public vendor documentation does not establish one consistent install model across BMC, Broadcom CA, and Rocket product estates. The strategy therefore assumes vendor products must be classified from actual product media, z/OSMF workflows where available, local install artifacts, and site-specific evidence.
+
+Broadcom CA and Rocket are included as vendor families because they are common third-party mainframe software providers in z/OS estates. This document intentionally avoids assuming that their products share one packaging, install, or maintenance model.
