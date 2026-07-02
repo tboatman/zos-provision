@@ -119,6 +119,13 @@ flowchart TD
         BMC8 --> BMC9{"BMC ready for pilot?"}
         BMC9 -- "No" --> BMC10["Mark BMC unknowns and continue discovery"]
         BMC9 -- "Yes" --> BMC11["Select BMC adapter pilot"]
+        BMC8 --> BMC12["First BMC target documentation intake"]
+        BMC12 --> BMC13["AMI Ops Monitoring and monitor products"]
+        BMC12 --> BMC14["AMI Ops Automation and licensed options"]
+        BMC12 --> BMC15["AMI DevX product-family inventory"]
+        BMC13 --> BMC16["Capture docs, media, service, HOLDDATA, JCL, workflows"]
+        BMC14 --> BMC16
+        BMC15 --> BMC16
     end
 
     subgraph BROADCOM["Broadcom CA documentation and product intake"]
@@ -421,6 +428,7 @@ flowchart TD
     CA8 --> VP1
     RK8 --> VP1
     BMC8 --> PD1
+    BMC16 --> PD1
     CA8 --> PD1
     RK8 --> PD1
     DP10 --> VD3
