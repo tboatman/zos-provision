@@ -26,6 +26,8 @@ See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vend
 
 See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md) for the internal SMP/E repository and disconnected VM guest clone model that vendor product service levels will feed.
 
+See [BMC Documentation Acquisition Plan](bmc-documentation-acquisition-plan.md) for the BMC-specific documentation and media intake path.
+
 ## Core Problem
 
 Vendor product deployment is not one problem. It is several overlapping problems:

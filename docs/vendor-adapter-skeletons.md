@@ -67,6 +67,8 @@ Each vendor adapter should provide:
 
 ## BMC Adapter Skeleton
 
+See [BMC Documentation Acquisition Plan](bmc-documentation-acquisition-plan.md) before implementing any BMC product adapter.
+
 ### Discovery
 
 - Locate BMC product HLQs, common libraries, runtime libraries, sample libraries, and product parameter datasets.

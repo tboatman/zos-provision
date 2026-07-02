@@ -1,0 +1,12 @@
+flowchart TD
+    A["BMC entitlement and installed-state inventory"] --> B["BMC Mainframe documentation catalog"]
+    A --> C["BMC Product Download Tool"]
+    B --> D["Product/version documentation set"]
+    C --> E["Media, service, HOLDDATA, tools, workflows"]
+    D --> F["Classify install method"]
+    E --> F
+    F --> G["Extract automation requirements"]
+    G --> H["Create BMC product definition"]
+    H --> I{"Ready for pilot?"}
+    I -- "No" --> J["Mark unknowns and continue discovery"]
+    I -- "Yes" --> K["Select product for adapter implementation"]
