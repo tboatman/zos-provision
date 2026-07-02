@@ -1,0 +1,38 @@
+# Basic Deployment Workflow
+
+```mermaid
+flowchart TD
+    A["Control Node<br/>Linux or macOS"] --> B["Ansible Project"]
+    B --> C["Preflight Checks"]
+
+    C --> D{"Ready?"}
+    D -- "No" --> E["Report gaps<br/>security, storage, SSH, ZOAU, Python, product media"]
+    D -- "Yes" --> F["Stage Inputs"]
+
+    F --> G["BMC Product Install<br/>SMP/E or vendor JCL"]
+    G --> H["BMC Runtime Config<br/>APF, LINKLIST, PARMLIB, PROCLIB, STCs"]
+
+    F --> I["CICS Region Provisioning<br/>datasets, catalogs, CSD, JCL"]
+    I --> J["CICS Resource Config<br/>CMCI / CSD resources"]
+
+    F --> K["IMS Region Provisioning<br/>PROCLIB, datasets, DBD/PSB/ACB"]
+    K --> L["IMS Commands / DBRC / Catalog"]
+
+    H --> M["Start / Refresh / Recycle"]
+    J --> M
+    L --> M
+
+    M --> N["Verification"]
+    N --> O{"Passed?"}
+
+    O -- "No" --> P["Recover / Rollback<br/>using backups, snapshots, job logs"]
+    O -- "Yes" --> Q["Evidence Bundle<br/>JES output, manifests, reports"]
+
+    Q --> R["Deployment Complete"]
+```
+
+Practical flow:
+
+```text
+Preflight -> Stage -> Install base products -> Provision CICS/IMS -> Apply runtime hooks -> Start/refresh -> Verify -> Capture evidence
+```
