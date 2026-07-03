@@ -1,0 +1,34 @@
+flowchart TD
+    A["BMC documentation source discovery"] --> B["BMC Docs XWiki catalogs"]
+    A --> C["BMC Support Central"]
+    A --> D["Product Download Tool"]
+    A --> E["Mainframe Installation resource"]
+    A --> F["Mainframe Maintenance resource"]
+    A --> G["Parameter Reference Database"]
+    A --> H["Product Name Finder"]
+    A --> I["Mainframe DevOps docs"]
+    A --> J["Control-M static docs on documents.bmc.com"]
+
+    B --> K["Product names, versions, canonical URLs, export options"]
+    C --> L["Licensed products, support pages, patches, compatibility, KB"]
+    D --> M["Media, patches, installation tools, package identifiers"]
+    E --> N["PSI/zOSMF, Installation System, FMIDs, download JCL"]
+    F --> O["RSL, RECEIVE ORDER, eFix, HOLDDATA, security portal"]
+    G --> P["Parameter details and cross-product settings"]
+    H --> Q["Current names, legacy names, local aliases"]
+    I --> R["CI/CD, APIs, CLIs, SDKs, pipeline examples"]
+    J --> S["Control-M and INCONTROL versioned documentation"]
+
+    K --> T["BMC product definition source map"]
+    L --> T
+    M --> T
+    N --> T
+    O --> T
+    P --> T
+    Q --> T
+    R --> T
+    S --> T
+
+    T --> U{"Enough evidence?"}
+    U -- "No" --> V["Request login, entitlement, or support case"]
+    U -- "Yes" --> W["Classify install and maintenance path"]

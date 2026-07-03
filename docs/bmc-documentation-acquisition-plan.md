@@ -17,12 +17,14 @@ Use these official BMC entry points first:
 - BMC Product Support pages: https://docs.bmc.com/xwiki/bin/view/Standalone/Product-Support/productinfo/
 - BMC Product Downloads: https://www.bmc.com/support/resources/product-downloads.html
 - BMC Support Central: https://www.bmc.com/support/support-central.html
-- BMC Control-M documentation: https://documents.bmc.com/supportu/9.0.21.300/en-US/Documentation/home.htm
-- BMC Control-M for Mainframe and INCONTROL documentation: https://documents.bmc.com/supportu/INC/9.0.21/en-US/home.htm
+- BMC Control-M documentation: https://documents.bmc.com/supportu/9.0.22/en-US/Documentation/home.htm
+- BMC Control-M for Mainframe and INCONTROL documentation: https://documents.bmc.com/supportu/INC/9.0.22/en-US/home.htm
 
 The BMC Mainframe documentation catalog is the primary product/version map. The Product Download Tool is the primary source for product media, patches, and installation tools.
 
 For the first BMC targets, see [BMC First-Wave Documentation Intake](bmc-first-wave-documentation-intake.md), covering BMC AMI Ops Monitoring and Monitor products, BMC AMI Ops Automation, the BMC AMI DevX product family, and the BMC Control-M suite.
+
+For alternate BMC source paths, export options, maintenance/install source pages, Product Support Pages, Parameter Reference Database, Product Name Finder, Mainframe DevOps, and Control-M static documentation versions back to 2024, see [BMC Alternative Documentation Sources](bmc-alternative-documentation-sources.md).
 
 ## Acquisition Flow
 

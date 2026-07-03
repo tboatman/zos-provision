@@ -25,10 +25,12 @@ Use these first:
 - BMC Product Downloads: https://www.bmc.com/support/resources/product-downloads.html
 - BMC Support Central: https://www.bmc.com/support/support-central.html
 - BMC Product Support pages: https://docs.bmc.com/xwiki/bin/view/Standalone/Product-Support/productinfo/
-- Control-M documentation: https://documents.bmc.com/supportu/9.0.21.300/en-US/Documentation/home.htm
-- Control-M for Mainframe and INCONTROL documentation: https://documents.bmc.com/supportu/INC/9.0.21/en-US/home.htm
+- Control-M documentation: https://documents.bmc.com/supportu/9.0.22/en-US/Documentation/home.htm
+- Control-M for Mainframe and INCONTROL documentation: https://documents.bmc.com/supportu/INC/9.0.22/en-US/home.htm
 
 The public documentation indexes identify product families, products, and visible versions. The detailed product pages can require BMC login or registration. Treat BMC account access as a blocking prerequisite, not an implementation detail.
+
+Also use [BMC Alternative Documentation Sources](bmc-alternative-documentation-sources.md) for Product Support Pages, Mainframe Installation, Mainframe Maintenance, Product Download Tool, Parameter Reference Database, Product Name Finder, Mainframe DevOps, and versioned Control-M/INCONTROL static documentation. That source map includes confirmed Control-M public documentation paths for 2026, 2025, and 2024.
 
 ## Access Required
 
@@ -237,7 +239,7 @@ bmc-ami-web-products-installation
 
 ### Current Official Index Signal
 
-The BMC Documentation home links Control-M as a workload automation solution and separately links Control-M for Mainframe. The current Control-M documentation entry point is hosted on `documents.bmc.com` and exposes version `9.0.21.300`. The Control-M for Mainframe link opens the INCONTROL documentation space, also marked version `9.0.21.300`.
+The BMC Documentation home links Control-M as a workload automation solution and separately links Control-M for Mainframe. Current and historical Control-M documentation is hosted on `documents.bmc.com`. Confirmed public paths include Control-M `9.0.22`, `9.0.21.300`, and `9.0.21.200`; `9.0.21.200` is a useful 2024 baseline. The Control-M for Mainframe link opens the INCONTROL documentation space, with confirmed public paths including `9.0.22` and `9.0.21`.
 
 Treat Control-M as a suite, not a single z/OS product. It spans distributed Control-M services, agents, plug-ins, Automation API, and mainframe INCONTROL components.
 
