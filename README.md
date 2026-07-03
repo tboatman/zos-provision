@@ -13,6 +13,10 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — focused source ledger for z/VM Ansible, SMAPI, Feilong/zthin, and disconnected VM guest clone automation.
 - [OSS Tooling Discovery](docs/oss-tooling-discovery.md) — open source tooling candidates for control-node helpers, z/OS USS tooling, z/VM clone-factory support, validation harnesses, and quarantine-only legacy/lab paths.
 - [Top-to-Bottom Gap Assessment and Remediation Plan](docs/top-to-bottom-gap-assessment.md) — the cross-document gap register and sequenced plan for closing design, evidence, schema, product, z/VM, and governance gaps before implementation.
+- [Pilot and Governance Controls](docs/pilot-and-governance-controls.md) — pilot selection, decision records, approval ownership, documentation sync, and atomic backlog rules.
+- [Schema and Evidence Foundation](docs/schema-and-evidence-foundation.md) — first-pass metadata shapes for depot packages, service levels, product definitions, dependencies, deployment manifests, evidence, and backout classes.
+- [Automation Contract and Security Gap Plan](docs/automation-contract-and-security-gap-plan.md) — z/OSMF, IBM Ansible, control-node, preflight, security backend, RACF clone, z/VM, and clone materialization detail.
+- [BMC Read-Only Configuration Unwinding Plan](docs/bmc-read-only-unwinding-plan.md) — first vendor unwinding plan for AMI Ops, AMI Ops Automation, AMI DevX, and Control-M.
 
 ## Vendor documentation intake
 

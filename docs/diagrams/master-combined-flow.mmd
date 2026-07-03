@@ -44,6 +44,10 @@ flowchart TD
         GAP4 --> GAP9["z/OSMF, Ansible collection, control-node, managed-node, CICS, IMS, Db2, and MQ decisions"]
         GAP5 --> GAP10["Security backend abstraction, RACF-first clone template, z/VM capability map"]
         GAP6 --> GAP11["Entitlement-backed inventory, BMC pilot evidence, OSS dispositions, sidequest rule"]
+        GAP2 --> GAP12["Pilot and governance controls detail"]
+        GAP3 --> GAP13["Schema and evidence foundation detail"]
+        GAP4 --> GAP14["Automation contract and security gap detail"]
+        GAP6 --> GAP15["BMC read-only unwinding detail"]
     end
 
     subgraph IBMDOCS["IBM Ansible and platform documentation gathering"]
@@ -124,6 +128,11 @@ flowchart TD
     GAP10 --> R1
     GAP11 --> DOCQUEUE
     GAP11 --> UNWINDQUEUE
+    GAP12 --> DOCS
+    GAP13 --> DATA
+    GAP14 --> PF1
+    GAP15 --> BMC1
+    GAP15 --> UW1
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

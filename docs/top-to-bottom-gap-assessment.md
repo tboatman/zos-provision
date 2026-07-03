@@ -23,6 +23,15 @@ The design is broad enough and internally consistent enough to proceed with deta
 
 The immediate priority is not to add more flowcharts. The immediate priority is to turn the current design into a gated backlog with evidence requirements, artifact schemas, and a narrow pilot path.
 
+## Detailed Gap Plans
+
+Several high-priority gaps now have dedicated detail plans:
+
+- [Pilot and Governance Controls](pilot-and-governance-controls.md) covers G-001, G-002, G-023, G-026, and G-027.
+- [Schema and Evidence Foundation](schema-and-evidence-foundation.md) covers G-005, G-019, G-020, G-021, and G-022.
+- [Automation Contract and Security Gap Plan](automation-contract-and-security-gap-plan.md) covers G-006, G-007, G-008, G-009, G-010, G-011, G-012, and G-013.
+- [BMC Read-Only Configuration Unwinding Plan](bmc-read-only-unwinding-plan.md) covers the BMC-first path through G-003, G-004, and G-018.
+
 ## Gap Register
 
 | ID | Gap | Why it matters | Current evidence | Remediation | Exit criterion | Priority |

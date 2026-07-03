@@ -282,6 +282,8 @@ See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-
 
 See [Top-to-Bottom Gap Assessment and Remediation Plan](top-to-bottom-gap-assessment.md) for the cross-document gap register and remediation phases that must be closed or explicitly waived before implementation begins.
 
+See [Pilot and Governance Controls](pilot-and-governance-controls.md), [Schema and Evidence Foundation](schema-and-evidence-foundation.md), and [Automation Contract and Security Gap Plan](automation-contract-and-security-gap-plan.md) for the first detailed closure plans behind the readiness checklist.
+
 ## Role Boundaries
 
 The roles should be intentionally narrow. Region provisioning, resource definition, and product runtime hooks should not be collapsed into one role because they have different owners, prerequisites, approvals, and recovery behavior.
