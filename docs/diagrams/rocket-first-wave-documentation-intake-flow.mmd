@@ -1,0 +1,17 @@
+flowchart TD
+    A["Rocket first-wave scope<br/>TMON, Mainstar, Enterprise Suite, Change/JCL/Data tools"] --> B["Confirm Rocket documentation and support access"]
+    B --> C["Open Rocket product catalog and documentation portal"]
+    C --> D["Record product families, product names, public pages, and aliases"]
+    D --> E{"Detailed docs and downloads visible?"}
+    E -- "No" --> F["Request support or entitlement-backed access"]
+    F --> C
+    E -- "Yes" --> G["Export or snapshot docs as permitted"]
+    G --> H["Capture install, customization, upgrade, admin, security, integration, messages, and maintenance sections"]
+    H --> I["Open support/download channels"]
+    I --> J["Capture media, service, HOLDDATA, generated JCL, z/OSMF workflows, USS payloads, Java payloads, and checksums"]
+    J --> K["Cross-check SMP/E CSIs, HLQs, USS paths, started tasks, agents, endpoints, and subsystem hooks"]
+    K --> L["Create Rocket first-wave product inventory"]
+    L --> M["Create product definitions for pilots"]
+    M --> N{"Ready for automation design?"}
+    N -- "No" --> O["Mark gaps and continue documentation/media discovery"]
+    N -- "Yes" --> P["Classify install method and design adapter"]

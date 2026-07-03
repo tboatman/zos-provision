@@ -24,6 +24,8 @@ Use these official Broadcom entry points first:
 
 Some Broadcom/CA documentation and downloads require login and entitlement. Treat access requirements as part of intake.
 
+For the first Broadcom CA targets, see [Broadcom CA First-Wave Documentation Intake](broadcom-ca-first-wave-documentation-intake.md), covering candidate DevOps, automation, security, database, and common-services product families.
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/broadcom-ca-documentation-acquisition-flow.mmd](diagrams/broadcom-ca-documentation-acquisition-flow.mmd)

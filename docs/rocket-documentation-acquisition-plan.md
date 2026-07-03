@@ -18,6 +18,8 @@ Use these official Rocket entry points first:
 
 Some Rocket documentation, support, and download functions require support-portal login and entitlement. Treat access requirements as part of intake.
 
+For the first Rocket targets, see [Rocket First-Wave Documentation Intake](rocket-first-wave-documentation-intake.md), covering candidate TMON, Mainstar, Enterprise Suite, Change/JCL/Data tools, and acquired or rebranded product families.
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/rocket-documentation-acquisition-flow.mmd](diagrams/rocket-documentation-acquisition-flow.mmd)

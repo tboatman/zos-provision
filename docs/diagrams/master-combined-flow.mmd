@@ -143,6 +143,15 @@ flowchart TD
         CA8 --> CA9{"Broadcom CA ready for pilot?"}
         CA9 -- "No" --> CA10["Mark Broadcom CA unknowns and continue discovery"]
         CA9 -- "Yes" --> CA11["Select Broadcom CA adapter pilot"]
+        CA8 --> CA12["First Broadcom CA target documentation intake"]
+        CA12 --> CA13["DevOps and change-management inventory"]
+        CA12 --> CA14["Automation, operations, and scheduling inventory"]
+        CA12 --> CA15["Security inventory"]
+        CA12 --> CA16["Database and data-management inventory"]
+        CA13 --> CA17["Capture docs, media, service, HOLDDATA, JCL, workflows, lifecycle, compatibility"]
+        CA14 --> CA17
+        CA15 --> CA17
+        CA16 --> CA17
     end
 
     subgraph ROCKET["Rocket documentation and product intake"]
@@ -157,6 +166,15 @@ flowchart TD
         RK8 --> RK9{"Rocket ready for pilot?"}
         RK9 -- "No" --> RK10["Mark Rocket unknowns and continue discovery"]
         RK9 -- "Yes" --> RK11["Select Rocket adapter pilot"]
+        RK8 --> RK12["First Rocket target documentation intake"]
+        RK12 --> RK13["TMON and monitoring inventory"]
+        RK12 --> RK14["Mainstar and storage/recovery inventory"]
+        RK12 --> RK15["Enterprise Suite and developer tooling inventory"]
+        RK12 --> RK16["Change, JCL, and data tools inventory"]
+        RK13 --> RK17["Capture docs, media, service, HOLDDATA, JCL, workflows, USS and Java payloads"]
+        RK14 --> RK17
+        RK15 --> RK17
+        RK16 --> RK17
     end
 
     subgraph VENDORLIFE["Generic third-party vendor lifecycle"]
@@ -434,7 +452,9 @@ flowchart TD
     BMC16 --> PD1
     BMC18 --> PD1
     CA8 --> PD1
+    CA17 --> PD1
     RK8 --> PD1
+    RK17 --> PD1
     DP10 --> VD3
     UW17 --> VD7
     PD13 --> VP1

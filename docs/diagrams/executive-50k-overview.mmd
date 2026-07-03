@@ -8,7 +8,9 @@ flowchart TD
     F --> G["Provision Runtime Platform<br/>z/OS services, RACF, CICS, IMS, Db2"]
     G --> H["Install and Configure Vendor Products<br/>base software plus subsystem integrations"]
     H --> U["First BMC Focus<br/>AMI Ops Monitoring, AMI Ops Automation, AMI DevX, Control-M"]
-    U --> I["Verify and Produce Evidence<br/>jobs, logs, manifests, drift checks, approvals"]
+    U --> W["First Broadcom CA Focus<br/>DevOps, automation, security, database, common services"]
+    W --> Y["First Rocket Focus<br/>TMON, Mainstar, Enterprise Suite, Change/JCL/Data tools"]
+    Y --> I["Verify and Produce Evidence<br/>jobs, logs, manifests, drift checks, approvals"]
     I --> J["Emit Disconnected VM Guest Clones<br/>repeatable development environments"]
 
     C --> K["Why It Is Large<br/>existing configuration must be unwound"]
@@ -18,6 +20,8 @@ flowchart TD
     G --> O["Why It Is Large<br/>security and subsystem changes are coupled"]
     H --> P["Why It Is Large<br/>BMC, Broadcom CA, and Rocket need vendor-specific adapters"]
     U --> V["Why It Is Large<br/>BMC expands into monitors, automation options, DevX subproducts, Control-M, and INCONTROL"]
+    W --> X["Why It Is Large<br/>Broadcom CA expands into legacy CA aliases, security, automation, databases, and common services"]
+    Y --> Z["Why It Is Large<br/>Rocket expands into monitoring, storage, development, JCL, data, USS, Java, and acquired product lines"]
     I --> Q["Why It Is Large<br/>evidence, rollback, and audit cannot be optional"]
     J --> R["Why It Is Large<br/>clones must be independent VM guests with local authority"]
 
@@ -28,6 +32,8 @@ flowchart TD
     O --> S
     P --> S
     V --> S
+    X --> S
+    Z --> S
     Q --> S
     R --> S
 

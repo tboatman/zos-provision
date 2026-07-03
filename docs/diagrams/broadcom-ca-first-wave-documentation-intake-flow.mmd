@@ -1,0 +1,18 @@
+flowchart TD
+    A["Broadcom CA first-wave scope<br/>DevOps, automation, security, database, common services"] --> B["Confirm Broadcom Support Portal access"]
+    B --> C["Open Mainframe Software entitlements and all-products view"]
+    C --> D["Open TechDocs, Compatibility Matrix, Lifecycle, KB, and Installation Tools"]
+    D --> E{"Detailed docs and downloads visible?"}
+    E -- "No" --> F["Request entitlement-backed access"]
+    F --> C
+    E -- "Yes" --> G["Capture product names, legacy CA aliases, versions, and lifecycle status"]
+    G --> H["Export or snapshot docs as permitted"]
+    H --> I["Capture install, customization, upgrade, admin, security, integration, messages, and maintenance sections"]
+    I --> J["Open My Downloads and installation/maintenance tools"]
+    J --> K["Capture media, service, HOLDDATA, generated JCL, workflows, and checksums"]
+    K --> L["Cross-check SMP/E CSIs, HLQs, started tasks, exits, security, and subsystem hooks"]
+    L --> M["Create Broadcom CA first-wave product inventory"]
+    M --> N["Create product definitions for pilots"]
+    N --> O{"Ready for automation design?"}
+    O -- "No" --> P["Mark gaps and continue entitlement/documentation/media discovery"]
+    O -- "Yes" --> Q["Classify install method and design adapter"]
