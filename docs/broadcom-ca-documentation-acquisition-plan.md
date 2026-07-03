@@ -26,6 +26,8 @@ Some Broadcom/CA documentation and downloads require login and entitlement. Trea
 
 For the first Broadcom CA targets, see [Broadcom CA First-Wave Documentation Intake](broadcom-ca-first-wave-documentation-intake.md), covering candidate DevOps, automation, security, database, and common-services product families.
 
+For the current public collection ledger, reachable source URLs, support-portal source-system evidence, and login-gated blockers, see [Broadcom CA Public Documentation Collection](broadcom-ca-public-documentation-collection.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/broadcom-ca-documentation-acquisition-flow.mmd](diagrams/broadcom-ca-documentation-acquisition-flow.mmd)

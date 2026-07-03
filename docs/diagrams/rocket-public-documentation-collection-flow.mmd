@@ -1,0 +1,30 @@
+flowchart TD
+    A["Rocket public documentation collection"] --> B["Open official product catalog"]
+    A --> C["Open Rocket docs portal"]
+    A --> D["Open Rocket support portal"]
+
+    B --> E["Products A-Z"]
+    E --> F["TMON One and mainframe monitoring"]
+    E --> G["PRO/JCL and JCL tooling"]
+    E --> H["Enterprise Storage and Mainstar"]
+    E --> I["ChangeMan and change tooling"]
+    E --> J["Enterprise Suite and developer tooling"]
+    E --> K["DataEdge and data access tooling"]
+
+    C --> L{"Product docs visible?"}
+    L -- "No" --> M["Mark documentation as login/search gated"]
+    L -- "Yes" --> N["Record canonical documentation URL and sections"]
+
+    D --> O["Record support/download login requirement"]
+
+    F --> P["Rocket public product evidence ledger"]
+    G --> P
+    H --> P
+    I --> P
+    J --> P
+    K --> P
+    M --> P
+    N --> P
+    O --> P
+
+    P --> Q["Rocket product-definition intake backlog"]

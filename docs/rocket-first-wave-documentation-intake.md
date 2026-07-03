@@ -33,6 +33,8 @@ The Rocket product catalog exposes Mainframe Operations navigation including C\P
 
 The docs portal and support portal may require login or entitlement for product-specific documentation, downloads, patches, or support-only content. Treat Rocket account access as a blocking prerequisite.
 
+Current public-source collection results are tracked in [Rocket Public Documentation Collection](rocket-public-documentation-collection.md). That ledger records public product pages, source URLs, visible product-family evidence, technical signals, and login-gated blockers.
+
 ## Access Required
 
 Before useful capture can start, obtain:

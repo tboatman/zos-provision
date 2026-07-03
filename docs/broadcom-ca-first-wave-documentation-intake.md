@@ -32,6 +32,8 @@ The Broadcom Support Portal exposes the mainframe software paths for My Entitlem
 
 TechDocs may block unauthenticated access or require entitlement-backed login for specific product content. Treat Broadcom account access as a blocking prerequisite.
 
+Current public-source collection results are tracked in [Broadcom CA Public Documentation Collection](broadcom-ca-public-documentation-collection.md). That ledger records public support-portal evidence, source-system links, candidate product families to resolve after login, and login-gated blockers.
+
 ## Access Required
 
 Before useful capture can start, obtain:

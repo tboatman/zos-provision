@@ -20,6 +20,8 @@ Some Rocket documentation, support, and download functions require support-porta
 
 For the first Rocket targets, see [Rocket First-Wave Documentation Intake](rocket-first-wave-documentation-intake.md), covering candidate TMON, Mainstar, Enterprise Suite, Change/JCL/Data tools, and acquired or rebranded product families.
 
+For the current public collection ledger, reachable source URLs, public product-page evidence, and login-gated blockers, see [Rocket Public Documentation Collection](rocket-public-documentation-collection.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/rocket-documentation-acquisition-flow.mmd](diagrams/rocket-documentation-acquisition-flow.mmd)

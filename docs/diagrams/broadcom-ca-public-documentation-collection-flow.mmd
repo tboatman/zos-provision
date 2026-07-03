@@ -1,0 +1,41 @@
+flowchart TD
+    A["Broadcom CA public documentation collection"] --> B["Open Broadcom Support Portal"]
+    A --> C["Open Mainframe All Products"]
+    A --> D["Open TechDocs"]
+    A --> E["Open mainframe product area"]
+
+    B --> F["Record Mainframe Software source systems"]
+    F --> G["My Entitlements"]
+    F --> H["My Downloads"]
+    F --> I["Documentation and TechDocs"]
+    F --> J["Compatibility Matrix"]
+    F --> K["Product Lifecycle"]
+    F --> L["Knowledge Base Articles"]
+    F --> M["Installation and Maintenance Tools"]
+
+    C --> N{"Product rows visible?"}
+    D --> O{"Product docs visible?"}
+    E --> P{"Product text visible?"}
+
+    N -- "No" --> Q["Mark all-products as login/session gated"]
+    N -- "Yes" --> R["Record product names and URLs"]
+    O -- "No" --> S["Mark TechDocs as login/session gated"]
+    O -- "Yes" --> T["Record canonical product documentation"]
+    P -- "No" --> U["Mark product area as browser-extraction limited"]
+    P -- "Yes" --> V["Record public product-family evidence"]
+
+    G --> W["Broadcom CA source evidence ledger"]
+    H --> W
+    I --> W
+    J --> W
+    K --> W
+    L --> W
+    M --> W
+    Q --> W
+    R --> W
+    S --> W
+    T --> W
+    U --> W
+    V --> W
+
+    W --> X["Broadcom CA product-definition intake backlog"]
