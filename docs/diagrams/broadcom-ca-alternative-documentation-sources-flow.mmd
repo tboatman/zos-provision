@@ -1,0 +1,31 @@
+flowchart TD
+    A["Broadcom CA documentation source discovery"] --> B["TechDocs product/version trees"]
+    A --> C["Legacy CA static docs on ftpdocs.broadcom.com/cadocs"]
+    A --> D["Compatibility Matrix static pages"]
+    A --> E["Product Lifecycle static page"]
+    A --> F["Support Portal Compatibility hub"]
+    A --> G["Public Knowledge Base articles"]
+    A --> H["Mainframe Software community"]
+    A --> I["Product Names and Abbreviations pages"]
+
+    B --> J["Full TOC, PDF download, install subsections"]
+    C --> K["Legacy CA product manuals and bookshelves"]
+    D --> L["Product-by-subsystem compatibility grids"]
+    E --> M["GA, EOS, EOL dates by product/release"]
+    F --> N["Index into compatibility categories"]
+    G --> O["Download, lifecycle, and compatibility explainers"]
+    H --> P["Legacy CA-prefixed names, troubleshooting breadcrumbs"]
+    I --> Q["Long-form, short-form, trademark naming"]
+
+    J --> R["Broadcom CA product definition source map"]
+    K --> R
+    L --> R
+    M --> R
+    N --> R
+    O --> R
+    P --> R
+    Q --> R
+
+    R --> S{"Enough evidence?"}
+    S -- "No" --> T["Request Broadcom login, entitlement, or support case"]
+    S -- "Yes" --> U["Classify install and maintenance path"]

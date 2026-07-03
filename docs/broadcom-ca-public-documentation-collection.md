@@ -88,6 +88,8 @@ Broadcom CA products can be unusually invasive in clone and automation design:
 
 ## Immediate Gaps
 
+For alternate Broadcom CA source paths that reduce some of these gaps without a login, including a legacy CA static documentation tree, static compatibility-matrix and product-lifecycle pages, and public knowledge base articles, see [Broadcom CA Alternative Documentation Sources](broadcom-ca-alternative-documentation-sources.md).
+
 - Broadcom account access is still required for entitlement, downloads, lifecycle, compatibility, installation tooling, and complete product scope, even when selected TechDocs product pages are public.
 - My Entitlements and My Downloads are required to distinguish licensed products from candidate products.
 - Direct TechDocs product/version URL checks are required before marking documentation as gated.

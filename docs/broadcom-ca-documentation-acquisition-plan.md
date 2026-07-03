@@ -30,6 +30,8 @@ For the current public collection ledger, reachable source URLs, support-portal 
 
 For the current non-canonical search ledger, low-yield third-party search results, and safe-use rules for legacy CA or unofficial documentation leads, see [Broadcom CA Non-Canonical Install Documentation Search](broadcom-ca-noncanonical-install-documentation-search.md).
 
+For alternate Broadcom CA source paths, publicly reachable TechDocs installation subsections and PDF downloads, the legacy CA static documentation tree on `ftpdocs.broadcom.com`, compatibility-matrix and product-lifecycle static pages, public knowledge base articles, and the Mainframe Software community, see [Broadcom CA Alternative Documentation Sources](broadcom-ca-alternative-documentation-sources.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/broadcom-ca-documentation-acquisition-flow.mmd](diagrams/broadcom-ca-documentation-acquisition-flow.mmd)
