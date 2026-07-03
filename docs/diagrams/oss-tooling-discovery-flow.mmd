@@ -1,0 +1,35 @@
+flowchart TD
+    A["OSS tooling discovery"] --> B["Collect candidate sources"]
+    B --> C["Open Mainframe projects"]
+    B --> D["Zowe ecosystem"]
+    B --> E["z/OS USS package ecosystem"]
+    B --> F["Validation and test tools"]
+    B --> G["Legacy and lab-only tools"]
+
+    C --> H["Feilong"]
+    C --> I["Galasa"]
+    D --> J["Zowe CLI"]
+    D --> K["Zowe API Mediation Layer"]
+    D --> L["Zowe Explorer"]
+    E --> M["zopen community meta and Git port"]
+    F --> N["Galasa and evidence harnesses"]
+    G --> O["py3270 and x3270 or s3270"]
+    G --> P["Hercules Hyperion"]
+
+    H --> Q["Classify fit, license, provenance, support"]
+    I --> Q
+    J --> Q
+    K --> Q
+    L --> Q
+    M --> Q
+    N --> Q
+    O --> Q
+    P --> Q
+
+    Q --> R{"Adoptable for project?"}
+    R -- "Core candidate" --> S["Add to capability map and depot plan"]
+    R -- "Optional" --> T["Track as helper or fallback"]
+    R -- "Risky or unclear" --> U["Quarantine until legal and support review"]
+    S --> V["Pin version and mirror internally"]
+    T --> V
+    U --> W["Keep out of executable automation"]

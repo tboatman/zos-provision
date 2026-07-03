@@ -12,6 +12,8 @@ Retrieval pass: 2026-07-03.
 
 Diagram source: [docs/diagrams/zvm-ansible-documentation-sources-flow.mmd](diagrams/zvm-ansible-documentation-sources-flow.mmd)
 
+For the broader OSS candidate ledger that includes Feilong, Zowe, zopen community tooling, Galasa, and quarantine-only tools, see [OSS Tooling Discovery](oss-tooling-discovery.md).
+
 ## Result Summary
 
 The z/VM Ansible source landscape is sparse but not empty.
@@ -22,7 +24,7 @@ Findings:
 - GitHub repository search found two IBM-owned repositories: `IBM/zvm_ansible` and `IBM/zvm_ansible_collection`.
 - `IBM/zvm_ansible_collection` has a `galaxy.yml` declaring namespace `ibm`, collection name `zvm_ansible`, and version `0.0.3`, but the README still documents local clone/build/install rather than direct Galaxy installation.
 - `IBM/zvm_ansible` is the better documentation/examples repository; it explains the management path through a Linux virtual machine on the target z/VM LPAR, SMAPI, Feilong zthin, and `smcli`.
-- Open Mainframe Project Feilong is a key adjacent source because the IBM Ansible material depends on its zthin/smcli layer.
+- Open Mainframe Project Feilong is a key adjacent source and candidate z/VM clone-factory substrate because the IBM Ansible material depends on its zthin/smcli layer.
 - IBM z/VM product documentation remains canonical for SMAPI, CP, CMS, directory management, networking, security, and guest lifecycle behavior.
 
 Practical conclusion: treat the IBM z/VM Ansible repositories as useful IBM-owned but not yet productized Ansible source material. Treat Feilong and IBM z/VM documentation as required supporting sources. Do not treat the z/VM path as equivalent to the supported Red Hat Ansible Content for IBM Z collection set until support status, installation path, and module contracts are verified.
@@ -113,6 +115,7 @@ The collection README identifies these module-level operations:
 1. Clone or fetch `IBM/zvm_ansible_collection` metadata and run `ansible-galaxy collection build` in a disposable workspace.
 2. Run `ansible-doc` against the built collection to capture module contracts.
 3. Capture exact Feilong zthin installation documentation through a browser or unrestricted network.
-4. Capture IBM z/VM 7.4 SMAPI, CP command, directory manager, TCP/IP SSL, and user directory documentation URLs.
-5. Ask IBM or the site z/VM owner whether the IBM z/VM Ansible repositories are supported, sample-only, or abandoned.
-6. Decide whether z/VM clone lifecycle belongs in Ansible roles, a custom collection, a wrapper around Feilong, or a site-owned service API.
+4. Classify Feilong in the OSS tooling ledger for license, support, mirroring, version pinning, and internal ownership.
+5. Capture IBM z/VM 7.4 SMAPI, CP command, directory manager, TCP/IP SSL, and user directory documentation URLs.
+6. Ask IBM or the site z/VM owner whether the IBM z/VM Ansible repositories are supported, sample-only, or abandoned.
+7. Decide whether z/VM clone lifecycle belongs in Ansible roles, a custom collection, a wrapper around Feilong, or a site-owned service API.

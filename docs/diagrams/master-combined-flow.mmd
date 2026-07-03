@@ -44,6 +44,25 @@ flowchart TD
         ID8 --> ID9["Role design prerequisites and preflight inputs"]
     end
 
+    subgraph OSSDOCS["OSS tooling discovery and governance"]
+        OSS1["Collect relevant OSS candidates"] --> OSS2["Feilong and IBM z/VM adjacent tooling"]
+        OSS1 --> OSS3["Zowe CLI, API Mediation Layer, and Explorer"]
+        OSS1 --> OSS4["zopen community packages and Git port"]
+        OSS1 --> OSS5["Galasa validation harness"]
+        OSS1 --> OSS6["py3270, x3270, s3270, and emulator watchlist"]
+        OSS2 --> OSS7["Classify license, provenance, support, and internal owner"]
+        OSS3 --> OSS7
+        OSS4 --> OSS7
+        OSS5 --> OSS7
+        OSS6 --> OSS7
+        OSS7 --> OSS8{"Adoption lane"}
+        OSS8 -- "Core candidate" --> OSS9["Pin version and mirror into internal depot"]
+        OSS8 -- "Optional helper" --> OSS10["Track as control-node or validation aid"]
+        OSS8 -- "Risky or unclear" --> OSS11["Quarantine outside executable automation"]
+        OSS9 --> OSS12["Feed platform and clone-factory capability maps"]
+        OSS10 --> OSS12
+    end
+
     subgraph ARCH["Target architecture surfaces"]
         ROLES --> ZOS["z/OS managed node over SSH"]
         ZOS --> ZOSMF["z/OSMF APIs and workflows"]
@@ -77,6 +96,9 @@ flowchart TD
 
     ID9 --> PF1
     ID9 --> COLLECTIONS
+    OSS12 --> ID8
+    OSS12 --> COLLECTIONS
+    OSS12 --> DP10
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

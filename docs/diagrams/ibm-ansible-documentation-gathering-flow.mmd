@@ -3,6 +3,7 @@ flowchart TD
     A --> C["Gather IBM product documentation"]
     A --> D["Gather z/VM lifecycle documentation"]
     A --> E["Probe collection availability and versions"]
+    A --> AE["Gather adjacent OSS tooling candidates"]
 
     B --> F["z/OS Core modules and requirements"]
     B --> G["z/OSMF modules and workflow support"]
@@ -25,6 +26,8 @@ flowchart TD
     E --> S["Confirm collection namespace and version"]
     E --> T["Confirm ansible-doc module contracts"]
     E --> U["Record unsupported or unconfirmed gaps"]
+    AE --> AF["Feilong, Zowe, zopen community, Galasa, and quarantine tools"]
+    AF --> AG["Classify license, support, provenance, mirror, and runtime lane"]
 
     F --> V["Platform capability map"]
     G --> V
@@ -44,6 +47,7 @@ flowchart TD
     S --> X["Collection evidence map"]
     T --> X
     U --> X
+    AG --> X
 
     V --> Y["Role design prerequisites"]
     W --> Y

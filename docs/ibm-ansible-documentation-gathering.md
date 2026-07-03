@@ -14,6 +14,8 @@ Diagram source: [docs/diagrams/ibm-ansible-documentation-gathering-flow.mmd](dia
 
 For the focused z/VM Ansible source ledger, see [z/VM Ansible Documentation Sources](zvm-ansible-documentation-sources.md).
 
+For governed evaluation of adjacent open source tooling, see [OSS Tooling Discovery](oss-tooling-discovery.md).
+
 ## Ground Rules
 
 - Treat IBM and Red Hat Ansible Content for IBM Z documentation as canonical for collection behavior, requirements, and module contracts.
@@ -22,6 +24,7 @@ For the focused z/VM Ansible source ledger, see [z/VM Ansible Documentation Sour
 - Capture both Ansible collection documentation and native IBM product documentation for each managed surface.
 - Prefer z/OSMF APIs and workflows where the target system exposes them and the relevant collection supports them.
 - Treat z/VM as a separate discovery track unless a current, supported Ansible collection is verified.
+- Treat OSS tools as adjacent candidates until license, provenance, support, version pinning, and internal mirror posture are captured.
 - Re-check all URLs and collection versions before implementation.
 
 ## Primary Ansible Source Inventory
@@ -136,4 +139,5 @@ These are not implementation files yet. They are normalized documentation and ca
 4. Gather IBM product documentation URLs for target versions of z/OS, CICS TS, IMS, Db2, MQ, z/OSMF, System Automation, and z/VM.
 5. Identify the approved z/VM automation interface for VM guest clone lifecycle.
 6. Build or inspect the IBM `zvm_ansible` collection locally and capture `ansible-doc` output for each module if the support posture is acceptable.
-7. Convert the gathered material into platform and subsystem capability maps.
+7. Classify OSS tooling candidates that affect control-node behavior, z/OS USS prerequisites, z/VM Management Access Point prerequisites, or validation evidence.
+8. Convert the gathered material into platform and subsystem capability maps.
