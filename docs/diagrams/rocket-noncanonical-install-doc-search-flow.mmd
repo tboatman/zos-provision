@@ -1,0 +1,39 @@
+flowchart TD
+    A["Rocket non-canonical install documentation search"] --> B["Search public web indexes"]
+    A --> C["Probe legacy predecessor-company domains"]
+    A --> D["Search public code hosting"]
+    A --> E["Probe third-party PDF mirrors"]
+    A --> F["Search community forums and conference decks"]
+
+    B --> G{"Reliable third-party install manual found?"}
+    C --> H{"Legacy ASG/Micro Focus/Serena domain still live?"}
+    D --> I{"Usable public install artifacts found?"}
+    E --> J{"Mirror page reachable and trustworthy?"}
+    F --> K{"Usable install/config lead found?"}
+
+    G -- "No" --> L["Record low-yield public search terms"]
+    G -- "Yes" --> M["Quarantine as non-authoritative lead"]
+    H -- "DNS dead or cert mismatch" --> N["Record domain as decommissioned/unverifiable"]
+    H -- "Reachable" --> O["Record legacy URL as historical lead"]
+    I -- "No" --> P["Record repository-search limitation"]
+    I -- "Yes" --> Q["Record artifact lead and require review"]
+    J -- "No / blocked" --> R["Record mirror as unconfirmed in this pass"]
+    J -- "Yes" --> S["Quarantine lead until provenance review"]
+    K -- "No" --> T["Record no useful thread/deck found"]
+    K -- "Yes" --> U["Record community/conference lead"]
+
+    L --> V["Rocket non-canonical source ledger"]
+    M --> V
+    N --> V
+    O --> V
+    P --> V
+    Q --> V
+    R --> V
+    S --> V
+    T --> V
+    U --> V
+
+    V --> W["Re-resolve through canonical Rocket sources"]
+    W --> X{"Canonical confirmation available?"}
+    X -- "No" --> Y["Keep out of executable automation"]
+    X -- "Yes" --> Z["Promote to Rocket product-definition evidence"]

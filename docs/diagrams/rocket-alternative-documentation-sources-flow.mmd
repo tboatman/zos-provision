@@ -1,0 +1,28 @@
+flowchart TD
+    A["Rocket documentation source discovery"] --> B["docs-be.rocketsoftware.com raw resource tree"]
+    A --> C["Product Renaming and Acquisition Reference"]
+    A --> D["Rocket Community portal"]
+    A --> E["Rocket support/entitlement portal"]
+    A --> F["Official Rocket GitHub organizations"]
+    A --> G["Product-line support forums"]
+    A --> H["rocketsoftware.com static resource_files tree"]
+
+    B --> I["Unauthenticated PDF manuals across TMON, Mainstar, PRO/JCL, ChangeMan ZMF, Enterprise Developer"]
+    C --> J["Legacy-to-current name mapping: ASG, Mainstar, Aldon, Zephyr, Micro Focus/Serena"]
+    D --> K["Public product forums, threads, and FAQ without mandatory login"]
+    E --> L["Entitlements, downloads, patches, cases (login required)"]
+    F --> M["Sample code, VS Code extensions, tutorials, CI/CD integration points"]
+    G --> N["Legacy product-specific community boards (e.g. Remote Desktop)"]
+    H --> O["Brochures, datasheets, and the public support-handbook PDF"]
+
+    I --> P["Rocket product definition source map"]
+    J --> P
+    K --> P
+    L --> P
+    M --> P
+    N --> P
+    O --> P
+
+    P --> Q{"Enough evidence?"}
+    Q -- "No" --> R["Request login, entitlement, or support case"]
+    Q -- "Yes" --> S["Classify install and maintenance path"]

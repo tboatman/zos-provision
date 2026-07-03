@@ -8,6 +8,8 @@ Do not commit copied Rocket manuals, exported HTML, or PDFs into this repository
 
 Retrieval pass: 2026-07-03.
 
+For non-canonical public install-documentation leads, see [Rocket Non-Canonical Install Documentation Search](rocket-noncanonical-install-documentation-search.md).
+
 ## Collection Flow
 
 Diagram source: [docs/diagrams/rocket-public-documentation-collection-flow.mmd](diagrams/rocket-public-documentation-collection-flow.mmd)

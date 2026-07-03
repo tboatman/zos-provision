@@ -22,6 +22,10 @@ For the first Rocket targets, see [Rocket First-Wave Documentation Intake](rocke
 
 For the current public collection ledger, reachable source URLs, public product-page evidence, and login-gated blockers, see [Rocket Public Documentation Collection](rocket-public-documentation-collection.md).
 
+For alternate Rocket source paths beyond the primary product catalog, including the `docs-be.rocketsoftware.com` raw-resource PDF tree, the Product Renaming and Acquisition Reference, the Community portal, and official Rocket GitHub organizations, see [Rocket Alternative Documentation Sources](rocket-alternative-documentation-sources.md).
+
+For the current non-canonical search ledger, low-yield third-party search results, and safe-use rules for legacy ASG, Mainstar, Aldon, Zephyr, or Micro Focus/Serena documentation leads, see [Rocket Non-Canonical Install Documentation Search](rocket-noncanonical-install-documentation-search.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/rocket-documentation-acquisition-flow.mmd](diagrams/rocket-documentation-acquisition-flow.mmd)
