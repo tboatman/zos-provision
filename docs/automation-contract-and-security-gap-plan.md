@@ -196,6 +196,8 @@ Clone-local security must never embed production secrets or depend on central au
 
 ## z/VM Clone Lifecycle Decision
 
+Detailed VM-side implementation contract: [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md).
+
 The current candidate path is:
 
 1. Ansible control node.
@@ -218,11 +220,14 @@ Required evidence before adoption:
 - Local extensions required by IBM `zvm_ansible`, if any.
 - IPL and shutdown pattern for z/OS guests.
 - Evidence that clone-local z/OS authority is independent from central authority.
+- Operation-by-operation mapping to SMAPI, Feilong, site service, direct client, or manual handoff.
+- Destroy and leaked-resource authority for guest IDs, disks, devices, reader/spool, network, credentials, and certificates.
 
 Decision outcomes:
 
 - Adopt Feilong plus IBM z/VM Ansible source as internal-supported path.
 - Wrap Feilong directly with site-owned modules or service API.
+- Build a direct internal SMAPI client if Feilong is unsuitable and site policy allows it.
 - Use a site-owned z/VM provisioning service instead.
 - Block disconnected clone automation until z/VM authority and support posture are resolved.
 

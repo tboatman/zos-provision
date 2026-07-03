@@ -1,0 +1,25 @@
+flowchart TD
+    A["Ansible control node"] --> B["z/VM clone factory role or collection"]
+    B --> C{"Implementation lane"}
+    C -- "Preferred candidate" --> D["Linux Management Access Point guest"]
+    D --> E["Feilong zthin and smcli"]
+    E --> F["z/VM SMAPI TCP service"]
+    C -- "Alternative" --> G["Site-owned z/VM provisioning service"]
+    G --> F
+    C -- "Fallback only" --> H["Manual CP, CMS, or directory-manager handoff"]
+    F --> I["Directory manager"]
+    F --> J["CP and CMS operations"]
+    I --> K["Create, update, or delete guest directory entry"]
+    J --> L["Create, copy, attach, or delete minidisks"]
+    J --> M["Configure NIC, VSWITCH, VLAN, and devices"]
+    J --> N["Punch firstboot material and purge reader"]
+    J --> O["Activate, IPL, deactivate, and destroy guest"]
+    K --> P["z/OS VM guest"]
+    L --> P
+    M --> P
+    N --> P
+    O --> P
+    P --> Q["Verify guest, local authority, and clone evidence"]
+    Q --> R{"Ready?"}
+    R -- "No" --> S["Recover or destroy half-created clone"]
+    R -- "Yes" --> T["Hand off disconnected clone"]

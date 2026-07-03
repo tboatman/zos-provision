@@ -484,7 +484,9 @@ flowchart TD
         CL5["Local RACF template"] --> CL2
         CL6["VM guest network, disk, and storage policy"] --> CL2
         CL2 --> CL7["Plan VM guest clone"]
-        CL7 --> CL8["Materialize datasets and USS content"]
+        CL7 --> CL7A["Select SMAPI, Feilong, site-service, direct-client, or handoff lane"]
+        CL7A --> CL7B["Execute z/VM directory, disk, network, reader, and activation operations"]
+        CL7B --> CL8["Materialize datasets and USS content"]
         CL8 --> CL9["Generate local RACF and certificates"]
         CL9 --> CL10["Render PARMLIB, PROCLIB, JES, TCP/IP, and product config"]
         CL10 --> CL11["Boot VM guest clone"]

@@ -842,3 +842,4 @@ Design assumptions in this document are based on the current IBM Ansible for IBM
 - z/OSMF module set, including authentication, security requirement validation, and workflow operation: https://ibm.github.io/z_ansible_collections_doc/ibm_zosmf/docs/source/modules.html
 - IBM product documentation entry points for z/OS, CICS TS, IMS, Db2 for z/OS, MQ for z/OS, System Automation, and z/VM are tracked in [IBM Ansible Documentation Gathering](ibm-ansible-documentation-gathering.md)
 - Focused z/VM Ansible source discovery, including IBM-owned GitHub repositories, Galaxy negative evidence, SMAPI, Feilong, and Management Access Point implications, is tracked in [z/VM Ansible Documentation Sources](zvm-ansible-documentation-sources.md)
+- VM-side SMAPI implementation design, including doc retrieval, prerequisites, operation mapping, and implementation lane choices, is tracked in [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md)

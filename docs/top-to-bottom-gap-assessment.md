@@ -30,6 +30,7 @@ Several high-priority gaps now have dedicated detail plans:
 - [Pilot and Governance Controls](pilot-and-governance-controls.md) covers G-001, G-002, G-023, G-026, and G-027.
 - [Schema and Evidence Foundation](schema-and-evidence-foundation.md) covers G-005, G-019, G-020, G-021, and G-022.
 - [Automation Contract and Security Gap Plan](automation-contract-and-security-gap-plan.md) covers G-006, G-007, G-008, G-009, G-010, G-011, G-012, and G-013.
+- [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md) covers G-012, G-029, G-032, and G-033.
 - [BMC Read-Only Configuration Unwinding Plan](bmc-read-only-unwinding-plan.md) covers the BMC-first path through G-003, G-004, and G-018.
 - [Product Inventory and Entitlement Intake](product-inventory-and-entitlement-intake.md) covers the cross-vendor path through G-003 and G-004.
 - [Subsystem Scope and Execution Plan](subsystem-scope-and-execution-plan.md) covers G-014, G-015, G-016, and G-017.
@@ -72,6 +73,7 @@ Several high-priority gaps now have dedicated detail plans:
 | G-030 | Baseline sealing and retirement policy is missing | Clones need reproducible source baselines and a way to retire bad or stale baselines | Service-level schema exists but no seal or retirement workflow | Add baseline approval, seal, evidence, retirement, and supersedence rules | A clone can reference a sealed baseline ID and reject retired baselines | High |
 | G-031 | Clone refresh and drift policy is missing | Disconnected clones can diverge and age without a clear refresh or rebuild rule | Clone governance mentions evidence and divergence but not drift workflow | Define drift checks and decide in-place refresh versus destroy/recreate | First pilot declares maximum drift and refresh policy | High |
 | G-032 | Destroy, cleanup, and leak detection are under-modeled | VM guest, storage, network, credentials, and evidence cleanup are high-risk if treated as an afterthought | Clone governance says destroyable but lacks detailed destroy phases | Define normal, forced, quarantine, and retain-for-debug destroy classes plus leaked-resource checks | Destroy evidence proves guest, storage, network, credentials, certificates, and metadata were handled | Critical |
+| G-033 | z/VM SMAPI implementation contract is not explicit enough | The clone factory depends on exact SMAPI setup, authorization, operation mapping, Feilong or site-service choice, and documentation retrieval | z/VM source ledger identified IBM docs, IBM z/VM Ansible repositories, Feilong, MAP, zthin, and `smcli`; SMAPI design doc now scopes the contract | Retrieve exact SMAPI and supporting z/VM docs, build a capability matrix, choose an implementation lane, and add `zvm_smapi` manifest fields | VM-side clone operations have an approved interface, authority model, evidence requirement, and fallback lane | Critical |
 
 ## Remediation Phases
 
@@ -123,13 +125,14 @@ Exit gate: the team knows which IBM-supported module, z/OSMF API, JCL path, or e
 
 ### Phase D: Security and Clone Factory
 
-Close G-010, G-011, G-012, and G-013.
+Close G-010, G-011, G-012, G-013, and G-033.
 
 Deliverables:
 
 - Security backend abstraction.
 - RACF-first clone-local security template.
 - z/VM clone lifecycle capability map.
+- z/VM SMAPI implementation contract and documentation retrieval evidence.
 - Feilong or alternate z/VM API decision.
 - Minimum viable VM guest clone shape.
 

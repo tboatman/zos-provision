@@ -14,6 +14,8 @@ Diagram source: [docs/diagrams/zvm-ansible-documentation-sources-flow.mmd](diagr
 
 For the broader OSS candidate ledger that includes Feilong, Zowe, zopen community tooling, Galasa, and quarantine-only tools, see [OSS Tooling Discovery](oss-tooling-discovery.md).
 
+For the VM-side implementation contract that grows out of this source ledger, see [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md).
+
 ## Result Summary
 
 The z/VM Ansible source landscape is sparse but not empty.
@@ -34,6 +36,8 @@ Practical conclusion: treat the IBM z/VM Ansible repositories as useful IBM-owne
 | Source | URL | Status from this pass | Use |
 | --- | --- | --- | --- |
 | IBM z/VM documentation | https://www.ibm.com/docs/en/zvm/7.4.0 | Canonical IBM product docs; base URL reachable through redirect from `/zvm/7.4` | z/VM release, CP, CMS, SMAPI, directory, TCP/IP, security, networking, service, and guest lifecycle authority |
+| z/VM 7.4 PDFs and more | https://www.ibm.com/docs/en/zvm/7.4.0/SSB27U_7.4.0/com.ibm.zvm.v740/allpubs.htm | IBM Documentation index page identified during SMAPI retrieval pass | Starting point for exact book and PDF capture |
+| z/VM Systems Management APIs topic | https://www.ibm.com/docs/en/zvm/7.4.0/SSB27U_7.4.0/com.ibm.zvm.v740.dmsa3/dmsa319.htm | IBM Documentation topic path identified during SMAPI retrieval pass | Starting point for SMAPI programming and operation mapping |
 | IBM zvm_ansible examples | https://github.com/IBM/zvm_ansible | IBM-owned GitHub repo; public; Apache-2.0; default branch `master`; repository pushed in 2025 according to GitHub metadata | Best current source for Ansible call path, prerequisites, examples, limitations, and operational pattern |
 | IBM zvm_ansible_collection | https://github.com/IBM/zvm_ansible_collection | IBM-owned GitHub repo; public; Apache-2.0; `galaxy.yml` declares `ibm.zvm_ansible` version `0.0.3`; not found by Galaxy keyword search | Candidate local-built Ansible collection; source for module list and collection packaging |
 | Ansible Galaxy keyword search: `zvm` | https://galaxy.ansible.com/api/v3/plugin/ansible/search/collection-versions/?keywords=zvm | API returned `count: 0` | Evidence that direct Galaxy install path was not found in this pass |
@@ -67,6 +71,12 @@ The README also documents a likely guest provisioning flow:
 9. Adjust relative or absolute share.
 
 This maps well to the disconnected clone requirement, but it must be validated against local z/VM authority, security, directory manager, storage, and z/OS guest IPL requirements.
+
+## SMAPI Implementation Linkage
+
+The source ledger now feeds a dedicated SMAPI implementation design. That design owns the operation mapping, prerequisites, clone manifest additions, evidence requirements, and lane decision between Feilong zthin, a site-owned provisioning service, a direct SMAPI client, or a manual handoff path.
+
+The next documentation retrieval pass must therefore capture not only general z/VM docs, but the exact SMAPI server setup, TCP/IP SSL, CP/CMS, directory-manager, reader/spool, and Feilong zthin material required to prove that each clone lifecycle operation has an approved interface.
 
 ## Candidate Module Surface From IBM zvm_ansible_collection
 
@@ -119,3 +129,4 @@ The collection README identifies these module-level operations:
 5. Capture IBM z/VM 7.4 SMAPI, CP command, directory manager, TCP/IP SSL, and user directory documentation URLs.
 6. Ask IBM or the site z/VM owner whether the IBM z/VM Ansible repositories are supported, sample-only, or abandoned.
 7. Decide whether z/VM clone lifecycle belongs in Ansible roles, a custom collection, a wrapper around Feilong, or a site-owned service API.
+8. Fill the SMAPI capability matrix described in [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md).

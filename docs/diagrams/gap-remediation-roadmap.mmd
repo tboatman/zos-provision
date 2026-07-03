@@ -43,13 +43,15 @@ flowchart TD
     T --> U["Security backend abstraction"]
     T --> V["RACF-first clone template"]
     T --> W["z/VM clone lifecycle capability map"]
-    T --> X["Feilong or alternate API decision"]
+    T --> X["SMAPI implementation contract and doc evidence"]
+    T --> XB["Feilong or alternate API decision"]
     T --> Y["Minimum viable VM guest clone shape"]
 
     U --> Z["Phase E: vendor intake and configuration unwinding"]
     V --> Z
     W --> Z
     X --> Z
+    XB --> Z
     Y --> Z
 
     Z --> AA["Entitlement-backed product inventory"]

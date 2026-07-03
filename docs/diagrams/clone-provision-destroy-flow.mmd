@@ -4,10 +4,11 @@ flowchart TD
     C --> D["Validate create plan and destroy plan"]
     D --> E{"Approved?"}
     E -- "No" --> F["Hold request and record gaps"]
-    E -- "Yes" --> G["Reserve z/VM guest identity, storage, and network"]
+    E -- "Yes" --> G["Select SMAPI, Feilong, site-service, direct-client, or handoff lane"]
 
-    G --> H["Materialize VM guest"]
-    H --> I{"Materialization successful?"}
+    G --> H["Reserve z/VM guest identity, storage, and network"]
+    H --> HA["Materialize VM guest"]
+    HA --> I{"Materialization successful?"}
     I -- "No" --> J["Run half-created clone cleanup"]
     J --> K["Publish failure evidence"]
 

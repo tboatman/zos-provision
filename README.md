@@ -11,6 +11,7 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [Platform Maintenance and Disconnected Clone Strategy](docs/platform-maintenance-and-disconnected-clones.md) — the substrate layer (z/OS maintenance, internal SMP/E repository, RACF, disconnected VM clones) that the other two depend on.
 - [IBM Ansible Documentation Gathering](docs/ibm-ansible-documentation-gathering.md) — the Ansible and IBM-platform source map for z/OS, z/OSMF, CICS, IMS, Db2, MQ, System Automation, Z HMC, and z/VM.
 - [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — focused source ledger for z/VM Ansible, SMAPI, Feilong/zthin, and disconnected VM guest clone automation.
+- [z/VM SMAPI Implementation Design](docs/zvm-smapi-implementation-design.md) — VM-side implementation contract for SMAPI, Feilong/zthin, site-service alternatives, clone lifecycle operations, and documentation retrieval.
 - [OSS Tooling Discovery](docs/oss-tooling-discovery.md) — open source tooling candidates for control-node helpers, z/OS USS tooling, z/VM clone-factory support, validation harnesses, and quarantine-only legacy/lab paths.
 - [Top-to-Bottom Gap Assessment and Remediation Plan](docs/top-to-bottom-gap-assessment.md) — the cross-document gap register and sequenced plan for closing design, evidence, schema, product, z/VM, and governance gaps before implementation.
 - [Pilot and Governance Controls](docs/pilot-and-governance-controls.md) — pilot selection, decision records, approval ownership, documentation sync, and atomic backlog rules.
@@ -40,6 +41,7 @@ The IBM-platform automation substrate is tracked separately from third-party ven
 
 - [IBM Ansible Documentation Gathering](docs/ibm-ansible-documentation-gathering.md) — collection and product-documentation intake for Ansible for IBM Z, z/OS, IBM subsystems, and z/VM.
 - [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — canonical and non-canonical source discovery for z/VM automation where Galaxy-published coverage is not enough.
+- [z/VM SMAPI Implementation Design](docs/zvm-smapi-implementation-design.md) — SMAPI implementation lane, prerequisites, operation mapping, and doc-retrieval contract for VM guest clone automation.
 - [OSS Tooling Discovery](docs/oss-tooling-discovery.md) — governed evaluation of relevant open source tools such as Feilong, Zowe, zopen community packages, Galasa, and last-resort legacy tooling.
 
 ## Sidequests

@@ -113,9 +113,10 @@ Clone creation starts with a plan, not VM operations.
 2. Validate all required packages and service levels are available.
 3. Validate clone-local security template and break-glass policy.
 4. Validate z/VM capacity, guest ID, minidisk, NIC, VSWITCH, and spool policy.
-5. Validate z/OSMF, Feilong, site z/VM API, or manual handoff path.
-6. Build ordered clone work plan.
-7. Produce an approval package.
+5. Validate z/OSMF, Feilong, site z/VM API, direct SMAPI, or manual handoff path.
+6. Validate the VM-side SMAPI operation mapping from [z/VM SMAPI Implementation Design](zvm-smapi-implementation-design.md).
+7. Build ordered clone work plan.
+8. Produce an approval package.
 
 ### Plan Outputs
 
@@ -148,6 +149,8 @@ Generic materialization phases:
 5. IPL or start the guest.
 6. Wait for SSH, z/OSMF, JES, and base services where expected.
 7. Record low-level VM evidence.
+
+For SMAPI-backed materialization, each phase must map to an approved SMAPI, Feilong, site-service, direct-client, or manual-handoff operation before Apply.
 
 Missing decisions:
 

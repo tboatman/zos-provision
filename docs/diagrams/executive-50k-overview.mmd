@@ -13,7 +13,7 @@ flowchart TD
     U --> W["First Broadcom CA Focus<br/>DevOps, automation, security, database, common services"]
     W --> Y["First Rocket Focus<br/>TMON, Mainstar, Enterprise Suite, Change/JCL/Data tools"]
     Y --> I["Verify and Produce Evidence<br/>jobs, logs, manifests, drift checks, approvals"]
-    I --> J["Emit Disconnected VM Guest Clones<br/>repeatable development environments"]
+    I --> J["Emit Disconnected VM Guest Clones<br/>SMAPI-backed repeatable development environments"]
 
     C --> K["Why It Is Large<br/>existing configuration must be unwound"]
     AA --> AB["Why It Is Large<br/>automation coverage differs across z/OS, subsystems, and z/VM"]
@@ -27,7 +27,7 @@ flowchart TD
     W --> X["Why It Is Large<br/>Broadcom CA expands into legacy CA aliases, security, automation, databases, and common services"]
     Y --> Z["Why It Is Large<br/>Rocket expands into monitoring, storage, development, JCL, data, USS, Java, and acquired product lines"]
     I --> Q["Why It Is Large<br/>evidence, rollback, and audit cannot be optional"]
-    J --> R["Why It Is Large<br/>clones must be independent VM guests with local authority"]
+    J --> R["Why It Is Large<br/>clones need SMAPI, z/VM authority, and local z/OS authority"]
 
     K --> S["Executive takeaway<br/>Feasible, but this is a platform program, not a script"]
     AB --> S
