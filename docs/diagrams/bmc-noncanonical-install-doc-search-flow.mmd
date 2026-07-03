@@ -1,0 +1,33 @@
+flowchart TD
+    A["BMC non-canonical install documentation search"] --> B["Search public web indexes"]
+    A --> C["Search Internet Archive CDX"]
+    A --> D["Search public code hosting"]
+    A --> E["Probe likely third-party PDF mirrors"]
+
+    B --> F{"Reliable install manual found?"}
+    C --> G{"Historical snapshots found?"}
+    D --> H{"Usable public install artifacts found?"}
+    E --> I{"Trustworthy mirror found?"}
+
+    F -- "No" --> J["Record low-yield search terms"]
+    F -- "Yes" --> K["Record as non-authoritative lead"]
+    G -- "Yes" --> L["Record Wayback portal snapshots"]
+    G -- "No" --> M["Record no archive evidence"]
+    H -- "No" --> N["Record code search limitation"]
+    H -- "Yes" --> O["Record artifact lead and require review"]
+    I -- "No" --> P["Reject as no usable mirror"]
+    I -- "Yes" --> Q["Quarantine lead until provenance review"]
+
+    J --> R["Non-canonical source ledger"]
+    K --> R
+    L --> R
+    M --> R
+    N --> R
+    O --> R
+    P --> R
+    Q --> R
+
+    R --> S["Re-resolve through canonical BMC sources"]
+    S --> T{"Canonical confirmation available?"}
+    T -- "No" --> U["Keep out of executable automation"]
+    T -- "Yes" --> V["Promote to product-definition evidence"]

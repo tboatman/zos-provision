@@ -8,6 +8,8 @@ Do not commit copied BMC manuals, exported HTML, or PDFs into this repository un
 
 Retrieval pass: 2026-07-03.
 
+For non-canonical public install-documentation leads, see [BMC Non-Canonical Install Documentation Search](bmc-noncanonical-install-documentation-search.md).
+
 ## Collection Flow
 
 Diagram source: [docs/diagrams/bmc-public-documentation-collection-flow.mmd](diagrams/bmc-public-documentation-collection-flow.mmd)

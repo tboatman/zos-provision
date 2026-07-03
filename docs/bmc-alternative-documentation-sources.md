@@ -8,6 +8,8 @@ This document is a source-acquisition map. It does not replace product-specific 
 
 Current public-source collection results are tracked in [BMC Public Documentation Collection](bmc-public-documentation-collection.md).
 
+Non-canonical public install-documentation searches are tracked separately in [BMC Non-Canonical Install Documentation Search](bmc-noncanonical-install-documentation-search.md). Treat those results as breadcrumbs only; they do not replace entitled BMC sources.
+
 ## Source Discovery Flow
 
 Diagram source: [docs/diagrams/bmc-alternative-documentation-sources-flow.mmd](diagrams/bmc-alternative-documentation-sources-flow.mmd)
