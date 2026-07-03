@@ -1,0 +1,41 @@
+flowchart TD
+    A["Broadcom CA non-canonical install documentation search"] --> B["Search public web indexes"]
+    A --> C["Search Internet Archive CDX"]
+    A --> D["Search public code hosting"]
+    A --> E["Probe legacy CA DocOps paths"]
+    A --> F["Check direct canonical TechDocs URLs"]
+
+    B --> G{"Reliable third-party install manual found?"}
+    C --> H{"Historical snapshots found?"}
+    D --> I{"Usable public install artifacts found?"}
+    E --> J{"Legacy DocOps mapping found?"}
+    F --> K{"Current TechDocs page reachable?"}
+
+    G -- "No" --> L["Record low-yield public search terms"]
+    G -- "Yes" --> M["Quarantine as non-authoritative lead"]
+    H -- "No" --> N["Record no useful broad archive inventory"]
+    H -- "Timeout" --> O["Retry exact URL checks later"]
+    H -- "Yes" --> P["Record historical URL evidence"]
+    I -- "No" --> Q["Record repository-search limitation"]
+    I -- "Yes" --> R["Record artifact lead and require review"]
+    J -- "No" --> S["Record no DocOps mapping found"]
+    J -- "Yes" --> T["Map old path to current TechDocs candidate"]
+    K -- "No" --> U["Require Broadcom login or entitlement"]
+    K -- "Yes" --> V["Record canonical product URL and Installing marker"]
+
+    L --> W["Broadcom CA non-canonical source ledger"]
+    M --> W
+    N --> W
+    O --> W
+    P --> W
+    Q --> W
+    R --> W
+    S --> W
+    T --> W
+    U --> W
+    V --> W
+
+    W --> X["Re-resolve through official Broadcom source systems"]
+    X --> Y{"Canonical confirmation available?"}
+    Y -- "No" --> Z["Keep fact out of executable automation"]
+    Y -- "Yes" --> AA["Promote to Broadcom CA product-definition evidence"]

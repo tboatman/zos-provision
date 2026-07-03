@@ -32,7 +32,9 @@ The Broadcom Support Portal exposes the mainframe software paths for My Entitlem
 
 TechDocs may block unauthenticated access or require entitlement-backed login for specific product content. Treat Broadcom account access as a blocking prerequisite.
 
-Current public-source collection results are tracked in [Broadcom CA Public Documentation Collection](broadcom-ca-public-documentation-collection.md). That ledger records public support-portal evidence, source-system links, candidate product families to resolve after login, and login-gated blockers.
+Current public-source collection results are tracked in [Broadcom CA Public Documentation Collection](broadcom-ca-public-documentation-collection.md). That ledger records public support-portal evidence, source-system links, candidate product families to resolve after login, selected public TechDocs product/version URLs, and login-gated blockers.
+
+Current non-canonical search results are tracked in [Broadcom CA Non-Canonical Install Documentation Search](broadcom-ca-noncanonical-install-documentation-search.md). That ledger records low-yield third-party search results and the rule that unofficial or legacy CA documentation leads must be re-resolved through official Broadcom or site-owned evidence before automation use.
 
 ## Access Required
 
@@ -55,7 +57,7 @@ Before useful capture can start, obtain:
 
 Broadcom exposes mainframe documentation, all-products, downloads, and lifecycle entry points through the Support Portal. The exact product list must be confirmed from entitlements and installed state rather than assumed from public search.
 
-Candidate products include Endevor-class source, package, promotion, and deployment tooling.
+Candidate products include Endevor-class source, package, promotion, and deployment tooling. A public TechDocs page for Endevor 19.0 has been found and should be used as the first canonical documentation URL to verify during entitlement-backed intake.
 
 ### What To Capture
 
@@ -96,7 +98,7 @@ broadcom-ca-change-management
 
 Broadcom mainframe support entry points expose the needed source systems, but the exact automation and scheduling products must be resolved from My Entitlements, My Downloads, installed HLQs, started tasks, and SMP/E CSIs.
 
-Candidate products include OPS/MVS-class automation, workload automation, console automation, system automation, and operational integration tooling.
+Candidate products include OPS/MVS-class automation, workload automation, console automation, system automation, and operational integration tooling. A public TechDocs page for OPS/MVS Event Management and Automation 14.0 has been found and should be used as the first canonical documentation URL to verify during entitlement-backed intake.
 
 ### What To Capture
 
@@ -129,7 +131,7 @@ broadcom-ca-workload-automation-family
 
 Broadcom mainframe estates commonly include CA-prefixed or Broadcom-branded security products. Because security product automation changes authority and clone-local authentication posture, this track requires stricter intake before any execution design.
 
-Candidate products include ACF2-class and Top Secret-class security tooling.
+Candidate products include ACF2-class and Top Secret-class security tooling. Public TechDocs pages for ACF2 for z/OS 16.0 and Top Secret for z/OS 16.0 have been found and should be used as the first canonical documentation URLs to verify during entitlement-backed intake.
 
 ### What To Capture
 

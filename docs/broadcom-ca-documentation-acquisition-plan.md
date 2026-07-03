@@ -28,6 +28,8 @@ For the first Broadcom CA targets, see [Broadcom CA First-Wave Documentation Int
 
 For the current public collection ledger, reachable source URLs, support-portal source-system evidence, and login-gated blockers, see [Broadcom CA Public Documentation Collection](broadcom-ca-public-documentation-collection.md).
 
+For the current non-canonical search ledger, low-yield third-party search results, and safe-use rules for legacy CA or unofficial documentation leads, see [Broadcom CA Non-Canonical Install Documentation Search](broadcom-ca-noncanonical-install-documentation-search.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/broadcom-ca-documentation-acquisition-flow.mmd](diagrams/broadcom-ca-documentation-acquisition-flow.mmd)
@@ -42,6 +44,7 @@ Inputs:
 - Broadcom Support Portal access.
 - Broadcom My Downloads access.
 - Broadcom TechDocs product URLs.
+- Non-canonical leads classified as `unverified_noncanonical`, only after they have been re-resolved through official Broadcom or site-owned evidence.
 - Current SMP/E CSI FMIDs and SYSMODs.
 - Current Broadcom/CA HLQs.
 - Current started tasks.
