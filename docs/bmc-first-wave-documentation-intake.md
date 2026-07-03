@@ -32,6 +32,8 @@ The public documentation indexes identify product families, products, and visibl
 
 Also use [BMC Alternative Documentation Sources](bmc-alternative-documentation-sources.md) for Product Support Pages, Mainframe Installation, Mainframe Maintenance, Product Download Tool, Parameter Reference Database, Product Name Finder, Mainframe DevOps, and versioned Control-M/INCONTROL static documentation. That source map includes confirmed Control-M public documentation paths for 2026, 2025, and 2024.
 
+Current public-source collection results are tracked in [BMC Public Documentation Collection](bmc-public-documentation-collection.md). That ledger records currently reachable product landing pages, Control-M and INCONTROL static documentation versions, visible table-of-contents evidence, public ready-made PDF candidates, and login-gated blockers.
+
 ## Access Required
 
 Before useful capture can start, obtain:

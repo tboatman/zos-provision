@@ -1,0 +1,36 @@
+flowchart TD
+    A["BMC public documentation collection"] --> B["Open official public catalogs"]
+    A --> C["Open support and delivery hubs"]
+    A --> D["Open Control-M static documentation"]
+
+    B --> E["Mainframe Ops catalog"]
+    B --> F["Mainframe DevX catalog"]
+    C --> G["Product Support Pages"]
+    C --> H["Product Downloads"]
+    C --> I["Mainframe Installation"]
+    C --> J["Mainframe Maintenance"]
+    D --> K["Control-M current and historical versions"]
+    D --> L["INCONTROL current and historical versions"]
+
+    E --> M["Record product URLs, versions, visible sections, export formats"]
+    F --> M
+    G --> N["Record support-side source paths"]
+    H --> O["Record entitlement-backed media and patch requirements"]
+    I --> P["Record z/OSMF PSI and Installation System evidence"]
+    J --> Q["Record RSL, RECEIVE ORDER, eFix, HOLDDATA evidence"]
+    K --> R["Record published dates and table of contents"]
+    L --> R
+
+    M --> S{"Detailed content public?"}
+    S -- "No" --> T["Mark gated and require BMC login"]
+    S -- "Yes" --> U["Record sections and export candidates"]
+
+    N --> V["BMC product source map"]
+    O --> V
+    P --> V
+    Q --> V
+    R --> V
+    T --> V
+    U --> V
+
+    V --> W["Product-definition intake backlog"]

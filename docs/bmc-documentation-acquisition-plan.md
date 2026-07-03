@@ -26,6 +26,8 @@ For the first BMC targets, see [BMC First-Wave Documentation Intake](bmc-first-w
 
 For alternate BMC source paths, export options, maintenance/install source pages, Product Support Pages, Parameter Reference Database, Product Name Finder, Mainframe DevOps, and Control-M static documentation versions back to 2024, see [BMC Alternative Documentation Sources](bmc-alternative-documentation-sources.md).
 
+For the current public collection ledger, reachable source URLs, visible sections, ready-made PDF candidates, and login-gated blockers, see [BMC Public Documentation Collection](bmc-public-documentation-collection.md).
+
 ## Acquisition Flow
 
 Diagram source: [docs/diagrams/bmc-documentation-acquisition-flow.mmd](diagrams/bmc-documentation-acquisition-flow.mmd)

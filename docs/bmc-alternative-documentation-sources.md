@@ -6,6 +6,8 @@ Capture BMC documentation and evidence sources beyond the primary Mainframe Ops 
 
 This document is a source-acquisition map. It does not replace product-specific documentation intake.
 
+Current public-source collection results are tracked in [BMC Public Documentation Collection](bmc-public-documentation-collection.md).
+
 ## Source Discovery Flow
 
 Diagram source: [docs/diagrams/bmc-alternative-documentation-sources-flow.mmd](diagrams/bmc-alternative-documentation-sources-flow.mmd)
