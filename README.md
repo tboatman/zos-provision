@@ -12,6 +12,7 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [IBM Ansible Documentation Gathering](docs/ibm-ansible-documentation-gathering.md) — the Ansible and IBM-platform source map for z/OS, z/OSMF, CICS, IMS, Db2, MQ, System Automation, Z HMC, and z/VM.
 - [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — focused source ledger for z/VM Ansible, SMAPI, Feilong/zthin, and disconnected VM guest clone automation.
 - [OSS Tooling Discovery](docs/oss-tooling-discovery.md) — open source tooling candidates for control-node helpers, z/OS USS tooling, z/VM clone-factory support, validation harnesses, and quarantine-only legacy/lab paths.
+- [Top-to-Bottom Gap Assessment and Remediation Plan](docs/top-to-bottom-gap-assessment.md) — the cross-document gap register and sequenced plan for closing design, evidence, schema, product, z/VM, and governance gaps before implementation.
 
 ## Vendor documentation intake
 

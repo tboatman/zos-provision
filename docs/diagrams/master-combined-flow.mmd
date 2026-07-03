@@ -33,6 +33,19 @@ flowchart TD
         AP --> TEMPLATES["Jinja templates for JCL, SQL, PARMLIB, PROCLIB, RACF"]
     end
 
+    subgraph GAPS["Top-to-bottom gap remediation"]
+        GAP1["Cross-document gap register"] --> GAP2["Pilot selection record"]
+        GAP2 --> GAP3["Artifact and schema foundation"]
+        GAP3 --> GAP4["IBM automation contract"]
+        GAP4 --> GAP5["Security and clone-factory decisions"]
+        GAP5 --> GAP6["Vendor intake and unwinding plan"]
+        GAP6 --> GAP7["Pilot design readiness gate"]
+        GAP3 --> GAP8["Product definition, dependency graph, evidence, and backout schemas"]
+        GAP4 --> GAP9["z/OSMF, Ansible collection, control-node, managed-node, CICS, IMS, Db2, and MQ decisions"]
+        GAP5 --> GAP10["Security backend abstraction, RACF-first clone template, z/VM capability map"]
+        GAP6 --> GAP11["Entitlement-backed inventory, BMC pilot evidence, OSS dispositions, sidequest rule"]
+    end
+
     subgraph IBMDOCS["IBM Ansible and platform documentation gathering"]
         ID1["Gather Red Hat Ansible Content for IBM Z docs"] --> ID2["Record collection versions and requirements"]
         ID2 --> ID3["Map z/OS Core, z/OSMF, CICS, IMS, System Automation, and Z HMC modules"]
@@ -99,6 +112,18 @@ flowchart TD
     OSS12 --> ID8
     OSS12 --> COLLECTIONS
     OSS12 --> DP10
+    GAP1 --> BACKLOG
+    GAP1 --> DOCS
+    GAP2 --> PRIORITY
+    GAP7 --> IN8
+    GAP8 --> DATA
+    GAP8 --> CI
+    GAP9 --> ID8
+    GAP9 --> PF1
+    GAP10 --> CL2
+    GAP10 --> R1
+    GAP11 --> DOCQUEUE
+    GAP11 --> UNWINDQUEUE
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

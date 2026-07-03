@@ -1,0 +1,73 @@
+flowchart TD
+    A["Top-to-bottom gap assessment"] --> B["Phase A: governance and source-of-truth setup"]
+    B --> C["Gap register"]
+    B --> D["Pilot selection record"]
+    B --> E["Decision log"]
+    B --> F["Approval ownership matrix"]
+    B --> G["Doc-sync checklist"]
+
+    C --> H["Phase B: artifact and schema foundation"]
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+
+    H --> I["Depot metadata schema"]
+    H --> J["Product definition schema"]
+    H --> K["Dependency graph schema"]
+    H --> L["Evidence bundle schema"]
+    H --> M["Backout classification vocabulary"]
+
+    I --> N["Phase C: IBM automation contract"]
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+
+    N --> O["z/OSMF capability checklist"]
+    N --> P["IBM Ansible collection capability map"]
+    N --> Q["Control-node execution environment plan"]
+    N --> R["Managed-node preflight evidence checklist"]
+    N --> S["CICS, IMS, Db2, and MQ scope decisions"]
+
+    O --> T["Phase D: security and clone factory"]
+    P --> T
+    Q --> T
+    R --> T
+    S --> T
+
+    T --> U["Security backend abstraction"]
+    T --> V["RACF-first clone template"]
+    T --> W["z/VM clone lifecycle capability map"]
+    T --> X["Feilong or alternate API decision"]
+    T --> Y["Minimum viable VM guest clone shape"]
+
+    U --> Z["Phase E: vendor intake and configuration unwinding"]
+    V --> Z
+    W --> Z
+    X --> Z
+    Y --> Z
+
+    Z --> AA["Entitlement-backed product inventory"]
+    Z --> AB["BMC pilot evidence"]
+    Z --> AC["Broadcom CA and Rocket evidence"]
+    Z --> AD["Read-only configuration unwinding plan"]
+    Z --> AE["OSS adoption dispositions"]
+    Z --> AF["Sidequest promotion rule"]
+
+    AA --> AG["Phase F: pilot design readiness"]
+    AB --> AG
+    AC --> AG
+    AD --> AG
+    AE --> AG
+    AF --> AG
+
+    AG --> AH["Pilot environment manifest"]
+    AG --> AI["Pilot product definitions"]
+    AG --> AJ["Pilot clone manifest"]
+    AG --> AK["Pilot security template"]
+    AG --> AL["Pilot deployment manifest"]
+    AG --> AM["Pilot evidence expectations"]
+    AM --> AN{"Ready for first code skeletons?"}
+    AN -- "No" --> AO["Keep implementation blocked and close remaining critical gaps"]
+    AN -- "Yes" --> AP["Build schema validation, plan rendering, and evidence skeletons first"]

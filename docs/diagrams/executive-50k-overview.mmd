@@ -4,7 +4,8 @@ flowchart TD
     B --> AA["Establish IBM Ansible Baseline<br/>collections, z/OSMF, subsystems, z/VM"]
     AA --> C["Discover Current Estate<br/>z/OS, CICS, IMS, Db2, RACF, vendor products"]
     C --> D["Normalize Knowledge<br/>product definitions, dependencies, aliases, risks"]
-    D --> E["Build Internal Software Repository<br/>IBM service, BMC, Broadcom CA, Rocket, site artifacts"]
+    D --> GA["Close Critical Gaps<br/>pilot scope, schemas, z/OSMF contracts, z/VM clone path, evidence"]
+    GA --> E["Build Internal Software Repository<br/>IBM service, BMC, Broadcom CA, Rocket, site artifacts"]
     E --> F["Automate Deployment Paths<br/>z/OSMF first, SMP/E, vendor JCL, runtime overlays"]
     F --> G["Provision Runtime Platform<br/>z/OS services, RACF, CICS, IMS, Db2"]
     G --> H["Install and Configure Vendor Products<br/>base software plus subsystem integrations"]
@@ -17,6 +18,7 @@ flowchart TD
     C --> K["Why It Is Large<br/>existing configuration must be unwound"]
     AA --> AB["Why It Is Large<br/>automation coverage differs across z/OS, subsystems, and z/VM"]
     D --> L["Why It Is Large<br/>every product needs a precise model"]
+    GA --> GB["Why It Is Large<br/>implementation must wait for schemas, decisions, and evidence gates"]
     E --> M["Why It Is Large<br/>no universal vendor repository exists"]
     F --> N["Why It Is Large<br/>install methods vary by product and release"]
     G --> O["Why It Is Large<br/>security and subsystem changes are coupled"]
@@ -30,6 +32,7 @@ flowchart TD
     K --> S["Executive takeaway<br/>Feasible, but this is a platform program, not a script"]
     AB --> S
     L --> S
+    GB --> S
     M --> S
     N --> S
     O --> S

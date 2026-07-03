@@ -280,6 +280,8 @@ See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vend
 
 See [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md) for z/OS maintenance, RACF control, internal SMP/E repository governance, and disconnected VM guest clone generation.
 
+See [Top-to-Bottom Gap Assessment and Remediation Plan](top-to-bottom-gap-assessment.md) for the cross-document gap register and remediation phases that must be closed or explicitly waived before implementation begins.
+
 ## Role Boundaries
 
 The roles should be intentionally narrow. Region provisioning, resource definition, and product runtime hooks should not be collapsed into one role because they have different owners, prerequisites, approvals, and recovery behavior.
@@ -801,6 +803,7 @@ Do not start by automating every product. Build the factory pattern with two ven
 
 Code should not begin until these are complete:
 
+- Critical gaps in [Top-to-Bottom Gap Assessment and Remediation Plan](top-to-bottom-gap-assessment.md) are closed or explicitly waived.
 - Product inventory is complete.
 - Environment and LPAR list is complete.
 - IBM Ansible collection, subsystem, and z/VM documentation gathering is complete.
