@@ -75,6 +75,12 @@ flowchart TD
     AG --> AK["Pilot security template"]
     AG --> AL["Pilot deployment manifest"]
     AG --> AM["Pilot evidence expectations"]
-    AM --> AN{"Ready for first code skeletons?"}
+    AM --> GA["Phase G: repository and clone workflow readiness"]
+    GA --> GB["Initial repository population workflow"]
+    GA --> GC["Sealed baseline record"]
+    GA --> GD["Clone create and destroy manifest"]
+    GA --> GE["Clone state machine"]
+    GA --> GF["Refresh, drift, destroy, and leaked-resource policy"]
+    GF --> AN{"Ready for first code skeletons?"}
     AN -- "No" --> AO["Keep implementation blocked and close remaining critical gaps"]
     AN -- "Yes" --> AP["Build schema validation, plan rendering, and evidence skeletons first"]

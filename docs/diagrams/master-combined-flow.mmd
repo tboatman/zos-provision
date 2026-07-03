@@ -51,6 +51,7 @@ flowchart TD
         GAP6 --> GAP16["Product inventory and entitlement intake detail"]
         GAP4 --> GAP17["Subsystem scope and execution detail"]
         GAP6 --> GAP18["OSS and sidequest disposition detail"]
+        GAP7 --> GAP19["Repository population and clone lifecycle workflows"]
     end
 
     subgraph IBMDOCS["IBM Ansible and platform documentation gathering"]
@@ -145,6 +146,10 @@ flowchart TD
     GAP17 --> PF7
     GAP18 --> OSS1
     GAP18 --> DOCS
+    GAP19 --> DP1
+    GAP19 --> CL1
+    GAP19 --> CL7
+    GAP19 --> TESTQUEUE
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

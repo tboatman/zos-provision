@@ -286,6 +286,8 @@ See [Pilot and Governance Controls](pilot-and-governance-controls.md), [Schema a
 
 See [Product Inventory and Entitlement Intake](product-inventory-and-entitlement-intake.md), [Subsystem Scope and Execution Plan](subsystem-scope-and-execution-plan.md), and [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md) for the remaining inventory, subsystem, OSS, and sidequest gap plans.
 
+See [Repository Population and Clone Lifecycle Workflows](repository-population-and-clone-lifecycle-workflows.md) for the initial repository population, baseline sealing, clone create/provision/handoff/refresh/destroy, and missing workflow decisions.
+
 ## Role Boundaries
 
 The roles should be intentionally narrow. Region provisioning, resource definition, and product runtime hooks should not be collapsed into one role because they have different owners, prerequisites, approvals, and recovery behavior.

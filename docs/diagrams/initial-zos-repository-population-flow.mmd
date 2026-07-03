@@ -1,0 +1,28 @@
+flowchart TD
+    A["Start initial repository population"] --> B["Bootstrap depot and metadata layout"]
+    B --> C["Register source material"]
+
+    C --> D["IBM z/OS base media and service"]
+    C --> E["IBM middleware media and service"]
+    C --> F["Vendor media, service, HOLDDATA, docs, workflows"]
+    C --> G["Site templates and historical installed-state evidence"]
+    C --> H["Approved OSS mirrors"]
+
+    D --> I["Capture package metadata and checksums"]
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+
+    I --> J["Normalize service-level records"]
+    J --> K["Build dependency graph"]
+    K --> L["Validate repository completeness"]
+    L --> M{"Baseline usable for clone?"}
+    M -- "No" --> N["Record missing media, entitlement, docs, HOLDDATA, or schema gaps"]
+    M -- "Yes" --> O["Publish baseline candidate"]
+    O --> P["Review and approve baseline"]
+    P --> Q{"Approved?"}
+    Q -- "No" --> N
+    Q -- "Yes" --> R["Seal immutable baseline"]
+    R --> S["Emit baseline evidence bundle"]
+    S --> T["Available for clone and deployment manifests"]

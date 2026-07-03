@@ -34,6 +34,7 @@ Several high-priority gaps now have dedicated detail plans:
 - [Product Inventory and Entitlement Intake](product-inventory-and-entitlement-intake.md) covers the cross-vendor path through G-003 and G-004.
 - [Subsystem Scope and Execution Plan](subsystem-scope-and-execution-plan.md) covers G-014, G-015, G-016, and G-017.
 - [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md) covers G-024 and G-025.
+- [Repository Population and Clone Lifecycle Workflows](repository-population-and-clone-lifecycle-workflows.md) covers G-028, G-029, G-030, G-031, and G-032.
 
 ## Gap Register
 
@@ -66,6 +67,11 @@ Several high-priority gaps now have dedicated detail plans:
 | G-025 | IOF is intentionally a sidequest but has no promotion rule | Sidequests can silently become scope unless promotion criteria are explicit | IOF sidequest exists | Define sidequest promotion criteria: custody, license, docs, install state, owner, and pilot relevance | IOF remains quarantined or is promoted through normal product lifecycle with a product definition | Low |
 | G-026 | Documentation synchronization is manual | The user requires docs in sync, but there is no documented sync checklist or CI gate | Diagram convention exists; docs are currently maintained manually | Add doc-sync checklist and later CI checks for links, no inline Mermaid, diagram presence, and schema references | Every substantive design change updates affected docs and diagram sources in the same commit | High |
 | G-027 | Implementation backlog is not split into safe atomic chunks | Atomic commits are required and the project is too large for coarse milestones | Delivery phases exist but not an issue-sized backlog | Convert remediation phases into issue-sized work packages with dependencies | Backlog contains small, reviewable chunks mapped to gaps and docs | High |
+| G-028 | Initial repository population workflow is not explicit | Clone and product automation depend on a sealed baseline, not just a directory layout | Platform and schema docs define repository content but not the end-to-end population flow | Define bootstrap, intake, service-level normalization, dependency graph, validation, publish, seal, and evidence workflow | A repository baseline can be reviewed as a workflow artifact before clone creation | Critical |
+| G-029 | Clone create/provision/destroy workflow is not explicit | A destroyable clone must have create, provision, handoff, refresh, and destroy paths designed together | Platform docs describe clone inputs and outputs but not the operational state machine | Define clone planning, materialization, localization, provisioning, handoff, refresh, suspend, expire, destroy, and leaked-resource checks | Clone manifest includes both create and destroy plan and the state machine is documented | Critical |
+| G-030 | Baseline sealing and retirement policy is missing | Clones need reproducible source baselines and a way to retire bad or stale baselines | Service-level schema exists but no seal or retirement workflow | Add baseline approval, seal, evidence, retirement, and supersedence rules | A clone can reference a sealed baseline ID and reject retired baselines | High |
+| G-031 | Clone refresh and drift policy is missing | Disconnected clones can diverge and age without a clear refresh or rebuild rule | Clone governance mentions evidence and divergence but not drift workflow | Define drift checks and decide in-place refresh versus destroy/recreate | First pilot declares maximum drift and refresh policy | High |
+| G-032 | Destroy, cleanup, and leak detection are under-modeled | VM guest, storage, network, credentials, and evidence cleanup are high-risk if treated as an afterthought | Clone governance says destroyable but lacks detailed destroy phases | Define normal, forced, quarantine, and retain-for-debug destroy classes plus leaked-resource checks | Destroy evidence proves guest, storage, network, credentials, certificates, and metadata were handled | Critical |
 
 ## Remediation Phases
 
@@ -158,6 +164,21 @@ Deliverables:
 - Explicit go or no-go decision for first code skeletons.
 
 Exit gate: implementation can begin with narrowly scoped role skeletons and tests, not broad product automation.
+
+### Phase G: Repository and Clone Workflow Readiness
+
+Close G-028, G-029, G-030, G-031, and G-032.
+
+Deliverables:
+
+- Initial repository population workflow.
+- Sealed baseline record.
+- Clone manifest with create and destroy sections.
+- Clone operational state machine.
+- Clone refresh and drift policy.
+- Destroy classes and leaked-resource checks.
+
+Exit gate: a clone can be planned, approved, created, localized, provisioned, handed off, expired, destroyed, and evidenced without relying on undocumented side steps.
 
 ## First Ten Work Packages
 

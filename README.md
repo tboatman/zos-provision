@@ -20,6 +20,7 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [Product Inventory and Entitlement Intake](docs/product-inventory-and-entitlement-intake.md) — cross-vendor inventory, entitlement, installed-state, and reconciliation rules before product definitions.
 - [Subsystem Scope and Execution Plan](docs/subsystem-scope-and-execution-plan.md) — CICS, IMS, Db2, and MQ state authority, execution path, evidence path, pilot constraints, and manifest shapes.
 - [OSS and Sidequest Disposition Plan](docs/oss-sidequest-disposition-plan.md) — OSS adoption states, quarantine rules, and sidequest promotion criteria.
+- [Repository Population and Clone Lifecycle Workflows](docs/repository-population-and-clone-lifecycle-workflows.md) — initial z/OS repository population, baseline sealing, clone create/provision/handoff/refresh/destroy, and missing workflow decisions.
 
 ## Vendor documentation intake
 

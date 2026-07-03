@@ -27,6 +27,8 @@ The focused z/VM automation source ledger is [z/VM Ansible Documentation Sources
 
 Adjacent open source tooling is tracked in [OSS Tooling Discovery](oss-tooling-discovery.md). Any adopted OSS component must be pinned, mirrored internally, and treated as repository input before it can support disconnected clone generation or maintenance evidence.
 
+The workflow layer for initial repository population, baseline sealing, clone creation, clone provisioning, refresh, and destroy is defined in [Repository Population and Clone Lifecycle Workflows](repository-population-and-clone-lifecycle-workflows.md).
+
 ## Scope Additions
 
 Platform automation must cover:

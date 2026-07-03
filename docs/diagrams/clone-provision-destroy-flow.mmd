@@ -1,0 +1,33 @@
+flowchart TD
+    A["Clone request"] --> B["Select sealed repository baseline"]
+    B --> C["Build clone manifest"]
+    C --> D["Validate create plan and destroy plan"]
+    D --> E{"Approved?"}
+    E -- "No" --> F["Hold request and record gaps"]
+    E -- "Yes" --> G["Reserve z/VM guest identity, storage, and network"]
+
+    G --> H["Materialize VM guest"]
+    H --> I{"Materialization successful?"}
+    I -- "No" --> J["Run half-created clone cleanup"]
+    J --> K["Publish failure evidence"]
+
+    I -- "Yes" --> L["IPL or start z/OS guest"]
+    L --> M["Run base preflight"]
+    M --> N["Localize identity, network, security, certificates, and platform overlays"]
+    N --> O["Provision selected CICS, IMS, Db2, MQ, vendor, and OSS surfaces"]
+    O --> P["Run verification probes"]
+    P --> Q{"Verification passed?"}
+    Q -- "No" --> R["Quarantine, recover, or destroy according to plan"]
+    R --> K
+
+    Q -- "Yes" --> S["Mark clone ready"]
+    S --> T["Handoff package"]
+    T --> U["Operate, suspend, refresh, or expire"]
+    U --> V{"Destroy required?"}
+    V -- "No" --> U
+    V -- "Yes" --> W["Export final evidence where possible"]
+    W --> X["Stop workloads and shutdown z/OS guest"]
+    X --> Y["Release network, guest ID, disks, volumes, credentials, and certificates"]
+    Y --> Z["Run leaked-resource checks"]
+    Z --> AA["Mark clone destroyed"]
+    AA --> AB["Feed lessons back to repository metadata and gaps"]
