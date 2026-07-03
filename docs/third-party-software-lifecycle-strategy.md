@@ -20,6 +20,8 @@ The lifecycle model is vendor-neutral. The first vendor families in scope are:
 - Broadcom CA mainframe products, including products still commonly referred to by CA-prefixed names.
 - Rocket Software mainframe products.
 
+Sidequest products that are not part of the first vendor-family track should be handled as standalone custody and installed-state investigations before they are promoted into the normal product-definition lifecycle. IOF is tracked this way in [IOF Sidequest](iof-sidequest.md).
+
 Vendor-specific naming, packaging, maintenance cadence, license handling, and generated jobs belong in product definitions and vendor adapters. The control plane should stay generic.
 
 See [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) for the initial vendor-dependent process overlays for BMC, Broadcom CA, and Rocket.

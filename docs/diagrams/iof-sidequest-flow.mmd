@@ -1,0 +1,33 @@
+flowchart TD
+    A["IOF sidequest"] --> B["Check old and current public vendor web presence"]
+    A --> C["Check IOF product page"]
+    A --> D["Check Fischer support page"]
+    A --> E["Check public media attachments"]
+    A --> F["Check public code hosting"]
+
+    B --> G{"fisc.com active?"}
+    G -- "Yes" --> H["Record Fischer current public custody signal"]
+    G -- "No" --> I["Escalate to registry, archives, and customer records"]
+
+    C --> J["Record product identity, version signal, and contact path"]
+    D --> K["Record support email and request path"]
+    E --> L{"Source or media public?"}
+    F --> M{"Open-source repository found?"}
+
+    L -- "No" --> N["Treat media as not publicly downloadable"]
+    L -- "Yes" --> O["Record artifact URL and license evidence"]
+    M -- "No" --> P["Treat open-source status as unproven"]
+    M -- "Yes" --> Q["Verify license, provenance, and authority"]
+
+    H --> R["IOF custody assessment"]
+    I --> R
+    J --> R
+    K --> R
+    N --> R
+    O --> R
+    P --> R
+    Q --> R
+
+    R --> S{"Installed locally?"}
+    S -- "No" --> T["Keep as sidequest reference only"]
+    S -- "Yes" --> U["Create Fischer IOF product definition after license and installed-state discovery"]
