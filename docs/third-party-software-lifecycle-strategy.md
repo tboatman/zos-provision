@@ -8,6 +8,8 @@ This is a planning and brainstorming document. It intentionally includes conserv
 
 No specialized Db2 deployment tools are assumed. If a vendor product requires Db2 plans, packages, repository objects, grants, or utility jobs, those steps must be modeled through generic z/OS automation: generated JCL, DSN command processor jobs, site-standard batch SQL runners, bind jobs, catalog queries, and captured evidence.
 
+This document is the vendor-product lifecycle track referenced from the `vendor_product` and `vendor_runtime_config` roles in [z/OS CICS, IMS, Db2, and Vendor Product Deployment Through Ansible](zos-cics-ims-db2-vendor-ansible-architecture.md), which is the overall system architecture this strategy plugs into.
+
 ## Documentation Diagram Convention
 
 All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid source files under [docs/diagrams](diagrams/). Markdown documents should link to those files instead of embedding Mermaid blocks inline.
@@ -89,6 +91,8 @@ Diagram source: [docs/diagrams/vendor-lifecycle-architecture.mmd](diagrams/vendo
 
 Because no established SMP/E repositories exist, create one. Do not wait for a perfect vendor-native repository model.
 
+This vendor depot is not a separate repository. It is the `smp/vendors/` subtree of the platform-wide internal SMP/E repository defined in [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md), which also hosts `ibm-zos/`, `ibm-middleware/`, and shared `holdata/`, `csi-templates/`, and `evidence/` trees alongside it. This document defines only the internal structure of the `vendors/` branch.
+
 The depot should store:
 
 - Original vendor packages, immutable.
@@ -108,35 +112,38 @@ Recommended structure:
 
 ```text
 depot/
-  vendors/
-    bmc/
-      products/
-        <product-code>/
-          <version>/
-            media/
-            expanded/
-            service/
-            holdata/
-            vendor-jcl/
-            zosmf-workflows/
-            product-definition.yml
-            dependency-graph.yml
-            checksums.txt
-            release-notes/
-            evidence/
-    broadcom-ca/
-      products/
-        <product-code>/
-          <version>/
-            ...
-    rocket/
-      products/
-        <product-code>/
-          <version>/
-            ...
+  smp/
+    vendors/
+      bmc/
+        products/
+          <product-code>/
+            <version>/
+              media/
+              expanded/
+              service/
+              holdata/
+              vendor-jcl/
+              zosmf-workflows/
+              product-definition.yml
+              dependency-graph.yml
+              checksums.txt
+              release-notes/
+              evidence/
+      broadcom-ca/
+        products/
+          <product-code>/
+            <version>/
+              ...
+      rocket/
+        products/
+          <product-code>/
+            <version>/
+              ...
 ```
 
 The depot can start as Git plus large artifact storage. It can evolve into Nexus, Artifactory, S3-compatible storage, SharePoint-backed storage, or an internal API.
+
+The per-version `product-definition.yml` captured here is an immutable snapshot: the product definition as understood at the moment that version was taken into the depot. It is not the same file the automation repository reads at run time. The live, currently-active definition lives at `product_definitions/vendors/<vendor>/<product-code>.yml` in the automation repository (see [Vendor Adapter Skeletons](vendor-adapter-skeletons.md)) and is expected to be updated as new versions are onboarded. When a new version is taken into the depot, diff its snapshot against the live definition and fold in any changes deliberately; do not let the two drift silently.
 
 ## Product Definition Schema
 

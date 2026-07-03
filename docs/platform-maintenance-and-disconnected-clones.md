@@ -4,7 +4,7 @@
 
 Define the platform-level scope for z/OS maintenance, RACF control, and an internal SMP/E-backed repository that can produce arbitrary development clones disconnected from central authority.
 
-This document sits above middleware and vendor-product deployment. It defines the substrate that CICS, IMS, Db2, and vendor product automation depend on.
+This document sits above middleware and vendor-product deployment. It defines the substrate that CICS, IMS, Db2, and vendor product automation depend on, expanding on the `zos_smp_repository` and `zos_clone_factory` roles from [z/OS CICS, IMS, Db2, and Vendor Product Deployment Through Ansible](zos-cics-ims-db2-vendor-ansible-architecture.md).
 
 ## Core Assumption
 
@@ -71,6 +71,8 @@ depot/
     clone-manifests/
     evidence/
 ```
+
+`smp/vendors/` is the mount point for the third-party vendor depot. Its internal per-product, per-version layout (`vendors/<vendor>/products/<product-code>/<version>/...`) is defined in [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md) rather than repeated here, so the two documents do not drift against each other.
 
 The repository must separate immutable vendor/IBM input from site-generated deployment state:
 

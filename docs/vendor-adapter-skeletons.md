@@ -6,6 +6,8 @@ Define the skeleton process overlays for vendor-dependent product deployment whi
 
 The intent is not to guess product-specific install instructions. The intent is to reserve the right extension points now so each vendor and product family can be onboarded without bending the generic architecture.
 
+This document overlays [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md), which itself plugs into the `vendor_product` and `vendor_runtime_config` roles in [z/OS CICS, IMS, Db2, and Vendor Product Deployment Through Ansible](zos-cics-ims-db2-vendor-ansible-architecture.md).
+
 ## Shared Lifecycle Phases
 
 Every vendor adapter should implement these phases:
@@ -177,6 +179,8 @@ product_definitions/
     rocket/
       <product-code>.yml
 ```
+
+This is the live, currently-active product definition that playbooks read at run time. It is distinct from the immutable per-version `product-definition.yml` snapshot captured inside the depot at intake time (see [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md#internal-vendor-software-depot)); the live file here is what that snapshot gets folded into once a new version is reviewed.
 
 Each product-specific file should fill in:
 
