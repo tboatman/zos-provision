@@ -81,7 +81,7 @@ The repository must separate immutable vendor/IBM input from site-generated depl
 
 ## z/OS Maintenance Model
 
-z/OS maintenance should use the same phases as vendor products:
+z/OS maintenance should use the same twelve-phase lifecycle as vendor products (see [Vendor Adapter Skeletons](vendor-adapter-skeletons.md#shared-lifecycle-phases)), with one phase intentionally skipped: Classify does not apply, because z/OS base maintenance is always `smpe_managed` -- there is no install-method ambiguity to resolve the way there is for a vendor product.
 
 1. **Discover**
    - Query current FMIDs, SYSMODs, CSI state, target libraries, distribution libraries, HOLDDATA state, APF/LINKLIST/LPA impact, and IPL requirements.
@@ -92,20 +92,29 @@ z/OS maintenance should use the same phases as vendor products:
 3. **Plan**
    - Build a maintenance manifest with affected FMIDs, zones, libraries, PARMLIB/PROCLIB changes, IPL/recycle requirements, and backout posture.
 
-4. **Check**
+4. **Stage**
+   - Stage SMPPTFIN, SMPHOLD, and RECEIVE/APPLY JCL for this maintenance run; run RECEIVE, which stages SYSMODs into SMP/E-controlled state.
+
+5. **Check**
    - Run RECEIVE CHECK, APPLY CHECK, HOLDDATA review, prerequisite checks, and conflict checks.
 
-5. **Apply**
+6. **Apply**
    - Prefer z/OSMF workflows where available and approved. Otherwise submit generated SMP/E JCL.
 
-6. **Verify**
+7. **Verify**
    - Verify CSI state, target libraries, reports, IPL/recycle completion, subsystem readiness, and clone compatibility.
 
-7. **Accept**
+8. **Recover**
+   - RESTORE SMP/E elements where supported, restore PARMLIB/PROCLIB/APF/LINKLIST members from backup, or reactivate the prior service level when verification fails.
+
+9. **Accept**
    - ACCEPT only after soak validation and explicit approval.
 
-8. **Publish**
-   - Publish service level metadata back to the internal SMP repository.
+10. **Publish**
+    - Publish service level metadata back to the internal SMP repository.
+
+11. **Evidence**
+    - Publish the maintenance run's evidence bundle: SMP/E reports, rendered JCL, JES output, before/after snapshots, and approvals.
 
 Diagram source: [docs/diagrams/platform-maintenance-flow.mmd](diagrams/platform-maintenance-flow.mmd)
 
@@ -172,7 +181,7 @@ The RACF model should include:
 - Password phrase and initial credential handling.
 - Revocation, expiration, and cleanup policy.
 
-RACF automation phases:
+RACF automation phases use their own vocabulary rather than the shared twelve-phase lifecycle, because RACF state is authored declaratively rather than received as vendor media: Intake and Classify do not apply (there is no media to register or install method to classify), and Accept/Publish do not apply (there is no SMP/E-style permanence step or dependency-graph entry for a security profile). Model, Render, and Validate together cover what Discover, Plan, Stage, and Check do for vendor products.
 
 1. **Model**
    - Define desired RACF state in environment or clone templates.
@@ -189,7 +198,10 @@ RACF automation phases:
 5. **Verify**
    - Query users, groups, connects, profiles, permits, OMVS segments, started task mappings, and keyrings.
 
-6. **Evidence**
+6. **Recover**
+   - Submit the backout command stream rendered at Render to restore the prior users, groups, connects, profiles, permits, and keyrings captured in the before snapshot. This is the mechanism the RACF backout drill in Production Readiness Tests exercises.
+
+7. **Evidence**
    - Publish before/after security snapshots and approval evidence.
 
 For disconnected clones, RACF generation is part of clone creation, not a later enterprise integration step.

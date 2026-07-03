@@ -10,7 +10,12 @@ This document overlays [Third-Party Vendor Software Lifecycle Strategy](third-pa
 
 ## Shared Lifecycle Phases
 
-Every vendor adapter should implement these phases:
+This is the canonical phase list for the whole project. Every other phase list in this documentation set (the Install Adapter Pattern in [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md), the z/OS Maintenance Model and RACF phases in [Platform Maintenance and Disconnected Clone Strategy](platform-maintenance-and-disconnected-clones.md), and Design Principle 4 in [z/OS CICS, IMS, Db2, and Vendor Product Deployment Through Ansible](zos-cics-ims-db2-vendor-ansible-architecture.md)) is a scoped subset of these 12 phases, not a competing definition. Where a subset drops or renames a phase, that document says why.
+
+Two of the twelve run once per product version; the rest run once per deployment run against a given environment:
+
+- **Once per product version, at depot intake:** Intake, Classify.
+- **Once per deployment run:** Discover, Plan, Stage, Check, Apply, Verify, Recover, Accept, Publish, Evidence.
 
 1. **Discover**
    - Identify installed products, releases, FMIDs, libraries, started tasks, runtime hooks, and local configuration.
@@ -42,8 +47,11 @@ Every vendor adapter should implement these phases:
 10. **Accept**
     - Run SMP/E ACCEPT or equivalent permanence step only after soak validation and approval.
 
-11. **Evidence**
-    - Publish product manifest, rendered artifacts, workflow output, JES output, before/after snapshots, approvals, and verification output.
+11. **Publish**
+    - Record the accepted service level back to the internal SMP/E repository's dependency graph and `installed_versions`/`promotion_status` metadata, so other products' Plan phase can resolve dependencies against it. Only meaningful for products other deployments can depend on; skip for standalone products.
+
+12. **Evidence**
+    - Publish the run's evidence bundle: product manifest, rendered artifacts, workflow output, JES output, before/after snapshots, approvals, and verification output.
 
 Diagram source: [docs/diagrams/vendor-adapter-skeleton.mmd](diagrams/vendor-adapter-skeleton.mmd)
 
@@ -66,6 +74,8 @@ Each vendor adapter should provide:
 - Verification probes.
 - Backout classification.
 - Evidence extraction rules.
+
+The three vendor skeletons below group the twelve canonical phases under five coarser headings for readability: Discovery covers the canonical Discover phase; Intake covers Intake and Classify; Install Overlay covers Plan, Stage, Check, Apply, Accept, and Publish for base product install; Runtime Overlay covers the same five phases again but for runtime hooks, which must be planned, staged, checked, applied, and evidenced as a separate change from base install; and Verification covers Verify. Recover and Evidence apply across both overlays and are not restated per vendor below; see the [Install Adapter Pattern](third-party-software-lifecycle-strategy.md#install-adapter-pattern) for the phase-tagged responsibilities each concrete adapter type (z/OSMF, SMP/E, Vendor JCL, Runtime Configuration, Legacy Capture) actually carries out.
 
 ## BMC Adapter Skeleton
 

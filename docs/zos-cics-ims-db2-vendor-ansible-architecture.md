@@ -23,7 +23,7 @@ All diagrams and flowcharts must be maintained as standalone `.mmd` Mermaid sour
    - IMS commands, DBRC, DBD/PSB/ACB generation, and catalog operations for IMS.
    - Db2 utilities, DSN command processor jobs, SQL execution jobs, BIND/REBIND jobs, catalog queries, and subsystem commands for Db2.
 3. Product deployment is metadata-driven. Product-specific values belong in inventory and product definition files, not hardcoded task logic.
-4. Every flow must support plan, apply, verify, and recover phases.
+4. Every flow must support plan, apply, verify, and recover phases at minimum. This is a floor, not the full model: the canonical lifecycle in [Vendor Adapter Skeletons](vendor-adapter-skeletons.md#shared-lifecycle-phases) defines twelve phases in total, and every other phase list in this documentation set is a scoped subset of that one.
 5. Idempotency is required where z/OS gives reliable state APIs. Where it does not, automation must use probes, markers, CSI queries, product libraries, or job output assertions.
 6. Separation of duties must be preserved: system programming, security, storage, middleware, and application responsibilities should map to different variable scopes, approvals, and run tags.
 
@@ -153,6 +153,7 @@ roles/
   ims_database_artifacts/
   db2_subsystem/
   db2_database_artifacts/
+  vendor_legacy_capture/
   vendor_product/
   vendor_runtime_config/
   verification/
@@ -355,6 +356,12 @@ Owns Db2 DDL, DCL, bind, rebind, free, explain, utility, and catalog-verificatio
 
 This role should treat SQL and bind control files as versioned deployment artifacts. It should support plan-only validation where possible, strict return-code and message assertions, before/after catalog snapshots, and explicit approval for destructive DDL or privilege removal.
 
+### `vendor_legacy_capture`
+
+Owns the Legacy Capture Adapter and the three-pass Configuration Unwinding Strategy (Inventory, Attribution, Normalization) from [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md#configuration-unwinding-strategy): read-only discovery of an existing installation, classification of what's vendor base versus local override versus unknown, and generation of a candidate product definition for human approval.
+
+This role is kept separate from `vendor_product` rather than folded into it because it is behaviorally opposite: it never applies a change, never stages install media, and never runs Accept or Publish. Its only output is a proposed product definition and a drift/unknown-config backlog. A product only moves to `vendor_product` once its captured model is approved and its install method is reclassified out of `legacy_manual_capture` or `unknown_pending_discovery` (an approval gate in its own right; see Approval Gates).
+
 ### `vendor_product`
 
 Owns product media staging, product definition interpretation, z/OSMF workflow orchestration, SMP/E or vendor JCL install orchestration, and product-specific install evidence.
@@ -431,6 +438,12 @@ Recovery model:
 
 Diagram source: [docs/diagrams/vendor-product-deployment-flow.mmd](diagrams/vendor-product-deployment-flow.mmd)
 
+Recovery model:
+
+- This is the least standardized flow in the architecture -- the recovery mechanism depends on which install adapter handled the deployment, per [Vendor Adapter Skeletons](vendor-adapter-skeletons.md) and the [Install Adapter Pattern](third-party-software-lifecycle-strategy.md#install-adapter-pattern): SMP/E-managed products RESTORE or reactivate the prior accepted service level; vendor-JCL-managed products resubmit prior-version JCL or restore previously promoted generated members from the depot; runtime-only products restore the prior PARMLIB/PROCLIB/APF/LINKLIST/security member content from a before/after snapshot.
+- Runtime hooks into CICS, IMS, or Db2 must be recoverable independently of the base product install, since they are modeled as a separate change (see `vendor_runtime_config` in Role Boundaries).
+- Legacy-capture products have no recovery model because they are never applied; recovery is not meaningful until a product is promoted out of `legacy_manual_capture`.
+
 Accept policy:
 
 - `ACCEPT` should be a separate, explicit playbook or workflow after soak validation.
@@ -453,6 +466,8 @@ Recovery model:
 Diagram source: [docs/diagrams/full-environment-deployment-flow.mmd](diagrams/full-environment-deployment-flow.mmd)
 
 The exact ordering depends on which vendor products are deployed. Products that instrument, monitor, or integrate with CICS, IMS, or Db2 may need base libraries installed before subsystem customization, but final hooks should happen after the target regions, subsystems, databases, and bind targets exist.
+
+Recovery model: this flow has no recovery model of its own. It composes Flows 2 through 5, so recovery means running each composed flow's own recovery model in reverse dependency order (product runtime hooks before base install, subsystem artifacts before region provisioning), not a single rollback action.
 
 ### Flow 7: Platform Maintenance and Clone Factory
 
@@ -496,6 +511,8 @@ The deployment planner should produce an ordered manifest before applying change
 10. Evidence publication.
 
 The manifest should be reviewed for production changes before execution.
+
+This ten-step manifest is the unit of work executed once per environment tier, through Apply and Verify. It is not a competing model with the [Update Strategy promotion ring](third-party-software-lifecycle-strategy.md#update-strategy): the promotion ring is the sequence of environment tiers (sandbox, integration test, dev, test, QA, production) the same manifest gets executed against in turn. ACCEPT is deliberately not one of the ten steps above -- it only happens at the ring's final "Accept or hold" stage, after soak on the last tier, as its own separately approved step per the Approval Gates below, not as part of every tier's manifest run.
 
 ## Idempotency Strategy
 
@@ -557,6 +574,9 @@ Required approval gates:
 - Db2 destructive DDL, REVOKE, FREE, mass REBIND, RUNSTATS/REORG/COPY policy changes, and subsystem parameter changes.
 - Any BYPASS of SMP/E HOLDDATA or requisites.
 - Any product step requiring IPL, LLA refresh, VARY, or subsystem restart.
+- Vendor JCL Adapter Apply for `vendor_jcl_managed` or `hybrid_smpe_plus_runtime` products in production -- this does not go through SMP/E APPLY and would otherwise pass with no gate.
+- Runtime Configuration Adapter Apply for `runtime_only` products in production, even when the change touches only product parameter members and not PARMLIB/APF/LINKLIST directly.
+- Promoting a product out of `unknown_pending_discovery` or `legacy_manual_capture` into an actively managed install method -- this is the point where the Legacy Capture Adapter's captured model is approved and automation starts making changes for the first time.
 
 ## Security Model
 
@@ -714,7 +734,7 @@ Deliverables:
 - Internal vendor software depot structure.
 - Vendor product definition schema.
 - Vendor adapter skeletons for BMC, Broadcom CA, and Rocket.
-- Read-only vendor estate discovery and configuration unwinding.
+- `vendor_legacy_capture` role: read-only vendor estate discovery and configuration unwinding.
 - Media staging framework.
 - SMP/E orchestration framework.
 - Product customization JCL framework.

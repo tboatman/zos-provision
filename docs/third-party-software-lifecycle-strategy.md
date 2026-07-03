@@ -192,7 +192,7 @@ Install method should be one of:
 
 Use one common Ansible interface with multiple install adapters underneath.
 
-All adapters should expose the same phases:
+All adapters should expose the same phases, drawn from the canonical twelve-phase lifecycle in [Vendor Adapter Skeletons](vendor-adapter-skeletons.md#shared-lifecycle-phases). Intake and Classify are excluded here because they run once per product version, before any adapter is invoked (see Depot Intake above and the Classify step in the previous section); everything below runs once per deployment run:
 
 - `discover`
 - `plan`
@@ -200,9 +200,10 @@ All adapters should expose the same phases:
 - `check`
 - `apply`
 - `verify`
-- `evidence`
 - `recover`
 - `accept`, only when meaningful
+- `publish`, only for products other deployments can depend on
+- `evidence`
 
 Adapter types:
 
@@ -210,69 +211,68 @@ Adapter types:
 
 Use where the site has z/OSMF enabled and the required z/OSMF APIs or workflows are available. This is the preferred direction for product installation and configuration where the vendor or site provides a usable z/OSMF workflow.
 
-Responsibilities:
+Responsibilities, tagged to the phase each belongs to:
 
-- Stage workflow definition files, variable files, and input artifacts.
-- Validate workflow variables against the product definition and environment model.
-- Create or drive z/OSMF workflows through approved APIs.
-- Track workflow step status, return codes, and messages.
-- Capture workflow evidence alongside JES output and generated artifacts.
-- Treat z/OSMF workflow completion as necessary but not sufficient; still verify installed product state, runtime hooks, and catalog/configuration state.
-- Fall back to generated JCL only for steps not represented by z/OSMF workflow APIs or for sites not yet onboarded to z/OSMF.
+- **Plan:** Fall back to generated JCL only for steps not represented by z/OSMF workflow APIs or for sites not yet onboarded to z/OSMF.
+- **Stage:** Stage workflow definition files, variable files, and input artifacts.
+- **Check:** Validate workflow variables against the product definition and environment model.
+- **Apply:** Create or drive z/OSMF workflows through approved APIs; track workflow step status, return codes, and messages.
+- **Verify:** Treat z/OSMF workflow completion as necessary but not sufficient; still verify installed product state, runtime hooks, and catalog/configuration state.
+- **Recover:** Re-run or roll back the z/OSMF workflow where the workflow definition supports a compensating action; otherwise hand off to the Runtime Configuration Adapter's Recover for any runtime changes the workflow made outside its own transactional scope.
+- **Evidence:** Capture workflow evidence alongside JES output and generated artifacts.
 
 ### SMP/E Adapter
 
 Use for products with normal SMP/E packaging, whether driven directly by generated JCL or by a z/OSMF workflow wrapper.
 
-Responsibilities:
+Responsibilities, tagged to the phase each belongs to:
 
-- Stage SMPPTFIN, SMPHOLD, RELFILEs, or package contents.
-- Allocate or validate CSI, SMPPTS, zones, DDDEFs, target libraries, and distribution libraries.
-- Run RECEIVE CHECK where useful.
-- Run RECEIVE.
-- Run APPLY CHECK.
-- Run APPLY only after approval.
-- Delay ACCEPT until after soak validation.
-- Query installed FMID and SYSMOD state.
-- Capture SMP/E reports.
+- **Discover:** Query installed FMID and SYSMOD state.
+- **Stage:** Stage SMPPTFIN, SMPHOLD, RELFILEs, or package contents; allocate or validate CSI, SMPPTS, zones, DDDEFs, target libraries, and distribution libraries; run RECEIVE, which per SMP/E's own semantics stages SYSMODs into SMP/E-controlled state rather than installing them.
+- **Check:** Run RECEIVE CHECK and APPLY CHECK where useful.
+- **Apply:** Run APPLY only after approval.
+- **Verify:** Re-query installed FMID and SYSMOD state against the plan to confirm APPLY landed as expected.
+- **Recover:** RESTORE SYSMOD elements where SMP/E supports it, or reactivate the prior target/distribution zone service level recorded in the internal SMP/E repository.
+- **Accept:** Delay ACCEPT until after soak validation.
+- **Evidence:** Capture SMP/E reports.
 
 ### Vendor JCL Adapter
 
 Use for products driven by vendor-supplied or generated JCL when z/OSMF workflow coverage is not available or is not the approved execution path for that step.
 
-Responsibilities:
+Responsibilities, tagged to the phase each belongs to:
 
-- Render JCL with environment-specific symbolic values.
-- Validate all referenced datasets before submit.
-- Submit jobs in dependency order.
-- Parse return codes and expected messages.
-- Capture JES output.
-- Install or update generated members only through controlled promotion.
-- Produce a synthetic installed-state marker if the product lacks machine-readable state.
+- **Stage:** Render JCL with environment-specific symbolic values.
+- **Check:** Validate all referenced datasets before submit.
+- **Apply:** Submit jobs in dependency order; install or update generated members only through controlled promotion.
+- **Verify:** Parse return codes and expected messages; produce a synthetic installed-state marker if the product lacks machine-readable state, so the next run's Discover has something to query.
+- **Recover:** Resubmit the prior-version install/customization JCL held in the depot, or restore the previously promoted generated members, using the before/after snapshot captured at Evidence.
+- **Evidence:** Capture JES output.
 
 ### Runtime Configuration Adapter
 
 Use for products where the install bits already exist but integration is the hard part.
 
-Responsibilities:
+Responsibilities, tagged to the phase each belongs to:
 
-- Update APF, LINKLIST, LPA, PROCLIB, PARMLIB, product parameter libraries, CICS, IMS, Db2, and security definitions.
-- Create before/after snapshots.
-- Require approval for invasive changes.
-- Trigger LLA refresh, started task recycle, CICS resource install, IMS command, or IPL scheduling when required.
+- **Check:** Require approval for invasive changes.
+- **Apply:** Update APF, LINKLIST, LPA, PROCLIB, PARMLIB, product parameter libraries, CICS, IMS, Db2, and security definitions; trigger LLA refresh, started task recycle, CICS resource install, IMS command, or IPL scheduling when required.
+- **Recover:** Restore the prior PARMLIB/PROCLIB/APF/LINKLIST/security member content from the before/after snapshot, then trigger the same refresh or recycle action used at Apply.
+- **Evidence:** Create before/after snapshots.
 
 ### Legacy Capture Adapter
 
-Use when an existing installation is too manually configured to automate directly.
+Use when an existing installation is too manually configured to automate directly. This adapter's Apply, Recover, Accept, and Publish phases are always no-ops: it deliberately never changes runtime state or depot content, only reads and classifies it. See [Configuration Unwinding Strategy](#configuration-unwinding-strategy) below for the fuller three-pass version of this adapter's Discover/Classify/Plan work.
 
-Responsibilities:
+Responsibilities, tagged to the phase each belongs to:
 
-- Discover current state.
-- Capture and classify configuration.
-- Generate a product definition from observed state.
-- Identify drift from vendor baseline.
-- Mark unknowns explicitly.
-- Avoid making changes until the product owner approves the captured model.
+- **Discover:** Discover current state.
+- **Classify:** Capture and classify configuration.
+- **Plan:** Generate a product definition from observed state.
+- **Check:** Identify drift from vendor baseline.
+- **Evidence:** Mark unknowns explicitly.
+
+Cross-cutting rule for this adapter: avoid making any change until the product owner approves the captured model, regardless of phase.
 
 ## Configuration Unwinding Strategy
 
