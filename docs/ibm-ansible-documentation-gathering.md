@@ -12,6 +12,8 @@ Retrieval pass: 2026-07-03.
 
 Diagram source: [docs/diagrams/ibm-ansible-documentation-gathering-flow.mmd](diagrams/ibm-ansible-documentation-gathering-flow.mmd)
 
+For the focused z/VM Ansible source ledger, see [z/VM Ansible Documentation Sources](zvm-ansible-documentation-sources.md).
+
 ## Ground Rules
 
 - Treat IBM and Red Hat Ansible Content for IBM Z documentation as canonical for collection behavior, requirements, and module contracts.
@@ -91,7 +93,7 @@ For each IBM subsystem or platform surface, capture:
 | MQ | No first-class IBM Z collection confirmed in this pass | MQ for z/OS docs, command paths, started tasks, certificates, CHLAUTH, queue manager lifecycle | Model as command/JCL/runtime overlay until a supported collection or API path is confirmed |
 | System Automation | IBM Z System Automation collection plus product docs | Collection modules, SA z/OS policy and operations documentation | Treat as licensed optional integration; do not assume availability |
 | Z HMC | IBM Z HMC collection | HMC collection docs and hardware-management boundaries | Useful for hardware/partition-adjacent actions; not a substitute for z/VM guest management |
-| z/VM | No current Ansible Galaxy `zvm` or `z/VM` collection hit found in this pass | z/VM docs, CP/CMS commands, directory, service, network, guest provisioning, available REST or local APIs | Treat as custom integration discovery, likely through z/VM-native tooling, APIs, SSH to Linux guests, or HMC-adjacent orchestration |
+| z/VM | No Ansible Galaxy `zvm` or `z/VM` collection hit found in this pass; IBM-owned GitHub repositories `IBM/zvm_ansible` and `IBM/zvm_ansible_collection` were found | z/VM docs, IBM z/VM Ansible repositories, Feilong/zthin docs, CP/CMS commands, SMAPI, directory, service, network, guest provisioning, available REST or local APIs | Treat as candidate local-built collection plus custom integration discovery until support status and module contracts are verified |
 
 ## z/VM Discovery Track
 
@@ -106,6 +108,8 @@ Required z/VM documentation questions:
 5. Which parts of the VM guest lifecycle are owned by z/VM automation versus z/OS automation inside the guest?
 6. Which security authority exists on z/VM, and how is it separated from clone-local z/OS authentication?
 7. What evidence proves that a disconnected VM guest clone is independent from central authority?
+
+The focused z/VM source pass found an IBM-owned but not Galaxy-published collection path. The likely model is Ansible control node to Linux Management Access Point on the target z/VM LPAR, then Feilong zthin/`smcli` to SMAPI and directory-manager operations. This is promising enough to study, but not yet authoritative enough for executable clone automation.
 
 ## Output Files To Create Later
 
@@ -131,4 +135,5 @@ These are not implementation files yet. They are normalized documentation and ca
 3. Confirm whether Db2 and MQ will be driven by collection modules, z/OSMF workflows, site JCL, REST APIs, or approved command utilities.
 4. Gather IBM product documentation URLs for target versions of z/OS, CICS TS, IMS, Db2, MQ, z/OSMF, System Automation, and z/VM.
 5. Identify the approved z/VM automation interface for VM guest clone lifecycle.
-6. Convert the gathered material into platform and subsystem capability maps.
+6. Build or inspect the IBM `zvm_ansible` collection locally and capture `ansible-doc` output for each module if the support posture is acceptable.
+7. Convert the gathered material into platform and subsystem capability maps.

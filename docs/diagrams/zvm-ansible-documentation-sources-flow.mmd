@@ -1,0 +1,40 @@
+flowchart TD
+    A["z/VM Ansible documentation source discovery"] --> B["Search official Ansible sources"]
+    A --> C["Search IBM-owned GitHub sources"]
+    A --> D["Gather IBM z/VM product docs"]
+    A --> E["Gather Feilong and zthin docs"]
+    A --> F["Search non-canonical examples"]
+
+    B --> G{"Galaxy collection found?"}
+    G -- "No" --> H["Record zero-result Galaxy evidence"]
+    G -- "Yes" --> I["Record supported install path and version"]
+
+    C --> J["IBM zvm_ansible examples repo"]
+    C --> K["IBM zvm_ansible_collection repo"]
+    J --> L["Extract MAP, SMAPI, zthin, smcli pattern"]
+    K --> M["Extract collection namespace, version, and modules"]
+
+    D --> N["z/VM release and SMAPI docs"]
+    D --> O["CP, CMS, directory, TCP/IP, SSL, security docs"]
+
+    E --> P["Feilong SDK and API docs"]
+    E --> Q["zthin and smcli install docs"]
+
+    F --> R["ICIC setup references"]
+    F --> S["Community examples and stale repos"]
+
+    H --> T["z/VM source ledger"]
+    I --> T
+    L --> T
+    M --> T
+    N --> T
+    O --> T
+    P --> T
+    Q --> T
+    R --> T
+    S --> T
+
+    T --> U["Classify support and risk"]
+    U --> V{"Ready for automation design?"}
+    V -- "No" --> W["Gather module contracts and site authority model"]
+    V -- "Yes" --> X["Promote to z/VM clone lifecycle capability map"]

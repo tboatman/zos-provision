@@ -10,6 +10,7 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [Third-Party Vendor Software Lifecycle Strategy](docs/third-party-software-lifecycle-strategy.md) — the vendor-product track (BMC, Broadcom CA, Rocket) that plugs into the architecture above.
 - [Platform Maintenance and Disconnected Clone Strategy](docs/platform-maintenance-and-disconnected-clones.md) — the substrate layer (z/OS maintenance, internal SMP/E repository, RACF, disconnected VM clones) that the other two depend on.
 - [IBM Ansible Documentation Gathering](docs/ibm-ansible-documentation-gathering.md) — the Ansible and IBM-platform source map for z/OS, z/OSMF, CICS, IMS, Db2, MQ, System Automation, Z HMC, and z/VM.
+- [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — focused source ledger for z/VM Ansible, SMAPI, Feilong/zthin, and disconnected VM guest clone automation.
 
 ## Vendor documentation intake
 
@@ -28,6 +29,7 @@ See [Vendor Adapter Skeletons](docs/vendor-adapter-skeletons.md) for how vendor-
 The IBM-platform automation substrate is tracked separately from third-party vendor intake:
 
 - [IBM Ansible Documentation Gathering](docs/ibm-ansible-documentation-gathering.md) — collection and product-documentation intake for Ansible for IBM Z, z/OS, IBM subsystems, and z/VM.
+- [z/VM Ansible Documentation Sources](docs/zvm-ansible-documentation-sources.md) — canonical and non-canonical source discovery for z/VM automation where Galaxy-published coverage is not enough.
 
 ## Sidequests
 

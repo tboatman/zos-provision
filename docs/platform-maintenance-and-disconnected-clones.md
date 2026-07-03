@@ -23,6 +23,8 @@ This does not mean clones are unmanaged. It means their management boundary is a
 
 Disconnected clones are not modeled as LPARs. They are VM guests built from repository-defined service levels, local security templates, local network/storage policy, and clone manifests.
 
+The focused z/VM automation source ledger is [z/VM Ansible Documentation Sources](zvm-ansible-documentation-sources.md). Current evidence points to a candidate IBM-owned but not Galaxy-published Ansible collection path using a Linux Management Access Point, SMAPI, Feilong zthin, and `smcli`; that path must be validated before clone lifecycle automation is implemented.
+
 ## Scope Additions
 
 Platform automation must cover:

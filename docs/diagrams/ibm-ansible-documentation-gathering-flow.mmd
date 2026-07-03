@@ -19,6 +19,8 @@ flowchart TD
     D --> P["CP, CMS, directory, minidisk, network, spool"]
     D --> Q["Guest create, IPL, stop, recycle, clone, expire"]
     D --> R["Independence from central authority"]
+    D --> AC["IBM zvm_ansible and zvm_ansible_collection"]
+    D --> AD["Feilong zthin and SMAPI path"]
 
     E --> S["Confirm collection namespace and version"]
     E --> T["Confirm ansible-doc module contracts"]
@@ -37,6 +39,8 @@ flowchart TD
     P --> W["z/VM capability map"]
     Q --> W
     R --> W
+    AC --> W
+    AD --> W
     S --> X["Collection evidence map"]
     T --> X
     U --> X
