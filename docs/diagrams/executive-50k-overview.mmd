@@ -1,7 +1,8 @@
 flowchart TD
     A["Goal<br/>Repeatable z/OS environment provisioning"] --> B["Control Node<br/>Ansible from Linux or macOS"]
 
-    B --> C["Discover Current Estate<br/>z/OS, CICS, IMS, Db2, RACF, vendor products"]
+    B --> AA["Establish IBM Ansible Baseline<br/>collections, z/OSMF, subsystems, z/VM"]
+    AA --> C["Discover Current Estate<br/>z/OS, CICS, IMS, Db2, RACF, vendor products"]
     C --> D["Normalize Knowledge<br/>product definitions, dependencies, aliases, risks"]
     D --> E["Build Internal Software Repository<br/>IBM service, BMC, Broadcom CA, Rocket, site artifacts"]
     E --> F["Automate Deployment Paths<br/>z/OSMF first, SMP/E, vendor JCL, runtime overlays"]
@@ -14,6 +15,7 @@ flowchart TD
     I --> J["Emit Disconnected VM Guest Clones<br/>repeatable development environments"]
 
     C --> K["Why It Is Large<br/>existing configuration must be unwound"]
+    AA --> AB["Why It Is Large<br/>automation coverage differs across z/OS, subsystems, and z/VM"]
     D --> L["Why It Is Large<br/>every product needs a precise model"]
     E --> M["Why It Is Large<br/>no universal vendor repository exists"]
     F --> N["Why It Is Large<br/>install methods vary by product and release"]
@@ -26,6 +28,7 @@ flowchart TD
     J --> R["Why It Is Large<br/>clones must be independent VM guests with local authority"]
 
     K --> S["Executive takeaway<br/>Feasible, but this is a platform program, not a script"]
+    AB --> S
     L --> S
     M --> S
     N --> S

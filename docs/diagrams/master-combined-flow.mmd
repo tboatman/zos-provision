@@ -33,6 +33,17 @@ flowchart TD
         AP --> TEMPLATES["Jinja templates for JCL, SQL, PARMLIB, PROCLIB, RACF"]
     end
 
+    subgraph IBMDOCS["IBM Ansible and platform documentation gathering"]
+        ID1["Gather Red Hat Ansible Content for IBM Z docs"] --> ID2["Record collection versions and requirements"]
+        ID2 --> ID3["Map z/OS Core, z/OSMF, CICS, IMS, System Automation, and Z HMC modules"]
+        ID4["Gather IBM product docs"] --> ID5["Map z/OS, CICS, IMS, Db2, MQ, System Automation, and z/VM surfaces"]
+        ID6["Probe unsupported or unconfirmed surfaces"] --> ID7["Classify Db2, MQ, and z/VM automation gaps"]
+        ID3 --> ID8["Platform and collection capability maps"]
+        ID5 --> ID8
+        ID7 --> ID8
+        ID8 --> ID9["Role design prerequisites and preflight inputs"]
+    end
+
     subgraph ARCH["Target architecture surfaces"]
         ROLES --> ZOS["z/OS managed node over SSH"]
         ZOS --> ZOSMF["z/OSMF APIs and workflows"]
@@ -63,6 +74,9 @@ flowchart TD
         PFGATE -- "No" --> PFGAP["Report gaps<br/>security, storage, SSH, ZOAU, Python, product media, APIs"]
         PFGAP --> PFFOLLOW["Create remediation backlog"]
     end
+
+    ID9 --> PF1
+    ID9 --> COLLECTIONS
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

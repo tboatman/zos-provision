@@ -793,6 +793,9 @@ Do not start by automating every product. Build the factory pattern with two ven
 13. What are the production approval boundaries for APPLY, ACCEPT, APF, PARMLIB, and started tasks?
 14. What is the required backout posture for each product?
 15. Are IPLs allowed, avoided, or scheduled only by separate change process?
+16. Which Ansible for IBM Z collection versions, dependency matrices, and module contracts are approved for z/OS, z/OSMF, CICS, IMS, System Automation, and Z HMC?
+17. What is the approved automation path for IBM subsystems without confirmed first-class collection support, especially Db2 and MQ?
+18. What is the approved z/VM automation interface for disconnected VM guest clone lifecycle?
 
 ## Implementation Readiness Checklist
 
@@ -800,6 +803,7 @@ Code should not begin until these are complete:
 
 - Product inventory is complete.
 - Environment and LPAR list is complete.
+- IBM Ansible collection, subsystem, and z/VM documentation gathering is complete.
 - Control-node and managed-node prerequisites are validated.
 - Security model is approved.
 - Dataset naming and storage standards are approved.
@@ -825,3 +829,6 @@ Design assumptions in this document are based on the current IBM Ansible for IBM
 - z/OS core module set for datasets, copy, JCL, operator commands, started tasks, TSO, APF, and related primitives: https://ibm.github.io/z_ansible_collections_doc/ibm_zos_core/docs/source/modules.html
 - z/OS CICS module set, including CMCI modules and CICS provisioning modules: https://ibm.github.io/z_ansible_collections_doc/ibm_zos_cics/docs/source/modules.html
 - z/OS IMS module set, including IMS command, DBRC, DBD, PSB, ACB, DDL, and catalog modules: https://ibm.github.io/z_ansible_collections_doc/ibm_zos_ims/docs/source/modules.html
+- IBM Ansible, z/OS, IBM subsystem, and z/VM documentation gathering plan reviewed on 2026-07-03: [IBM Ansible Documentation Gathering](ibm-ansible-documentation-gathering.md)
+- z/OSMF module set, including authentication, security requirement validation, and workflow operation: https://ibm.github.io/z_ansible_collections_doc/ibm_zosmf/docs/source/modules.html
+- IBM product documentation entry points for z/OS, CICS TS, IMS, Db2 for z/OS, MQ for z/OS, System Automation, and z/VM are tracked in [IBM Ansible Documentation Gathering](ibm-ansible-documentation-gathering.md)

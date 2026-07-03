@@ -1,0 +1,49 @@
+flowchart TD
+    A["IBM Ansible documentation gathering"] --> B["Gather Ansible for IBM Z collection docs"]
+    A --> C["Gather IBM product documentation"]
+    A --> D["Gather z/VM lifecycle documentation"]
+    A --> E["Probe collection availability and versions"]
+
+    B --> F["z/OS Core modules and requirements"]
+    B --> G["z/OSMF modules and workflow support"]
+    B --> H["CICS modules and CMCI requirements"]
+    B --> I["IMS modules and command or artifact support"]
+    B --> J["System Automation and Z HMC collections"]
+
+    C --> K["z/OS, JES, MVS, USS, SMP/E, RACF, TCP/IP"]
+    C --> L["CICS TS and CICSPlex SM"]
+    C --> M["IMS, DBRC, catalog, DBD, PSB, ACB, DDL"]
+    C --> N["Db2 for z/OS, SQL, BIND, utilities, catalog"]
+    C --> O["MQ for z/OS, queue managers, channels, certificates"]
+
+    D --> P["CP, CMS, directory, minidisk, network, spool"]
+    D --> Q["Guest create, IPL, stop, recycle, clone, expire"]
+    D --> R["Independence from central authority"]
+
+    E --> S["Confirm collection namespace and version"]
+    E --> T["Confirm ansible-doc module contracts"]
+    E --> U["Record unsupported or unconfirmed gaps"]
+
+    F --> V["Platform capability map"]
+    G --> V
+    H --> V
+    I --> V
+    J --> V
+    K --> V
+    L --> V
+    M --> V
+    N --> V
+    O --> V
+    P --> W["z/VM capability map"]
+    Q --> W
+    R --> W
+    S --> X["Collection evidence map"]
+    T --> X
+    U --> X
+
+    V --> Y["Role design prerequisites"]
+    W --> Y
+    X --> Y
+    Y --> Z{"Ready to write Ansible code?"}
+    Z -- "No" --> AA["Add documentation and capability gaps to backlog"]
+    Z -- "Yes" --> AB["Proceed to role skeleton design"]
