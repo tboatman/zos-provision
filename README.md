@@ -17,6 +17,9 @@ This repository is currently **documentation only**. Per [zos-cics-ims-db2-vendo
 - [Schema and Evidence Foundation](docs/schema-and-evidence-foundation.md) — first-pass metadata shapes for depot packages, service levels, product definitions, dependencies, deployment manifests, evidence, and backout classes.
 - [Automation Contract and Security Gap Plan](docs/automation-contract-and-security-gap-plan.md) — z/OSMF, IBM Ansible, control-node, preflight, security backend, RACF clone, z/VM, and clone materialization detail.
 - [BMC Read-Only Configuration Unwinding Plan](docs/bmc-read-only-unwinding-plan.md) — first vendor unwinding plan for AMI Ops, AMI Ops Automation, AMI DevX, and Control-M.
+- [Product Inventory and Entitlement Intake](docs/product-inventory-and-entitlement-intake.md) — cross-vendor inventory, entitlement, installed-state, and reconciliation rules before product definitions.
+- [Subsystem Scope and Execution Plan](docs/subsystem-scope-and-execution-plan.md) — CICS, IMS, Db2, and MQ state authority, execution path, evidence path, pilot constraints, and manifest shapes.
+- [OSS and Sidequest Disposition Plan](docs/oss-sidequest-disposition-plan.md) — OSS adoption states, quarantine rules, and sidequest promotion criteria.
 
 ## Vendor documentation intake
 

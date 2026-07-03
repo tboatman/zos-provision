@@ -12,6 +12,8 @@ Retrieval pass: 2026-07-03.
 
 Diagram source: [docs/diagrams/oss-tooling-discovery-flow.mmd](diagrams/oss-tooling-discovery-flow.mmd)
 
+Disposition states and sidequest promotion rules are defined in [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md).
+
 ## Ground Rules
 
 - Treat every open source candidate as supply-chain input until license, provenance, support posture, versioning, mirroring, and security review are captured.

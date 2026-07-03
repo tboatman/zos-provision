@@ -1,0 +1,28 @@
+flowchart TD
+    A["Start product inventory"] --> B["Collect public candidate names"]
+    A --> C["Collect entitlement and licensed inventory"]
+    A --> D["Collect installed-state evidence"]
+
+    B --> E["Candidate from public docs"]
+    C --> F["Candidate from entitlement"]
+    D --> G["Candidate from installed state"]
+
+    E --> H["Reconcile product identity and aliases"]
+    F --> H
+    G --> H
+
+    H --> I["Collect canonical docs, media, service, HOLDDATA, checksums"]
+    H --> J["Collect CSIs, FMIDs, HLQs, started tasks, runtime hooks"]
+    H --> K["Collect owners, license status, and support path"]
+
+    I --> L["Inventory record"]
+    J --> L
+    K --> L
+
+    L --> M{"Evidence reconciled?"}
+    M -- "No" --> N["Mark blocked or unknown_pending_discovery"]
+    M -- "Yes" --> O["Owner review"]
+    O --> P{"Approved for product definition?"}
+    P -- "No" --> Q["Keep inventory record and gap list"]
+    P -- "Yes" --> R["Create product definition draft"]
+    R --> S["Feed dependency graph, depot, and pilot manifest"]

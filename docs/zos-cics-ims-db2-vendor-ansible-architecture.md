@@ -284,6 +284,8 @@ See [Top-to-Bottom Gap Assessment and Remediation Plan](top-to-bottom-gap-assess
 
 See [Pilot and Governance Controls](pilot-and-governance-controls.md), [Schema and Evidence Foundation](schema-and-evidence-foundation.md), and [Automation Contract and Security Gap Plan](automation-contract-and-security-gap-plan.md) for the first detailed closure plans behind the readiness checklist.
 
+See [Product Inventory and Entitlement Intake](product-inventory-and-entitlement-intake.md), [Subsystem Scope and Execution Plan](subsystem-scope-and-execution-plan.md), and [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md) for the remaining inventory, subsystem, OSS, and sidequest gap plans.
+
 ## Role Boundaries
 
 The roles should be intentionally narrow. Region provisioning, resource definition, and product runtime hooks should not be collapsed into one role because they have different owners, prerequisites, approvals, and recovery behavior.

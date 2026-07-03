@@ -12,6 +12,8 @@ Retrieval pass: 2026-07-03.
 
 Diagram source: [docs/diagrams/iof-sidequest-flow.mmd](diagrams/iof-sidequest-flow.mmd)
 
+Promotion criteria for sidequests are defined in [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md).
+
 ## Current Public Finding
 
 The strongest public evidence points to Fischer International Systems Corporation as the current public custodian of IOF.

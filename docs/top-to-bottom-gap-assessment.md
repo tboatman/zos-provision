@@ -31,6 +31,9 @@ Several high-priority gaps now have dedicated detail plans:
 - [Schema and Evidence Foundation](schema-and-evidence-foundation.md) covers G-005, G-019, G-020, G-021, and G-022.
 - [Automation Contract and Security Gap Plan](automation-contract-and-security-gap-plan.md) covers G-006, G-007, G-008, G-009, G-010, G-011, G-012, and G-013.
 - [BMC Read-Only Configuration Unwinding Plan](bmc-read-only-unwinding-plan.md) covers the BMC-first path through G-003, G-004, and G-018.
+- [Product Inventory and Entitlement Intake](product-inventory-and-entitlement-intake.md) covers the cross-vendor path through G-003 and G-004.
+- [Subsystem Scope and Execution Plan](subsystem-scope-and-execution-plan.md) covers G-014, G-015, G-016, and G-017.
+- [OSS and Sidequest Disposition Plan](oss-sidequest-disposition-plan.md) covers G-024 and G-025.
 
 ## Gap Register
 

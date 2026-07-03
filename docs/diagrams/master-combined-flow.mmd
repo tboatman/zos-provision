@@ -48,6 +48,9 @@ flowchart TD
         GAP3 --> GAP13["Schema and evidence foundation detail"]
         GAP4 --> GAP14["Automation contract and security gap detail"]
         GAP6 --> GAP15["BMC read-only unwinding detail"]
+        GAP6 --> GAP16["Product inventory and entitlement intake detail"]
+        GAP4 --> GAP17["Subsystem scope and execution detail"]
+        GAP6 --> GAP18["OSS and sidequest disposition detail"]
     end
 
     subgraph IBMDOCS["IBM Ansible and platform documentation gathering"]
@@ -133,6 +136,15 @@ flowchart TD
     GAP14 --> PF1
     GAP15 --> BMC1
     GAP15 --> UW1
+    GAP16 --> BMC1
+    GAP16 --> CA1
+    GAP16 --> RK1
+    GAP17 --> C1
+    GAP17 --> I1
+    GAP17 --> D1
+    GAP17 --> PF7
+    GAP18 --> OSS1
+    GAP18 --> DOCS
 
     subgraph INTAKE["Enterprise intake and design controls"]
         PFGATE -- "Yes" --> IN1["Stage inputs"]

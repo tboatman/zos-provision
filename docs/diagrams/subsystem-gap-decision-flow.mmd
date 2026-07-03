@@ -1,0 +1,22 @@
+flowchart TD
+    A["Subsystem scope decision"] --> B["CICS"]
+    A --> C["IMS"]
+    A --> D["Db2"]
+    A --> E["MQ"]
+
+    B --> F["Choose CMCI, CSD batch, or site process"]
+    C --> G["Choose full region, artifact generation, or deferred"]
+    D --> H["Choose SQL runner, DSN command path, bind path"]
+    E --> I["Choose include, dependency-only, or deferred"]
+
+    F --> J["Declare state authority"]
+    G --> J
+    H --> J
+    I --> J
+
+    J --> K["Declare execution path"]
+    K --> L["Declare evidence path"]
+    L --> M["Declare owner, approval gate, and backout class"]
+    M --> N{"Ready for pilot manifest?"}
+    N -- "No" --> O["Discovery-only or deferred"]
+    N -- "Yes" --> P["Add subsystem manifest to pilot"]
