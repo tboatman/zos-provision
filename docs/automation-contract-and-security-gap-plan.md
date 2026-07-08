@@ -163,6 +163,34 @@ ACF2 and Top Secret first scope:
 - Capture equivalent resource classes and naming rules.
 - Do not claim command parity until a security owner validates it.
 
+### ACF2 and Top Secret Discovery Placeholder
+
+G-010's remediation calls for discovery placeholders alongside the RACF-first template. Until a site with ACF2 or Top Secret is in scope, this is discover-only: no apply, render, or backout support is implied by populating this shape.
+
+```yaml
+security_backend_discovery:
+  type: acf2 | top_secret
+  environment: TBD
+  query_path:
+    users_or_logonids: discover_only | unknown
+    groups_or_scopesets: discover_only | unknown
+    dataset_rules: discover_only | unknown
+    resource_rules: discover_only | unknown
+    started_task_mappings: discover_only | unknown
+  naming_conventions:
+    rule_or_profile_prefixes: []
+    resource_classes: []
+  evidence:
+    query_commands: []
+    sample_output: TBD
+  parity_with_racf_model:
+    validated: false
+    validated_by: TBD
+    notes: TBD
+```
+
+This placeholder exists so an ACF2 or Top Secret estate can be discovered and recorded without implying the RACF-first command-rendering and apply model applies to it.
+
 ## Clone-Local Security Template
 
 Disconnected clone security is not a normal enterprise integration. It must be local, generated, reviewable, and destroyable.
