@@ -192,6 +192,8 @@ product_definitions/
 
 This is the live, currently-active product definition that playbooks read at run time. It is distinct from the immutable per-version `product-definition.yml` snapshot captured inside the depot at intake time (see [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md#internal-vendor-software-depot)); the live file here is what that snapshot gets folded into once a new version is reviewed.
 
+The canonical YAML shape both files draw from lives in [Schema and Evidence Foundation](schema-and-evidence-foundation.md#product-definition). The list below is a per-product checklist restatement, not a second source of truth.
+
 Each product-specific file should fill in:
 
 - Product aliases.

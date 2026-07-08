@@ -149,6 +149,8 @@ The per-version `product-definition.yml` captured here is an immutable snapshot:
 
 Every vendor product should have a product definition that describes the product independent of any one LPAR.
 
+The canonical YAML shape lives in [Schema and Evidence Foundation](schema-and-evidence-foundation.md#product-definition); the list below is a descriptive restatement for lifecycle-strategy context, not a second source of truth. If this list and the schema doc ever disagree, the schema doc wins and this list should be updated to match.
+
 Required fields:
 
 - Product name.

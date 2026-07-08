@@ -8,6 +8,8 @@ Gap coverage: G-005, G-019, G-020, G-021, and G-022 from [Top-to-Bottom Gap Asse
 
 Review pass: 2026-07-03.
 
+This document is the canonical source for the product definition, depot package, service-level, dependency graph, deployment manifest, and evidence manifest schema shapes. The "Required fields" prose list in [Third-Party Vendor Software Lifecycle Strategy](third-party-software-lifecycle-strategy.md#product-definition-schema) and the "should fill in" list in [Vendor Adapter Skeletons](vendor-adapter-skeletons.md#product-specific-adapter-files) are descriptive restatements for their own context, not competing definitions. When a field list needs to change, update the YAML shape here first, then reconcile the other two.
+
 ## Design Rule
 
 The first implementation slice should validate and render data. It should not submit JCL, alter security, drive z/OSMF workflows, or install vendor products.
