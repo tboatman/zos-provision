@@ -24,6 +24,8 @@ First BMC families to unwind:
 
 This is read-only discovery. It must not submit install jobs, alter runtime libraries, change security, recycle started tasks, or update product configuration.
 
+BMC is first by design (see Phase E in [Top-to-Bottom Gap Assessment and Remediation Plan](top-to-bottom-gap-assessment.md#remediation-phases)). Broadcom CA and Rocket each need their own read-only unwinding plan (`broadcom-ca-read-only-unwinding-plan.md` and `rocket-read-only-unwinding-plan.md`) once BMC's pass validates the approach; those documents do not exist yet and G-018 stays open cross-vendor until they do, even after this BMC plan is complete.
+
 ## Objectives
 
 1. Identify installed BMC products, versions, FMIDs, maintenance levels, and aliases.
